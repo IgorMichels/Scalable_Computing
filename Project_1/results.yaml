@@ -1,0 +1,1200 @@
+---
+Results:
+    - numThreads: 1
+    - blockLength: 27614545
+    - preparationTime: 0.11836
+    - searchTime: 3.45293
+    - totalTime: 3.57129
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 2
+    - blockLength: 13807272
+    - preparationTime: 0.0947302
+    - searchTime: 3.40451
+    - totalTime: 3.49924
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 3
+    - blockLength: 9204848
+    - preparationTime: 0.0916028
+    - searchTime: 3.41268
+    - totalTime: 3.50429
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 4
+    - blockLength: 6903636
+    - preparationTime: 0.090479
+    - searchTime: 3.39605
+    - totalTime: 3.48653
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 5
+    - blockLength: 5522909
+    - preparationTime: 0.0909272
+    - searchTime: 3.46586
+    - totalTime: 3.55679
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 6
+    - blockLength: 4602424
+    - preparationTime: 0.110668
+    - searchTime: 3.42523
+    - totalTime: 3.5359
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 7
+    - blockLength: 3944935
+    - preparationTime: 0.09088
+    - searchTime: 3.38311
+    - totalTime: 3.47399
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 8
+    - blockLength: 3451818
+    - preparationTime: 0.089427
+    - searchTime: 3.4224
+    - totalTime: 3.51183
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 9
+    - blockLength: 3068282
+    - preparationTime: 0.103831
+    - searchTime: 3.46238
+    - totalTime: 3.56621
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 10
+    - blockLength: 2761454
+    - preparationTime: 0.099138
+    - searchTime: 3.48115
+    - totalTime: 3.58029
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 11
+    - blockLength: 2510413
+    - preparationTime: 0.0984386
+    - searchTime: 3.419
+    - totalTime: 3.51744
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 12
+    - blockLength: 2301212
+    - preparationTime: 0.102153
+    - searchTime: 3.49502
+    - totalTime: 3.59718
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 13
+    - blockLength: 2124195
+    - preparationTime: 0.109403
+    - searchTime: 3.4373
+    - totalTime: 3.5467
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 14
+    - blockLength: 1972467
+    - preparationTime: 0.0901039
+    - searchTime: 3.41644
+    - totalTime: 3.50654
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 15
+    - blockLength: 1840969
+    - preparationTime: 0.111844
+    - searchTime: 3.43316
+    - totalTime: 3.54501
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 16
+    - blockLength: 1725909
+    - preparationTime: 0.0918439
+    - searchTime: 3.44751
+    - totalTime: 3.53936
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 17
+    - blockLength: 1624385
+    - preparationTime: 0.109217
+    - searchTime: 3.49759
+    - totalTime: 3.6068
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 18
+    - blockLength: 1534141
+    - preparationTime: 0.106104
+    - searchTime: 3.44378
+    - totalTime: 3.54989
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 19
+    - blockLength: 1453397
+    - preparationTime: 0.106195
+    - searchTime: 3.45556
+    - totalTime: 3.56176
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 20
+    - blockLength: 1380727
+    - preparationTime: 0.100733
+    - searchTime: 3.46866
+    - totalTime: 3.5694
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 21
+    - blockLength: 1314978
+    - preparationTime: 0.0984488
+    - searchTime: 3.51765
+    - totalTime: 3.6161
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 22
+    - blockLength: 1255206
+    - preparationTime: 0.0985073
+    - searchTime: 3.50629
+    - totalTime: 3.6048
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 23
+    - blockLength: 1200632
+    - preparationTime: 0.105691
+    - searchTime: 3.45914
+    - totalTime: 3.56483
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 24
+    - blockLength: 1150606
+    - preparationTime: 0.106693
+    - searchTime: 3.60174
+    - totalTime: 3.70844
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 25
+    - blockLength: 1104581
+    - preparationTime: 0.116869
+    - searchTime: 3.49816
+    - totalTime: 3.61503
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 26
+    - blockLength: 1062097
+    - preparationTime: 0.0954342
+    - searchTime: 3.51365
+    - totalTime: 3.60909
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 27
+    - blockLength: 1022760
+    - preparationTime: 0.094986
+    - searchTime: 3.49786
+    - totalTime: 3.59284
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 28
+    - blockLength: 986233
+    - preparationTime: 0.0923951
+    - searchTime: 3.45025
+    - totalTime: 3.54265
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 29
+    - blockLength: 952225
+    - preparationTime: 0.124209
+    - searchTime: 3.52501
+    - totalTime: 3.64922
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 30
+    - blockLength: 920484
+    - preparationTime: 0.0979272
+    - searchTime: 3.49596
+    - totalTime: 3.59389
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 31
+    - blockLength: 890791
+    - preparationTime: 0.109501
+    - searchTime: 3.45424
+    - totalTime: 3.56374
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 32
+    - blockLength: 862954
+    - preparationTime: 0.0930012
+    - searchTime: 3.44598
+    - totalTime: 3.53898
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 33
+    - blockLength: 836804
+    - preparationTime: 0.0923865
+    - searchTime: 3.43565
+    - totalTime: 3.52804
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 34
+    - blockLength: 812192
+    - preparationTime: 0.10439
+    - searchTime: 3.53486
+    - totalTime: 3.63925
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 35
+    - blockLength: 788987
+    - preparationTime: 0.093942
+    - searchTime: 3.44599
+    - totalTime: 3.53993
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 36
+    - blockLength: 767070
+    - preparationTime: 0.0905349
+    - searchTime: 3.4358
+    - totalTime: 3.52633
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 37
+    - blockLength: 746339
+    - preparationTime: 0.112952
+    - searchTime: 3.43645
+    - totalTime: 3.5494
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 38
+    - blockLength: 726698
+    - preparationTime: 0.0927104
+    - searchTime: 3.5466
+    - totalTime: 3.63931
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 39
+    - blockLength: 708065
+    - preparationTime: 0.111197
+    - searchTime: 3.42665
+    - totalTime: 3.53785
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 40
+    - blockLength: 690363
+    - preparationTime: 0.0981778
+    - searchTime: 3.4488
+    - totalTime: 3.54698
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 41
+    - blockLength: 673525
+    - preparationTime: 0.0918545
+    - searchTime: 3.42817
+    - totalTime: 3.52003
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 42
+    - blockLength: 657489
+    - preparationTime: 0.09168
+    - searchTime: 3.44369
+    - totalTime: 3.53537
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 43
+    - blockLength: 642198
+    - preparationTime: 0.0901024
+    - searchTime: 3.42794
+    - totalTime: 3.51804
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 44
+    - blockLength: 627603
+    - preparationTime: 0.091137
+    - searchTime: 3.41416
+    - totalTime: 3.5053
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 45
+    - blockLength: 613656
+    - preparationTime: 0.091067
+    - searchTime: 3.42356
+    - totalTime: 3.51463
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 46
+    - blockLength: 600316
+    - preparationTime: 0.105365
+    - searchTime: 3.44827
+    - totalTime: 3.55363
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 47
+    - blockLength: 587543
+    - preparationTime: 0.0911731
+    - searchTime: 3.4219
+    - totalTime: 3.51308
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 48
+    - blockLength: 575303
+    - preparationTime: 0.0886895
+    - searchTime: 3.41625
+    - totalTime: 3.50494
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 49
+    - blockLength: 563562
+    - preparationTime: 0.0909121
+    - searchTime: 3.41992
+    - totalTime: 3.51083
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 50
+    - blockLength: 552290
+    - preparationTime: 0.0894068
+    - searchTime: 3.42991
+    - totalTime: 3.51932
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 51
+    - blockLength: 541461
+    - preparationTime: 0.0914961
+    - searchTime: 3.48622
+    - totalTime: 3.57772
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 52
+    - blockLength: 531048
+    - preparationTime: 0.105451
+    - searchTime: 3.48706
+    - totalTime: 3.59251
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 53
+    - blockLength: 521029
+    - preparationTime: 0.0928593
+    - searchTime: 3.49038
+    - totalTime: 3.58324
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 54
+    - blockLength: 511380
+    - preparationTime: 0.0927805
+    - searchTime: 3.55484
+    - totalTime: 3.64762
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 55
+    - blockLength: 502082
+    - preparationTime: 0.139859
+    - searchTime: 3.54501
+    - totalTime: 3.68487
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 56
+    - blockLength: 493116
+    - preparationTime: 0.0998194
+    - searchTime: 3.46156
+    - totalTime: 3.56138
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 57
+    - blockLength: 484465
+    - preparationTime: 0.0948429
+    - searchTime: 3.42164
+    - totalTime: 3.51648
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 58
+    - blockLength: 476112
+    - preparationTime: 0.102686
+    - searchTime: 3.42072
+    - totalTime: 3.52341
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 59
+    - blockLength: 468043
+    - preparationTime: 0.093324
+    - searchTime: 3.48999
+    - totalTime: 3.58331
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 60
+    - blockLength: 460242
+    - preparationTime: 0.101166
+    - searchTime: 3.42901
+    - totalTime: 3.53018
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 61
+    - blockLength: 452697
+    - preparationTime: 0.0960323
+    - searchTime: 3.43047
+    - totalTime: 3.5265
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 62
+    - blockLength: 445395
+    - preparationTime: 0.0951802
+    - searchTime: 3.43973
+    - totalTime: 3.53491
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 63
+    - blockLength: 438326
+    - preparationTime: 0.0901677
+    - searchTime: 3.46309
+    - totalTime: 3.55326
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 64
+    - blockLength: 431477
+    - preparationTime: 0.108077
+    - searchTime: 3.42812
+    - totalTime: 3.53619
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 65
+    - blockLength: 424839
+    - preparationTime: 0.0920357
+    - searchTime: 3.49075
+    - totalTime: 3.58279
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 66
+    - blockLength: 418402
+    - preparationTime: 0.102227
+    - searchTime: 3.43326
+    - totalTime: 3.53549
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 67
+    - blockLength: 412157
+    - preparationTime: 0.0907167
+    - searchTime: 3.44013
+    - totalTime: 3.53084
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 68
+    - blockLength: 406096
+    - preparationTime: 0.097031
+    - searchTime: 3.44081
+    - totalTime: 3.53784
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 69
+    - blockLength: 400210
+    - preparationTime: 0.0904817
+    - searchTime: 3.46748
+    - totalTime: 3.55796
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 70
+    - blockLength: 394493
+    - preparationTime: 0.0925933
+    - searchTime: 3.4748
+    - totalTime: 3.56739
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 71
+    - blockLength: 388937
+    - preparationTime: 0.0912969
+    - searchTime: 3.39941
+    - totalTime: 3.4907
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 72
+    - blockLength: 383535
+    - preparationTime: 0.0922125
+    - searchTime: 3.44125
+    - totalTime: 3.53346
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 73
+    - blockLength: 378281
+    - preparationTime: 0.0943341
+    - searchTime: 3.41066
+    - totalTime: 3.50499
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 74
+    - blockLength: 373169
+    - preparationTime: 0.090431
+    - searchTime: 3.38796
+    - totalTime: 3.47839
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 75
+    - blockLength: 368193
+    - preparationTime: 0.106183
+    - searchTime: 3.3917
+    - totalTime: 3.49788
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 76
+    - blockLength: 363349
+    - preparationTime: 0.0910402
+    - searchTime: 3.43962
+    - totalTime: 3.53066
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 77
+    - blockLength: 358630
+    - preparationTime: 0.102858
+    - searchTime: 3.39327
+    - totalTime: 3.49612
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 78
+    - blockLength: 354032
+    - preparationTime: 0.0895702
+    - searchTime: 3.39224
+    - totalTime: 3.48181
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 79
+    - blockLength: 349551
+    - preparationTime: 0.0996134
+    - searchTime: 3.41379
+    - totalTime: 3.51341
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 80
+    - blockLength: 345181
+    - preparationTime: 0.0909032
+    - searchTime: 3.39074
+    - totalTime: 3.48164
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 81
+    - blockLength: 340920
+    - preparationTime: 0.0901272
+    - searchTime: 3.40944
+    - totalTime: 3.49957
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 82
+    - blockLength: 336762
+    - preparationTime: 0.0991048
+    - searchTime: 3.41835
+    - totalTime: 3.51746
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 83
+    - blockLength: 332705
+    - preparationTime: 0.0916168
+    - searchTime: 3.39207
+    - totalTime: 3.48368
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 84
+    - blockLength: 328744
+    - preparationTime: 0.0888082
+    - searchTime: 3.40417
+    - totalTime: 3.49298
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 85
+    - blockLength: 324877
+    - preparationTime: 0.0946368
+    - searchTime: 3.43199
+    - totalTime: 3.52662
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 86
+    - blockLength: 321099
+    - preparationTime: 0.0952926
+    - searchTime: 3.39248
+    - totalTime: 3.48777
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 87
+    - blockLength: 317408
+    - preparationTime: 0.0912407
+    - searchTime: 3.39035
+    - totalTime: 3.48159
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 88
+    - blockLength: 313801
+    - preparationTime: 0.0919272
+    - searchTime: 3.39124
+    - totalTime: 3.48317
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 89
+    - blockLength: 310275
+    - preparationTime: 0.0911345
+    - searchTime: 3.41959
+    - totalTime: 3.51073
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 90
+    - blockLength: 306828
+    - preparationTime: 0.0912554
+    - searchTime: 3.39138
+    - totalTime: 3.48263
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 91
+    - blockLength: 303456
+    - preparationTime: 0.0901954
+    - searchTime: 3.38488
+    - totalTime: 3.47507
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 92
+    - blockLength: 300158
+    - preparationTime: 0.0914561
+    - searchTime: 3.38864
+    - totalTime: 3.48009
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 93
+    - blockLength: 296930
+    - preparationTime: 0.101042
+    - searchTime: 3.47088
+    - totalTime: 3.57192
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 94
+    - blockLength: 293771
+    - preparationTime: 0.11878
+    - searchTime: 3.47112
+    - totalTime: 3.5899
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 95
+    - blockLength: 290679
+    - preparationTime: 0.0950065
+    - searchTime: 3.38791
+    - totalTime: 3.48292
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 96
+    - blockLength: 287651
+    - preparationTime: 0.0900585
+    - searchTime: 3.40175
+    - totalTime: 3.49181
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 97
+    - blockLength: 284686
+    - preparationTime: 0.0918965
+    - searchTime: 3.49299
+    - totalTime: 3.58489
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 98
+    - blockLength: 281781
+    - preparationTime: 0.0971468
+    - searchTime: 3.52748
+    - totalTime: 3.62462
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 99
+    - blockLength: 278934
+    - preparationTime: 0.1061
+    - searchTime: 3.42241
+    - totalTime: 3.52851
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
+---
+Results:
+    - numThreads: 100
+    - blockLength: 276145
+    - preparationTime: 0.100436
+    - searchTime: 3.40759
+    - totalTime: 3.50803
+    - wordOccurrences:
+        - love: 10235
+        - hate: 850
+    - mostCommonWord: Love
+
