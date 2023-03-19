@@ -35,7 +35,7 @@ void write_file(int times = 100) {
     }
 }
 
-pair<int, int> count_love_hate(string text, int numLove, int numHate) {
+void count_love_hate(string text, int *numLove, int *numHate) {
     istringstream iss(text);
     string word;
     do {
@@ -45,10 +45,9 @@ pair<int, int> count_love_hate(string text, int numLove, int numHate) {
         word.erase(std::remove(word.begin(), word.end(), '.'), word.end());
         word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
 
-        if (word == "love") numLove++;
-        if (word == "hate") numHate++;
+        if (word == "love") (*numLove)++;
+        if (word == "hate") (*numHate)++;
     } while (iss);
-    return make_pair(numLove, numHate);
 }
 
 void run(int numThreads = 1, bool log = true) {
@@ -59,7 +58,7 @@ void run(int numThreads = 1, bool log = true) {
     int threadLength = text.length() / numThreads;
 
     auto prep = chrono::steady_clock::now();
-    pair<int, int> answer = count_love_hate(text, numLove, numHate);
+    count_love_hate(text, &numLove, &numHate);
     
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
@@ -73,9 +72,9 @@ void run(int numThreads = 1, bool log = true) {
         cout << "Preparation time: " << prepTime.count() << '\n';
         cout << "Search time: " << searchTime.count() << '\n';
         cout << "Total time: " << totalTime.count() << '\n';
-        cout << "Word occurrences:\n" << "  Love: " << answer.first << '\n' << "  Hate: " << answer.second << '\n';
+        cout << "Word occurrences:\n" << "  Love: " << numLove << '\n' << "  Hate: " << numHate << '\n';
         cout << "Most common word: ";
-        if (answer.first > answer.second) {
+        if (numLove > numHate) {
             cout << "Love\n\n";
         }
         else {
@@ -90,9 +89,9 @@ void run(int numThreads = 1, bool log = true) {
         cout << "    - preparationTime: " << prepTime.count() << '\n';
         cout << "    - searchTime: " << searchTime.count() << '\n';
         cout << "    - totalTime: " << totalTime.count() << '\n';
-        cout << "    - wordOccurrences:\n" << "        - love: " << answer.first << '\n' << "        - hate: " << answer.second << '\n';
+        cout << "    - wordOccurrences:\n" << "        - love: " << numLove << '\n' << "        - hate: " << numHate << '\n';
         cout << "    - mostCommonWord: ";
-        if (answer.first > answer.second) {
+        if (numLove > numHate) {
             cout << "Love\n\n";
         }
         else {
@@ -103,6 +102,6 @@ void run(int numThreads = 1, bool log = true) {
 
 int main() {
     write_file(5);
-    for (int i = 1; i <= 100; ++i) run(i, false);
+    for (int i = 1; i <= 3; ++i) run(i, true);
     remove("shakespeare_extended.txt");
 }
