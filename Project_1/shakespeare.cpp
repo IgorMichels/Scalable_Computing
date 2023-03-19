@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include<numeric>
 #include <thread>
 #include <vector>
 #include <string>
@@ -35,8 +36,15 @@ void write_file(int times = 100) {
     }
 }
 
-void count_love_hate(string text, int *numLove, int *numHate) {
-    istringstream iss(text);
+struct dataFunction {
+            string text;
+            int *numLove;
+            int *numHate;
+        };
+
+// void count_love_hate(string text, int *numLove, int *numHate) {
+void count_love_hate(dataFunction data) {
+    istringstream iss(data.text);
     string word;
     do {
         iss >> word;
@@ -45,21 +53,48 @@ void count_love_hate(string text, int *numLove, int *numHate) {
         word.erase(std::remove(word.begin(), word.end(), '.'), word.end());
         word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
 
-        if (word == "love") (*numLove)++;
-        if (word == "hate") (*numHate)++;
+        if (word == "love") (*(data.numLove))++;
+        if (word == "hate") (*(data.numHate))++;
     } while (iss);
 }
 
 void run(int numThreads = 1, bool log = true) {
     auto start = chrono::steady_clock::now();
     string text = read_file("shakespeare_extended.txt");
-    int numLove = 0;
-    int numHate = 0;
     int threadLength = text.length() / numThreads;
+    vector<thread *> threads;
+    vector<int> loveCount(numThreads, 0);
+    vector<int> hateCount(numThreads, 0);
+
+    /*
+    for (int i = 1; i <= numThreads; i++) {
+        dataFunction data;
+        data.text = text.substr((i - 1) * threadLength, threadLength);
+        data.numLove = &(loveCount[i]);
+        data.numHate = &(hateCount[i]);
+        thread *ti = thread(count_love_hate, data);
+        // thread *ti = new thread(count_love_hate, text.substr((i - 1) * threadLength, threadLength), &(loveCount[i]), &(hateCount[i]));
+        threads.push_back(ti);
+    }
+    */
 
     auto prep = chrono::steady_clock::now();
-    count_love_hate(text, &numLove, &numHate);
+    /*
+    for (int i = 1; i <= numThreads; i++) {
+        (*threads[i]).join();
+    }
+    */
     
+    dataFunction data;
+    data.text = text;
+    data.numLove = &(loveCount[0]);
+    data.numHate = &(hateCount[0]);
+    count_love_hate(data);
+    // count_love_hate(text, &(loveCount[0]), &(hateCount[0]));
+    
+    int numLove = accumulate(loveCount.begin(), loveCount.end(), 0);
+    int numHate = accumulate(hateCount.begin(), hateCount.end(), 0);
+
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
     chrono::duration<double> prepTime = prep - start;
