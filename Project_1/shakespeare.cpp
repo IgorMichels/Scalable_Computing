@@ -42,7 +42,6 @@ struct dataFunction {
             int *numHate;
         };
 
-// void count_love_hate(string text, int *numLove, int *numHate) {
 void count_love_hate(dataFunction data) {
     istringstream iss(data.text);
     string word;
@@ -66,32 +65,20 @@ void run(int numThreads = 1, bool log = true) {
     vector<int> loveCount(numThreads, 0);
     vector<int> hateCount(numThreads, 0);
 
-    /*
-    for (int i = 1; i <= numThreads; i++) {
+    for (int i = 0; i < numThreads; i++) {
         dataFunction data;
-        data.text = text.substr((i - 1) * threadLength, threadLength);
+        data.text = text.substr(i * threadLength, threadLength);
         data.numLove = &(loveCount[i]);
         data.numHate = &(hateCount[i]);
-        thread *ti = thread(count_love_hate, data);
-        // thread *ti = new thread(count_love_hate, text.substr((i - 1) * threadLength, threadLength), &(loveCount[i]), &(hateCount[i]));
+        thread *ti = new thread(&count_love_hate, data);
         threads.push_back(ti);
     }
-    */
 
     auto prep = chrono::steady_clock::now();
-    /*
-    for (int i = 1; i <= numThreads; i++) {
-        (*threads[i]).join();
+    for (auto th : threads) {
+        th -> join();
     }
-    */
-    
-    dataFunction data;
-    data.text = text;
-    data.numLove = &(loveCount[0]);
-    data.numHate = &(hateCount[0]);
-    count_love_hate(data);
-    // count_love_hate(text, &(loveCount[0]), &(hateCount[0]));
-    
+
     int numLove = accumulate(loveCount.begin(), loveCount.end(), 0);
     int numHate = accumulate(hateCount.begin(), hateCount.end(), 0);
 
@@ -136,7 +123,7 @@ void run(int numThreads = 1, bool log = true) {
 }
 
 int main() {
-    write_file(5);
-    for (int i = 1; i <= 3; ++i) run(i, true);
+    write_file(100);
+    for (int i = 1; i <= 100; ++i) run(i, false);
     remove("shakespeare_extended.txt");
 }
