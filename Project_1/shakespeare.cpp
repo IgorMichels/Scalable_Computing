@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include<numeric>
+#include <numeric>
 #include <thread>
 #include <vector>
 #include <string>
@@ -47,10 +47,10 @@ void count_love_hate(dataFunction data) {
     string word;
     do {
         iss >> word;
-        std::transform(word.begin(), word.end(), word.begin(), ::tolower);
-        word.erase(std::remove(word.begin(), word.end(), ','), word.end());
-        word.erase(std::remove(word.begin(), word.end(), '.'), word.end());
-        word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
+        // std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+        // word.erase(std::remove(word.begin(), word.end(), ','), word.end());
+        // word.erase(std::remove(word.begin(), word.end(), '.'), word.end());
+        // word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
 
         if (word == "love") (*(data.numLove))++;
         if (word == "hate") (*(data.numHate))++;
@@ -123,7 +123,8 @@ void run(int numThreads = 1, bool log = true) {
 }
 
 int main() {
-    write_file(100);
-    for (int i = 1; i <= 100; ++i) run(i, false);
+    int n{ 5 };
+    write_file(n);
+    for (int i = 1; i <= n; ++i) run(i, false);
     remove("shakespeare_extended.txt");
 }
