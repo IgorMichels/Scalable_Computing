@@ -2,9 +2,9 @@
 Results:
     - numThreads: 1
     - blockLength: 552290900
-    - preparationTime: 2.2014
-    - searchTime: 63.7573
-    - totalTime: 65.9587
+    - preparationTime: 2.04743
+    - searchTime: 63.8632
+    - totalTime: 65.9107
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -14,9 +14,9 @@ Results:
 Results:
     - numThreads: 2
     - blockLength: 276145450
-    - preparationTime: 2.11305
-    - searchTime: 35.474
-    - totalTime: 37.587
+    - preparationTime: 1.83877
+    - searchTime: 34.2807
+    - totalTime: 36.1194
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -26,9 +26,9 @@ Results:
 Results:
     - numThreads: 3
     - blockLength: 184096966
-    - preparationTime: 1.96706
-    - searchTime: 25.4966
-    - totalTime: 27.4637
+    - preparationTime: 1.86158
+    - searchTime: 23.9048
+    - totalTime: 25.7664
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -38,9 +38,9 @@ Results:
 Results:
     - numThreads: 4
     - blockLength: 138072725
-    - preparationTime: 2.00691
-    - searchTime: 22.7717
-    - totalTime: 24.7786
+    - preparationTime: 1.88246
+    - searchTime: 21.2554
+    - totalTime: 23.1378
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -50,9 +50,9 @@ Results:
 Results:
     - numThreads: 5
     - blockLength: 110458180
-    - preparationTime: 1.97349
-    - searchTime: 20.2233
-    - totalTime: 22.1968
+    - preparationTime: 1.87907
+    - searchTime: 19.8401
+    - totalTime: 21.7192
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -62,9 +62,9 @@ Results:
 Results:
     - numThreads: 6
     - blockLength: 92048483
-    - preparationTime: 1.94482
-    - searchTime: 20.0872
-    - totalTime: 22.032
+    - preparationTime: 1.94663
+    - searchTime: 18.5677
+    - totalTime: 20.5144
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -74,9 +74,9 @@ Results:
 Results:
     - numThreads: 7
     - blockLength: 78898700
-    - preparationTime: 2.03036
-    - searchTime: 19.9218
-    - totalTime: 21.9522
+    - preparationTime: 1.91903
+    - searchTime: 19.2607
+    - totalTime: 21.1797
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -86,9 +86,9 @@ Results:
 Results:
     - numThreads: 8
     - blockLength: 69036362
-    - preparationTime: 1.97094
-    - searchTime: 20.3885
-    - totalTime: 22.3594
+    - preparationTime: 1.96704
+    - searchTime: 20.1468
+    - totalTime: 22.1139
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -98,9 +98,9 @@ Results:
 Results:
     - numThreads: 9
     - blockLength: 61365655
-    - preparationTime: 2.01555
-    - searchTime: 22.2831
-    - totalTime: 24.2987
+    - preparationTime: 2.00412
+    - searchTime: 22.3442
+    - totalTime: 24.3484
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -110,9 +110,9 @@ Results:
 Results:
     - numThreads: 10
     - blockLength: 55229090
-    - preparationTime: 2.14798
-    - searchTime: 22.3177
-    - totalTime: 24.4657
+    - preparationTime: 1.94904
+    - searchTime: 24.8835
+    - totalTime: 26.8326
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -122,9 +122,9 @@ Results:
 Results:
     - numThreads: 11
     - blockLength: 50208263
-    - preparationTime: 2.08586
-    - searchTime: 22.6526
-    - totalTime: 24.7385
+    - preparationTime: 1.92728
+    - searchTime: 24.5467
+    - totalTime: 26.474
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -134,9 +134,9 @@ Results:
 Results:
     - numThreads: 12
     - blockLength: 46024241
-    - preparationTime: 2.07617
-    - searchTime: 22.6953
-    - totalTime: 24.7715
+    - preparationTime: 1.94439
+    - searchTime: 24.3578
+    - totalTime: 26.3022
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -146,9 +146,9 @@ Results:
 Results:
     - numThreads: 13
     - blockLength: 42483915
-    - preparationTime: 2.08389
-    - searchTime: 23.0982
-    - totalTime: 25.1821
+    - preparationTime: 2.00238
+    - searchTime: 24.8384
+    - totalTime: 26.8407
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -158,9 +158,9 @@ Results:
 Results:
     - numThreads: 14
     - blockLength: 39449350
-    - preparationTime: 1.95905
-    - searchTime: 22.8759
-    - totalTime: 24.835
+    - preparationTime: 1.9762
+    - searchTime: 24.2569
+    - totalTime: 26.2331
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -170,9 +170,9 @@ Results:
 Results:
     - numThreads: 15
     - blockLength: 36819393
-    - preparationTime: 2.12152
-    - searchTime: 22.3741
-    - totalTime: 24.4957
+    - preparationTime: 1.99008
+    - searchTime: 24.5133
+    - totalTime: 26.5034
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -182,9 +182,9 @@ Results:
 Results:
     - numThreads: 16
     - blockLength: 34518181
-    - preparationTime: 1.99542
-    - searchTime: 22.1944
-    - totalTime: 24.1899
+    - preparationTime: 2.04959
+    - searchTime: 24.1088
+    - totalTime: 26.1584
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -194,9 +194,9 @@ Results:
 Results:
     - numThreads: 17
     - blockLength: 32487700
-    - preparationTime: 2.18386
-    - searchTime: 22.6464
-    - totalTime: 24.8303
+    - preparationTime: 2.05389
+    - searchTime: 24.4396
+    - totalTime: 26.4935
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -206,9 +206,9 @@ Results:
 Results:
     - numThreads: 18
     - blockLength: 30682827
-    - preparationTime: 2.13183
-    - searchTime: 22.4656
-    - totalTime: 24.5974
+    - preparationTime: 2.02863
+    - searchTime: 24.0814
+    - totalTime: 26.11
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -218,9 +218,9 @@ Results:
 Results:
     - numThreads: 19
     - blockLength: 29067942
-    - preparationTime: 2.086
-    - searchTime: 22.9165
-    - totalTime: 25.0025
+    - preparationTime: 2.06343
+    - searchTime: 24.4209
+    - totalTime: 26.4843
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -230,9 +230,9 @@ Results:
 Results:
     - numThreads: 20
     - blockLength: 27614545
-    - preparationTime: 2.1883
-    - searchTime: 22.3397
-    - totalTime: 24.528
+    - preparationTime: 2.01544
+    - searchTime: 24.754
+    - totalTime: 26.7694
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -242,9 +242,9 @@ Results:
 Results:
     - numThreads: 21
     - blockLength: 26299566
-    - preparationTime: 2.08188
-    - searchTime: 22.7505
-    - totalTime: 24.8324
+    - preparationTime: 2.01097
+    - searchTime: 24.8555
+    - totalTime: 26.8664
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -254,9 +254,9 @@ Results:
 Results:
     - numThreads: 22
     - blockLength: 25104131
-    - preparationTime: 2.06189
-    - searchTime: 22.7208
-    - totalTime: 24.7826
+    - preparationTime: 2.00883
+    - searchTime: 24.666
+    - totalTime: 26.6749
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -266,9 +266,9 @@ Results:
 Results:
     - numThreads: 23
     - blockLength: 24012647
-    - preparationTime: 2.08387
-    - searchTime: 22.7306
-    - totalTime: 24.8144
+    - preparationTime: 1.94768
+    - searchTime: 24.9309
+    - totalTime: 26.8786
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -278,9 +278,9 @@ Results:
 Results:
     - numThreads: 24
     - blockLength: 23012120
-    - preparationTime: 2.1619
-    - searchTime: 22.797
-    - totalTime: 24.9589
+    - preparationTime: 2.01813
+    - searchTime: 24.7031
+    - totalTime: 26.7212
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -290,9 +290,9 @@ Results:
 Results:
     - numThreads: 25
     - blockLength: 22091636
-    - preparationTime: 2.18125
-    - searchTime: 22.3528
-    - totalTime: 24.534
+    - preparationTime: 2.17307
+    - searchTime: 24.7788
+    - totalTime: 26.9518
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -302,9 +302,9 @@ Results:
 Results:
     - numThreads: 26
     - blockLength: 21241957
-    - preparationTime: 2.32616
-    - searchTime: 22.4571
-    - totalTime: 24.7832
+    - preparationTime: 2.06988
+    - searchTime: 24.8403
+    - totalTime: 26.9102
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -314,9 +314,9 @@ Results:
 Results:
     - numThreads: 27
     - blockLength: 20455218
-    - preparationTime: 2.13678
-    - searchTime: 22.2935
-    - totalTime: 24.4303
+    - preparationTime: 2.05224
+    - searchTime: 24.59
+    - totalTime: 26.6423
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -326,9 +326,9 @@ Results:
 Results:
     - numThreads: 28
     - blockLength: 19724675
-    - preparationTime: 2.15986
-    - searchTime: 22.6626
-    - totalTime: 24.8225
+    - preparationTime: 2.0767
+    - searchTime: 24.761
+    - totalTime: 26.8377
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -338,9 +338,9 @@ Results:
 Results:
     - numThreads: 29
     - blockLength: 19044513
-    - preparationTime: 2.24415
-    - searchTime: 22.2115
-    - totalTime: 24.4557
+    - preparationTime: 2.08086
+    - searchTime: 24.7761
+    - totalTime: 26.857
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -350,9 +350,9 @@ Results:
 Results:
     - numThreads: 30
     - blockLength: 18409696
-    - preparationTime: 2.15257
-    - searchTime: 22.3127
-    - totalTime: 24.4652
+    - preparationTime: 2.10757
+    - searchTime: 24.4367
+    - totalTime: 26.5443
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -362,9 +362,9 @@ Results:
 Results:
     - numThreads: 31
     - blockLength: 17815835
-    - preparationTime: 2.4016
-    - searchTime: 22.3564
-    - totalTime: 24.758
+    - preparationTime: 2.0808
+    - searchTime: 23.5695
+    - totalTime: 25.6503
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -374,9 +374,9 @@ Results:
 Results:
     - numThreads: 32
     - blockLength: 17259090
-    - preparationTime: 2.24835
-    - searchTime: 22.403
-    - totalTime: 24.6514
+    - preparationTime: 2.12609
+    - searchTime: 24.4897
+    - totalTime: 26.6158
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -386,9 +386,9 @@ Results:
 Results:
     - numThreads: 33
     - blockLength: 16736087
-    - preparationTime: 2.45751
-    - searchTime: 21.5452
-    - totalTime: 24.0027
+    - preparationTime: 2.2025
+    - searchTime: 24.7352
+    - totalTime: 26.9377
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -398,9 +398,9 @@ Results:
 Results:
     - numThreads: 34
     - blockLength: 16243850
-    - preparationTime: 2.55003
-    - searchTime: 21.895
-    - totalTime: 24.445
+    - preparationTime: 2.00034
+    - searchTime: 24.6439
+    - totalTime: 26.6443
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -410,9 +410,9 @@ Results:
 Results:
     - numThreads: 35
     - blockLength: 15779740
-    - preparationTime: 2.07068
-    - searchTime: 22.2176
-    - totalTime: 24.2883
+    - preparationTime: 2.1092
+    - searchTime: 24.3156
+    - totalTime: 26.4248
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -422,9 +422,9 @@ Results:
 Results:
     - numThreads: 36
     - blockLength: 15341413
-    - preparationTime: 2.17482
-    - searchTime: 22.6402
-    - totalTime: 24.815
+    - preparationTime: 1.9631
+    - searchTime: 23.2952
+    - totalTime: 25.2583
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -434,9 +434,9 @@ Results:
 Results:
     - numThreads: 37
     - blockLength: 14926781
-    - preparationTime: 1.95957
-    - searchTime: 22.1326
-    - totalTime: 24.0922
+    - preparationTime: 2.22045
+    - searchTime: 24.4019
+    - totalTime: 26.6224
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -446,9 +446,9 @@ Results:
 Results:
     - numThreads: 38
     - blockLength: 14533971
-    - preparationTime: 2.26023
-    - searchTime: 21.7293
-    - totalTime: 23.9895
+    - preparationTime: 2.06609
+    - searchTime: 24.8442
+    - totalTime: 26.9103
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -458,9 +458,9 @@ Results:
 Results:
     - numThreads: 39
     - blockLength: 14161305
-    - preparationTime: 2.7126
-    - searchTime: 21.9482
-    - totalTime: 24.6608
+    - preparationTime: 1.84873
+    - searchTime: 24.761
+    - totalTime: 26.6097
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -470,9 +470,9 @@ Results:
 Results:
     - numThreads: 40
     - blockLength: 13807272
-    - preparationTime: 2.29664
-    - searchTime: 21.7124
-    - totalTime: 24.0091
+    - preparationTime: 1.95339
+    - searchTime: 24.3469
+    - totalTime: 26.3003
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -482,9 +482,9 @@ Results:
 Results:
     - numThreads: 41
     - blockLength: 13470509
-    - preparationTime: 2.15755
-    - searchTime: 21.9221
-    - totalTime: 24.0796
+    - preparationTime: 2.14122
+    - searchTime: 24.0721
+    - totalTime: 26.2133
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -494,9 +494,9 @@ Results:
 Results:
     - numThreads: 42
     - blockLength: 13149783
-    - preparationTime: 2.19087
-    - searchTime: 21.8339
-    - totalTime: 24.0248
+    - preparationTime: 2.12431
+    - searchTime: 24.3708
+    - totalTime: 26.4952
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -506,9 +506,9 @@ Results:
 Results:
     - numThreads: 43
     - blockLength: 12843974
-    - preparationTime: 2.24398
-    - searchTime: 21.8234
-    - totalTime: 24.0674
+    - preparationTime: 1.963
+    - searchTime: 24.6733
+    - totalTime: 26.6363
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -518,9 +518,9 @@ Results:
 Results:
     - numThreads: 44
     - blockLength: 12552065
-    - preparationTime: 2.25794
-    - searchTime: 21.7671
-    - totalTime: 24.025
+    - preparationTime: 2.09095
+    - searchTime: 24.5308
+    - totalTime: 26.6217
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -530,9 +530,9 @@ Results:
 Results:
     - numThreads: 45
     - blockLength: 12273131
-    - preparationTime: 2.2895
-    - searchTime: 22.4451
-    - totalTime: 24.7346
+    - preparationTime: 1.96181
+    - searchTime: 24.3821
+    - totalTime: 26.3439
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -542,9 +542,9 @@ Results:
 Results:
     - numThreads: 46
     - blockLength: 12006323
-    - preparationTime: 2.03238
-    - searchTime: 22.2206
-    - totalTime: 24.253
+    - preparationTime: 2.23839
+    - searchTime: 24.3653
+    - totalTime: 26.6037
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -554,9 +554,9 @@ Results:
 Results:
     - numThreads: 47
     - blockLength: 11750870
-    - preparationTime: 2.86179
-    - searchTime: 21.9307
-    - totalTime: 24.7925
+    - preparationTime: 1.93855
+    - searchTime: 23.1514
+    - totalTime: 25.0899
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -566,9 +566,9 @@ Results:
 Results:
     - numThreads: 48
     - blockLength: 11506060
-    - preparationTime: 2.54238
-    - searchTime: 21.9088
-    - totalTime: 24.4512
+    - preparationTime: 1.96775
+    - searchTime: 24.8937
+    - totalTime: 26.8615
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -578,9 +578,9 @@ Results:
 Results:
     - numThreads: 49
     - blockLength: 11271242
-    - preparationTime: 2.17071
-    - searchTime: 22.8012
-    - totalTime: 24.9719
+    - preparationTime: 1.92915
+    - searchTime: 25.0617
+    - totalTime: 26.9908
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -590,9 +590,9 @@ Results:
 Results:
     - numThreads: 50
     - blockLength: 11045818
-    - preparationTime: 2.06333
-    - searchTime: 23.0277
-    - totalTime: 25.091
+    - preparationTime: 1.98553
+    - searchTime: 24.2233
+    - totalTime: 26.2089
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -602,9 +602,9 @@ Results:
 Results:
     - numThreads: 51
     - blockLength: 10829233
-    - preparationTime: 1.88355
-    - searchTime: 23.2008
-    - totalTime: 25.0843
+    - preparationTime: 2.28372
+    - searchTime: 24.3394
+    - totalTime: 26.6231
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -614,9 +614,9 @@ Results:
 Results:
     - numThreads: 52
     - blockLength: 10620978
-    - preparationTime: 2.06983
-    - searchTime: 22.3365
-    - totalTime: 24.4064
+    - preparationTime: 2.22221
+    - searchTime: 24.6914
+    - totalTime: 26.9136
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -626,9 +626,9 @@ Results:
 Results:
     - numThreads: 53
     - blockLength: 10420583
-    - preparationTime: 2.17864
-    - searchTime: 22.5116
-    - totalTime: 24.6902
+    - preparationTime: 2.15405
+    - searchTime: 24.8593
+    - totalTime: 27.0133
     - wordOccurrences:
         - love: 204700
         - hate: 17002
@@ -638,9 +638,9 @@ Results:
 Results:
     - numThreads: 54
     - blockLength: 10227609
-    - preparationTime: 2.11773
-    - searchTime: 22.3202
-    - totalTime: 24.438
+    - preparationTime: 1.9465
+    - searchTime: 25.0283
+    - totalTime: 26.9748
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -650,9 +650,9 @@ Results:
 Results:
     - numThreads: 55
     - blockLength: 10041652
-    - preparationTime: 2.23399
-    - searchTime: 22.1948
-    - totalTime: 24.4287
+    - preparationTime: 1.95043
+    - searchTime: 24.6924
+    - totalTime: 26.6428
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -662,9 +662,9 @@ Results:
 Results:
     - numThreads: 56
     - blockLength: 9862337
-    - preparationTime: 1.93918
-    - searchTime: 22.6134
-    - totalTime: 24.5526
+    - preparationTime: 2.34218
+    - searchTime: 23.9909
+    - totalTime: 26.3331
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -674,9 +674,9 @@ Results:
 Results:
     - numThreads: 57
     - blockLength: 9689314
-    - preparationTime: 1.93335
-    - searchTime: 22.5125
-    - totalTime: 24.4458
+    - preparationTime: 1.93566
+    - searchTime: 24.6219
+    - totalTime: 26.5576
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -686,9 +686,9 @@ Results:
 Results:
     - numThreads: 58
     - blockLength: 9522256
-    - preparationTime: 2.03237
-    - searchTime: 22.6225
-    - totalTime: 24.6549
+    - preparationTime: 1.97771
+    - searchTime: 24.5372
+    - totalTime: 26.5149
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -698,9 +698,9 @@ Results:
 Results:
     - numThreads: 59
     - blockLength: 9360862
-    - preparationTime: 1.97723
-    - searchTime: 22.3866
-    - totalTime: 24.3638
+    - preparationTime: 2.25462
+    - searchTime: 24.1361
+    - totalTime: 26.3908
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -710,9 +710,9 @@ Results:
 Results:
     - numThreads: 60
     - blockLength: 9204848
-    - preparationTime: 1.93798
-    - searchTime: 23.2558
-    - totalTime: 25.1937
+    - preparationTime: 1.94649
+    - searchTime: 24.2639
+    - totalTime: 26.2104
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -722,9 +722,9 @@ Results:
 Results:
     - numThreads: 61
     - blockLength: 9053949
-    - preparationTime: 2.30362
-    - searchTime: 22.391
-    - totalTime: 24.6946
+    - preparationTime: 1.92117
+    - searchTime: 24.6803
+    - totalTime: 26.6015
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -734,9 +734,9 @@ Results:
 Results:
     - numThreads: 62
     - blockLength: 8907917
-    - preparationTime: 1.99322
-    - searchTime: 22.5297
-    - totalTime: 24.523
+    - preparationTime: 1.95118
+    - searchTime: 24.6062
+    - totalTime: 26.5573
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -746,9 +746,9 @@ Results:
 Results:
     - numThreads: 63
     - blockLength: 8766522
-    - preparationTime: 2.17268
-    - searchTime: 22.3381
-    - totalTime: 24.5108
+    - preparationTime: 2.00329
+    - searchTime: 24.8531
+    - totalTime: 26.8564
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -758,9 +758,9 @@ Results:
 Results:
     - numThreads: 64
     - blockLength: 8629545
-    - preparationTime: 2.00211
-    - searchTime: 22.2574
-    - totalTime: 24.2595
+    - preparationTime: 2.27823
+    - searchTime: 24.5424
+    - totalTime: 26.8207
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -770,9 +770,9 @@ Results:
 Results:
     - numThreads: 65
     - blockLength: 8496783
-    - preparationTime: 2.0106
-    - searchTime: 22.2168
-    - totalTime: 24.2274
+    - preparationTime: 1.97391
+    - searchTime: 24.8026
+    - totalTime: 26.7765
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -782,9 +782,9 @@ Results:
 Results:
     - numThreads: 66
     - blockLength: 8368043
-    - preparationTime: 3.12857
-    - searchTime: 21.8169
-    - totalTime: 24.9455
+    - preparationTime: 2.02493
+    - searchTime: 24.8755
+    - totalTime: 26.9004
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -794,9 +794,9 @@ Results:
 Results:
     - numThreads: 67
     - blockLength: 8243147
-    - preparationTime: 2.34182
-    - searchTime: 22.1744
-    - totalTime: 24.5162
+    - preparationTime: 2.3645
+    - searchTime: 23.9657
+    - totalTime: 26.3302
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -806,9 +806,9 @@ Results:
 Results:
     - numThreads: 68
     - blockLength: 8121925
-    - preparationTime: 2.31466
-    - searchTime: 21.8383
-    - totalTime: 24.153
+    - preparationTime: 2.45267
+    - searchTime: 24.1705
+    - totalTime: 26.6232
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -818,9 +818,9 @@ Results:
 Results:
     - numThreads: 69
     - blockLength: 8004215
-    - preparationTime: 2.6891
-    - searchTime: 21.875
-    - totalTime: 24.5641
+    - preparationTime: 2.27409
+    - searchTime: 24.4825
+    - totalTime: 26.7566
     - wordOccurrences:
         - love: 204700
         - hate: 16999
@@ -830,9 +830,9 @@ Results:
 Results:
     - numThreads: 70
     - blockLength: 7889870
-    - preparationTime: 3.09707
-    - searchTime: 21.9647
-    - totalTime: 25.0618
+    - preparationTime: 2.4836
+    - searchTime: 24.5717
+    - totalTime: 27.0553
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -842,9 +842,9 @@ Results:
 Results:
     - numThreads: 71
     - blockLength: 7778745
-    - preparationTime: 2.19958
-    - searchTime: 22.4718
-    - totalTime: 24.6714
+    - preparationTime: 2.05097
+    - searchTime: 25.1148
+    - totalTime: 27.1657
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -854,9 +854,9 @@ Results:
 Results:
     - numThreads: 72
     - blockLength: 7670706
-    - preparationTime: 2.4157
-    - searchTime: 22.1814
-    - totalTime: 24.5971
+    - preparationTime: 2.04088
+    - searchTime: 24.5109
+    - totalTime: 26.5518
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -866,9 +866,9 @@ Results:
 Results:
     - numThreads: 73
     - blockLength: 7565628
-    - preparationTime: 1.96421
-    - searchTime: 23.1336
-    - totalTime: 25.0978
+    - preparationTime: 2.23979
+    - searchTime: 24.8122
+    - totalTime: 27.052
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -878,9 +878,9 @@ Results:
 Results:
     - numThreads: 74
     - blockLength: 7463390
-    - preparationTime: 2.15911
-    - searchTime: 22.6517
-    - totalTime: 24.8108
+    - preparationTime: 1.9439
+    - searchTime: 25.1685
+    - totalTime: 27.1124
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -890,9 +890,9 @@ Results:
 Results:
     - numThreads: 75
     - blockLength: 7363878
-    - preparationTime: 2.65436
-    - searchTime: 21.6157
-    - totalTime: 24.27
+    - preparationTime: 2.00903
+    - searchTime: 24.7981
+    - totalTime: 26.8072
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -902,9 +902,9 @@ Results:
 Results:
     - numThreads: 76
     - blockLength: 7266985
-    - preparationTime: 1.95657
-    - searchTime: 22.546
-    - totalTime: 24.5026
+    - preparationTime: 2.04514
+    - searchTime: 24.7729
+    - totalTime: 26.8181
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -914,9 +914,9 @@ Results:
 Results:
     - numThreads: 77
     - blockLength: 7172609
-    - preparationTime: 2.49422
-    - searchTime: 21.9341
-    - totalTime: 24.4283
+    - preparationTime: 1.95997
+    - searchTime: 25.0469
+    - totalTime: 27.0069
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -926,9 +926,9 @@ Results:
 Results:
     - numThreads: 78
     - blockLength: 7080652
-    - preparationTime: 2.73238
-    - searchTime: 21.7812
-    - totalTime: 24.5136
+    - preparationTime: 2.07657
+    - searchTime: 24.8425
+    - totalTime: 26.9191
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -938,9 +938,9 @@ Results:
 Results:
     - numThreads: 79
     - blockLength: 6991024
-    - preparationTime: 2.50607
-    - searchTime: 21.836
-    - totalTime: 24.342
+    - preparationTime: 2.44354
+    - searchTime: 24.5213
+    - totalTime: 26.9649
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -950,9 +950,9 @@ Results:
 Results:
     - numThreads: 80
     - blockLength: 6903636
-    - preparationTime: 2.20792
-    - searchTime: 23.1138
-    - totalTime: 25.3217
+    - preparationTime: 1.993
+    - searchTime: 24.6323
+    - totalTime: 26.6253
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -962,9 +962,9 @@ Results:
 Results:
     - numThreads: 81
     - blockLength: 6818406
-    - preparationTime: 2.66692
-    - searchTime: 22.4767
-    - totalTime: 25.1436
+    - preparationTime: 2.01494
+    - searchTime: 24.4682
+    - totalTime: 26.4831
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -974,9 +974,9 @@ Results:
 Results:
     - numThreads: 82
     - blockLength: 6735254
-    - preparationTime: 2.01389
-    - searchTime: 23.4827
-    - totalTime: 25.4966
+    - preparationTime: 2.62657
+    - searchTime: 23.9893
+    - totalTime: 26.6159
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -986,9 +986,9 @@ Results:
 Results:
     - numThreads: 83
     - blockLength: 6654107
-    - preparationTime: 2.70859
-    - searchTime: 21.932
-    - totalTime: 24.6406
+    - preparationTime: 2.69942
+    - searchTime: 24.1177
+    - totalTime: 26.8171
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -998,9 +998,9 @@ Results:
 Results:
     - numThreads: 84
     - blockLength: 6574891
-    - preparationTime: 2.40382
-    - searchTime: 22.1576
-    - totalTime: 24.5614
+    - preparationTime: 1.95366
+    - searchTime: 24.7868
+    - totalTime: 26.7405
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1010,9 +1010,9 @@ Results:
 Results:
     - numThreads: 85
     - blockLength: 6497540
-    - preparationTime: 2.47604
-    - searchTime: 21.9037
-    - totalTime: 24.3798
+    - preparationTime: 1.98095
+    - searchTime: 24.7636
+    - totalTime: 26.7445
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1022,9 +1022,9 @@ Results:
 Results:
     - numThreads: 86
     - blockLength: 6421987
-    - preparationTime: 2.45136
-    - searchTime: 21.9538
-    - totalTime: 24.4051
+    - preparationTime: 2.33857
+    - searchTime: 24.066
+    - totalTime: 26.4046
     - wordOccurrences:
         - love: 204699
         - hate: 17000
@@ -1034,9 +1034,9 @@ Results:
 Results:
     - numThreads: 87
     - blockLength: 6348171
-    - preparationTime: 2.55691
-    - searchTime: 22.0195
-    - totalTime: 24.5764
+    - preparationTime: 2.7876
+    - searchTime: 23.5783
+    - totalTime: 26.3659
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1046,9 +1046,9 @@ Results:
 Results:
     - numThreads: 88
     - blockLength: 6276032
-    - preparationTime: 2.42884
-    - searchTime: 21.8114
-    - totalTime: 24.2403
+    - preparationTime: 2.62092
+    - searchTime: 23.7968
+    - totalTime: 26.4178
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1058,9 +1058,9 @@ Results:
 Results:
     - numThreads: 89
     - blockLength: 6205515
-    - preparationTime: 2.67727
-    - searchTime: 22.3727
-    - totalTime: 25.05
+    - preparationTime: 2.64464
+    - searchTime: 23.7404
+    - totalTime: 26.3851
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1070,9 +1070,9 @@ Results:
 Results:
     - numThreads: 90
     - blockLength: 6136565
-    - preparationTime: 2.6104
-    - searchTime: 22.7562
-    - totalTime: 25.3666
+    - preparationTime: 1.98901
+    - searchTime: 24.6897
+    - totalTime: 26.6787
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1082,9 +1082,9 @@ Results:
 Results:
     - numThreads: 91
     - blockLength: 6069130
-    - preparationTime: 2.50209
-    - searchTime: 21.9012
-    - totalTime: 24.4033
+    - preparationTime: 2.44651
+    - searchTime: 24.4793
+    - totalTime: 26.9258
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1094,9 +1094,9 @@ Results:
 Results:
     - numThreads: 92
     - blockLength: 6003161
-    - preparationTime: 2.65101
-    - searchTime: 22.5008
-    - totalTime: 25.1518
+    - preparationTime: 2.00004
+    - searchTime: 24.735
+    - totalTime: 26.735
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1106,9 +1106,9 @@ Results:
 Results:
     - numThreads: 93
     - blockLength: 5938611
-    - preparationTime: 2.17865
-    - searchTime: 22.7755
-    - totalTime: 24.9542
+    - preparationTime: 2.51456
+    - searchTime: 24.4397
+    - totalTime: 26.9543
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1118,9 +1118,9 @@ Results:
 Results:
     - numThreads: 94
     - blockLength: 5875435
-    - preparationTime: 2.62061
-    - searchTime: 22.5117
-    - totalTime: 25.1323
+    - preparationTime: 2.60509
+    - searchTime: 24.288
+    - totalTime: 26.8931
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1130,9 +1130,9 @@ Results:
 Results:
     - numThreads: 95
     - blockLength: 5813588
-    - preparationTime: 1.96897
-    - searchTime: 22.7683
-    - totalTime: 24.7372
+    - preparationTime: 2.81343
+    - searchTime: 23.8199
+    - totalTime: 26.6333
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1142,9 +1142,9 @@ Results:
 Results:
     - numThreads: 96
     - blockLength: 5753030
-    - preparationTime: 2.37863
-    - searchTime: 22.5329
-    - totalTime: 24.9116
+    - preparationTime: 2.68652
+    - searchTime: 23.6582
+    - totalTime: 26.3447
     - wordOccurrences:
         - love: 204700
         - hate: 17001
@@ -1154,9 +1154,9 @@ Results:
 Results:
     - numThreads: 97
     - blockLength: 5693720
-    - preparationTime: 2.83227
-    - searchTime: 21.9502
-    - totalTime: 24.7825
+    - preparationTime: 2.749
+    - searchTime: 22.7332
+    - totalTime: 25.4822
     - wordOccurrences:
         - love: 204701
         - hate: 17000
@@ -1166,9 +1166,9 @@ Results:
 Results:
     - numThreads: 98
     - blockLength: 5635621
-    - preparationTime: 2.80828
-    - searchTime: 22.1963
-    - totalTime: 25.0045
+    - preparationTime: 2.07165
+    - searchTime: 22.1571
+    - totalTime: 24.2288
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1178,9 +1178,9 @@ Results:
 Results:
     - numThreads: 99
     - blockLength: 5578695
-    - preparationTime: 2.34803
-    - searchTime: 22.199
-    - totalTime: 24.547
+    - preparationTime: 2.07041
+    - searchTime: 23.4649
+    - totalTime: 25.5353
     - wordOccurrences:
         - love: 204700
         - hate: 17000
@@ -1190,9 +1190,9 @@ Results:
 Results:
     - numThreads: 100
     - blockLength: 5522909
-    - preparationTime: 2.31901
-    - searchTime: 22.0071
-    - totalTime: 24.3261
+    - preparationTime: 2.42204
+    - searchTime: 22.3529
+    - totalTime: 24.7749
     - wordOccurrences:
         - love: 204700
         - hate: 17000
