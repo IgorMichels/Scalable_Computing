@@ -28,78 +28,93 @@ class Car:
         self.direction = 1 if direction == 'S' else -1
         self.maxSpeedLane = maxSpeed
         self.highwayExtension = highwayExtension
-        self.pos = 0
+        self.pos = 0 if direction == 'S' else highwayExtension
         self.currSpeed = randint(self.minSpeed, self.maxSpeedLane)
         self.isCrashed = False
 
     def crash(self):
         self.isCrashed = True
 
+    def tryCrash(self, highwayStatus):
+        # primeiro verifica se há algum carro ao seu lado
+        # se sim, vai em direção ao mesmo, tentando colidir
+
+        # se não, busca em que pista está o carro que está
+        # imediatamente atrás e freia bruscamente mudando 
+        # para aquela pista
+        if self.direction == 1:
+            # sentido sul
+            if np.sum(highwayStatus[self.pos, self.actualLane:self.numLanes] == 1) >= 2:
+                self.pos += self.currSpeed
+                self.actualLane += 1
+                return self.pos, self.actualLane
+            elif np.sum(highwayStatus[self.pos, :self.actualLane] == 1) >= 1:
+                self.pos += self.currSpeed
+                self.actualLane -= 1
+                return self.pos, self.actualLane
+
+            self.currSpeed += self.minAcceleration
+            for i in range(self.pos, 0, -1):
+                if np.sum(highwayStatus[i, self.actualLane + 1:self.numLanes] == 1) >= 1:
+                    self.pos += self.currSpeed
+                    self.actualLane += 1
+                    return self.pos, self.actualLane
+                elif highwayStatus[i, self.actualLane] == 1:
+                    self.pos += self.currSpeed
+                    return self.pos, self.actualLane
+                elif np.sum(highwayStatus[i, :self.actualLane] == 1) >= 1:
+                    self.pos += self.currSpeed
+                    self.actualLane -= 1
+                    return self.pos, self.actualLane
+
+        else:
+            # sentido norte
+            if np.sum(highwayStatus[self.pos, self.actualLane:]) >= 2:
+                self.pos -= self.currSpeed
+                self.actualLane += 1
+                return self.pos, self.actualLane
+            elif np.sum(highwayStatus[self.pos, -self.numLanes:self.actualLane]) >= 1:
+                self.pos -= self.currSpeed
+                self.actualLane -= 1
+                return self.pos, self.actualLane
+
+            self.currSpeed += self.minAcceleration
+            for i in range(self.pos, self.highwayExtension + 1):
+                if np.sum(highwayStatus[i, self.actualLane + 1:]) >= 1:
+                    self.pos -= self.currSpeed
+                    self.actualLane += 1
+                    return self.pos, self.actualLane
+                elif highwayStatus[i, self.actualLane] == 1:
+                    self.pos -= self.currSpeed
+                    return self.pos, self.actualLane
+                elif np.sum(highwayStatus[i, -self.numLanes:self.actualLane]) >= 1:
+                    self.pos -= self.currSpeed
+                    self.actualLane -= 1
+                    return self.pos, self.actualLane
+                
+        # não há carros atrás
+        self.pos -= self.currSpeed
+        return self.pos, self.actualLane
+
     def updateCar(self, highwayStatus):
         if self.isCrashed: return
 
         if random() < self.probCrash: self.willCrash = True
-        if self.willCrash:
-            # primeiro verifica se há algum carro ao seu lado
-            # se sim, vai em direção ao mesmo, causando a colisão
-
-            # se não, busca em que pista está o carro que está
-            # imediatamente atrás e freia bruscamente mudando 
-            # para aquela pista
-            if self.direction == 1:
-                # sentido sul
-                if np.sum(highwayStatus[self.pos, self.actualLane:self.numLanes]) >= 2:
-                    self.pos += self.currSpeed
-                    self.actualLane += 1
-                    return self.pos, self.actualLane
-                elif np.sum(highwayStatus[self.pos, :self.actualLane]) >= 1:
-                    self.pos += self.currSpeed
-                    self.actualLane -= 1
-                    return self.pos, self.actualLane
-
-                for i in range(self.pos, 0, -1):
-                    if np.sum(highwayStatus[i, self.actualLane:self.numLanes]) >= 1:
-                        self.currSpeed += self.minAcceleration
-                        self.pos += self.currSpeed
-                        self.actualLane += 1
-                        return self.pos, self.actualLane
-                    elif np.sum(highwayStatus[i, :self.actualLane]) >= 1:
-                        self.currSpeed += self.minAcceleration
-                        self.pos += self.currSpeed
-                        self.actualLane -= 1
-                        return self.pos, self.actualLane
-
-            else:
-                # sentido norte
-                if np.sum(highwayStatus[self.pos, self.actualLane:]) >= 2:
-                    self.pos -= self.currSpeed
-                    self.actualLane += 1
-                    return self.pos, self.actualLane
-                elif np.sum(highwayStatus[self.pos, -self.numLanes:self.actualLane]) >= 1:
-                    self.pos -= self.currSpeed
-                    self.actualLane -= 1
-                    return self.pos, self.actualLane
-
-                for i in range(self.pos, self.highwayExtension + 1):
-                    if np.sum(highwayStatus[i, self.actualLane:]) >= 1:
-                        self.currSpeed += self.minAcceleration
-                        self.pos -= self.currSpeed
-                        self.actualLane += 1
-                        return self.pos, self.actualLane
-                    elif np.sum(highwayStatus[i, -self.numLanes:self.actualLane]) >= 1:
-                        self.currSpeed += self.minAcceleration
-                        self.pos -= self.currSpeed
-                        self.actualLane -= 1
-                        return self.pos, self.actualLane
+        if self.willCrash: return self.tryCrash(highwayStatus)
         
+        # não colidiu, vamos ver se há colisão a frente
+        if ...:
+            pass
+
+        # caminho limpo
         if random() < self.probChangeLane:
             if self.actualLane == 0: self.actualLane += 1
             elif self.actualLane == self.numLanes - 1: self.actualLane -= 1
             else: self.actualLane += choice([-1, 1])
 
-        # fazer mecanismo para frear caso tenha um acidente a frente
-        # bem como ele se acidentar se passar por "cima" de uma colisão
         self.currSpeed += randint(self.minAcceleration, self.maxAcceleration)
+        if self.currSpeed > self.maxSpeed: self.currSpeed = self.maxSpeed
+        if self.currSpeed < self.minSpeed: self.currSpeed = self.minSpeed
         self.pos += self.currSpeed
         return self.pos, self.actualLane
 
@@ -133,6 +148,8 @@ class Highway:
         self.cars = list()
 
     def updateHighwayStatus(self):
+        print(self.cars)
+        # input()
         for i in range(self.highwayStatus.shape[1]):
             if np.sum(self.highwayStatus[:, i] < 0) > 0:
                 args = np.argsort(self.highwayStatus[:, i])
@@ -141,8 +158,8 @@ class Highway:
                     self.highwayStatus[args[j], i] += 1
                     j += 1
 
-        for i, car in enumerate(self.cars):
-            car, pos, lane = car
+        for i, car_info in enumerate(self.cars):
+            car, pos, lane = car_info
             update = car.updateCar(self.highwayStatus)
             if update == None: continue
 
@@ -152,10 +169,11 @@ class Highway:
             
             self.cars[i] = [car, pos, lane]
         
-        for i, car in enumerate(self.cars):
-            car, pos, lane = car
+        drop = list()
+        for i, car_info in enumerate(self.cars):
+            car, pos, lane = car_info
             if pos < 0 or pos > self.highwayExtension:
-                self.cars.pop(i)
+                drop.append(i)
                 continue
 
             if car.direction == -1:
@@ -164,6 +182,8 @@ class Highway:
             
             if self.highwayStatus[pos, lane] == 1: self.highwayStatus[pos, lane] = -self.cleanLaneEpochs
             else: self.highwayStatus[pos, lane] = 1
+
+        for i in drop[::-1]: self.cars.pop(i)
 
         for i in range(self.numLanesS):
             if random() < self.probNewCar:
@@ -178,6 +198,7 @@ class Highway:
                              'S'
                              )
                 self.cars.append([newCar, 0, i])
+                self.highwayStatus[0, i] = 1
 
         for i in range(self.numLanesN):
             if random() < self.probNewCar:
@@ -192,13 +213,15 @@ class Highway:
                              'N'
                              )
                 self.cars.append([newCar, self.highwayExtension, i])
-                
+                self.highwayStatus[self.highwayExtension, i + self.numLanesS] = 1
 
     def simulate(self,
                  epochs : int):
         
         for _ in range(epochs):
             self.updateHighwayStatus()
+            #plt.imshow(self.highwayStatus)
+            #plt.show()
             print(self.highwayStatus)
 
 if __name__ == '__main__':
@@ -206,14 +229,17 @@ if __name__ == '__main__':
                  code = 101,
                  numLanesN = 3,
                  numLanesS = 2,
-                 maxSpeed = 1,
+                 maxSpeed = 2,
                  probNewCar = 0.05,
                  probChangeLane = 0.05,
-                 speedLimitsCar = (0, 5),
-                 accelerationLimitsCar = (0, 1),
+                 speedLimitsCar = (1, 4),
+                 accelerationLimitsCar = (1, 2),
                  probCrash = 0.01,
                  cleanLaneEpochs = 10,
                  highwayExtension = 10
     )
 
-    hw.simulate(1000)
+    # hw.simulate(100)
+    A = np.arange(20).reshape(4, 5)
+    print(A)
+    print(A[::-1])
