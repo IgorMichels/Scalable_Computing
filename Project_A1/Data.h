@@ -22,8 +22,13 @@ struct Data
     string status;
 };
 
-class External
-{
+class External{
+public:
+  static External& getInstance(int maxSize) {
+    static External instance(maxSize);
+    return instance;
+  }
+
 private:
     // Declaração dos vetores dos dados à serem gerados
     vector<string> m_names;
@@ -39,7 +44,6 @@ private:
     uniform_int_distribution<> m_dis_years;
   
     // Informações gerais da classe
-    int m_maxSize;
     vector<Data *> m_Queue;
     string m_genStatus;
     map<string, Data> m_genData;
@@ -82,7 +86,9 @@ public:
     bool m_Multi;
     int m_maxQ;
     int m_nRef;
+    int m_maxSize;
 
+private:
     External(int qSize){
         m_read_files(&m_names, &m_cars, &m_plates);
         m_maxSize = qSize;
@@ -101,7 +107,6 @@ public:
         m_dis_years  = uniform_int_distribution<int>(0, m_years.size()-1);
     }
 
-private:
     void m_Generator(){
 
         while(m_Queue.size() > 0){
