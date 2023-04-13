@@ -28,13 +28,14 @@ class Highway:
         self.probCrash = probCrash
         self.cleanLaneEpochs = cleanLaneEpochs
         self.highwayExtension = highwayExtension
-        self.highwayStatusSouth = np.zeros((self.highwayExtension + 1, self.numLanesS))
-        self.highwayStatusNorth = np.zeros((self.highwayExtension + 1, self.numLanesN))
+        self.highwayStatusSouth = np.zeros((self.highwayExtension + 1, self.numLanesS, 2), dtype = int)
+        self.highwayStatusNorth = np.zeros((self.highwayExtension + 1, self.numLanesN, 2), dtype = int)
         self.carsSouth = list()
         self.carsNorth = list()
         self.actualEpoch = 0
 
-    def updateHighwayStatus(self, direction : str):
+    def updateHighwayStatus(self,
+                            direction : str):
         direction = direction.upper()
         if direction.startswith('S'):
             highwayStatus = self.highwayStatusSouth
@@ -46,11 +47,11 @@ class Highway:
             cars = self.carsNorth
         
         for i in range(highwayStatus.shape[1]):
-            if np.sum(highwayStatus[:, i] < 0) > 0:
-                args = np.argsort(highwayStatus[:, i])
+            if np.sum(highwayStatus[:, i, 0] < 0) > 0:
+                args = np.argsort(highwayStatus[:, i, 0])
                 j = 0
-                while highwayStatus[args[j], i] < 0:
-                    highwayStatus[args[j], i] += 1
+                while highwayStatus[args[j], i, 0] < 0:
+                    highwayStatus[args[j], i, 0] += 1
                     j += 1
 
         oldCarsPositions = list()
@@ -61,7 +62,9 @@ class Highway:
             car.updateCar(highwayStatus)
 
             # remove carro da posição anterior se ele não está batido
-            if not car.isCrashed: highwayStatus[oldPos, oldLane] = 0
+            if not car.isCrashed: 
+                highwayStatus[oldPos, oldLane, 0] = 0
+                highwayStatus[oldPos, oldLane, 1] = 0
                 
             newPos, newLane = car.pos, car.actualLane
             newCarsPositions.append([newPos, newLane])
@@ -86,14 +89,16 @@ class Highway:
         drop = list()
         for i, car in enumerate(cars):
             pos, lane = car.pos, car.actualLane
-            if pos < 0 or pos > self.highwayExtension or (car.isCrashed and highwayStatus[car.pos, car.actualLane] == 0):
+            if pos < 0 or pos > self.highwayExtension or (car.isCrashed and highwayStatus[car.pos, car.actualLane, 0] == 0):
                 drop.append(i)
                 continue
             
-            if highwayStatus[pos, lane] == 0:
-                highwayStatus[pos, lane] = 1
+            if highwayStatus[pos, lane, 0] == 0:
+                highwayStatus[pos, lane, 0] = 1
+                highwayStatus[pos, lane, 1] = car.currSpeed
             elif not car.isCrashed:
-                highwayStatus[pos, lane] = -self.cleanLaneEpochs
+                highwayStatus[pos, lane, 0] = -self.cleanLaneEpochs
+                highwayStatus[pos, lane, 1] = 0
                 car.crash()
                 for j, car2 in enumerate(cars):
                     pos2, lane2 = car2.pos, car2.actualLane
@@ -105,7 +110,7 @@ class Highway:
 
         # adiciona novos carros
         for i in range(numLanes):
-            if highwayStatus[0, i] != 0: continue
+            if highwayStatus[0, i, 0] != 0: continue
             if random() < self.probNewCar:
                 newCar = Car(self.speedLimitsCar,
                              self.accelerationLimitsCar,
@@ -118,10 +123,11 @@ class Highway:
                              direction[0]
                              )
                 cars.append(newCar)
-                highwayStatus[0, i] = 1
+                highwayStatus[0, i, 0] = 1
+                highwayStatus[0, i, 1] = newCar.currSpeed
 
     def sendStatus(self):
-        with open(f'{str(self.actualEpoch).zfill(5)}_{self.highwayCode}.txt', 'w') as f:
+        with open(f'files/{str(self.actualEpoch).zfill(5)}_{self.highwayCode}.txt', 'w') as f:
             for car in self.carsSouth: f.write(f'{car.plate}, ({car.actualLane}, {car.pos})\n')
             for car in self.carsNorth: f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n')
 
@@ -131,6 +137,7 @@ class Highway:
         self.sendStatus()
         self.actualEpoch += 1
 
-    def simEpochs(self, epochs : int):
+    def simEpochs(self,
+                  epochs : int):
         for _ in range(epochs):
             self.simulate()

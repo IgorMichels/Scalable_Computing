@@ -7,7 +7,15 @@ from random import randint
 
 from Highway import Highway
 
+def printStatus(highwayStatus : np.array):
+    nlins, ncols, _ = highwayStatus.shape
+    print()
+    for i in range(nlins):
+        for j in range(ncols): print(f'({highwayStatus[i, j, 0]}, {highwayStatus[i, j, 1]})', end = ' ')
+        print()
+
 if __name__ == '__main__':
+    CLEAN = False
     TOTAL_HIGHWAYS = 5
     highwayCodes = np.arange(100, 100 + TOTAL_HIGHWAYS)
     highways = list()
@@ -23,16 +31,19 @@ if __name__ == '__main__':
             accelerationLimitsCar = (randint(-3, -1), randint(1, 3)),
             probCrash = randint(1, 5) / 100,
             cleanLaneEpochs = randint(1, 10),
-            highwayExtension = randint(100, 200)
+            highwayExtension = randint(10, 15)
         ))
     
     t = time()
-    for epoch in range(5):
-        for hw in highways: hw.simulate()
+    for epoch in range(100):
+        for hw in highways:
+            hw.simulate()
+            if hw.highwayCode == 101: printStatus(hw.highwayStatusSouth)
 
     tf = time()
 
-    files = glob('*.txt')
-    for file in files: os.remove(file)
+    if CLEAN:
+        files = glob('files/*.txt')
+        for file in files: os.remove(file)
 
     print(f'Total time: {tf - t:.2f} seconds')
