@@ -16,10 +16,9 @@ mutex mtx;
 struct Data
 {
     string plate;
-    string car;
+    string model;
     string name;
     int year;
-    string status;
 };
 
 class External{
@@ -87,7 +86,7 @@ public:
     int m_maxQ;
     int m_nRef;
     int m_maxSize;
-
+    
 private:
     External(int qSize){
         m_read_files(&m_names, &m_cars, &m_plates);
@@ -122,10 +121,9 @@ private:
 
             // Seleciona uniformemente dados aleatórios de uma lista pré determinada
             (*vehiData).plate = plate                        ;
-            (*vehiData).car   = m_cars[m_dis_cars(m_gen)]    ;
+            (*vehiData).model   = m_cars[m_dis_cars(m_gen)]    ;
             (*vehiData).name  = m_names[m_dis_names(m_gen)]  ;
             (*vehiData).year  = m_years[m_dis_years(m_gen)]  ;
-            (*vehiData).status  = "generated"                ;
 
             m_Queue.pop_back();
 
@@ -138,7 +136,6 @@ public:
     void request(Data * car){
 
         if(m_Queue.size() >= m_maxSize){
-            (*car).status = "refused";
             m_nRef++;
         }
 
