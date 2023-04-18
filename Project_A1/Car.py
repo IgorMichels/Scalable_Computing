@@ -109,7 +109,7 @@ class Car:
         
         occupieds = list()
         for i in range(1, newSpeed + 1):
-            if self.pos + i >= highwayStatus.shape[0]: continue
+            if self.pos + i >= highwayStatus.shape[0]: break
             if highwayStatus[self.pos + i, newLane, 0] != 0:
                 occupieds.append(self.pos + i + max(highwayStatus[self.pos + i, newLane, 1] + self.minAcceleration, 0))
 
@@ -121,8 +121,7 @@ class Car:
         
         if self.pos + minPossibleSpeed < occupied:
             # tem um carro a frente que, se frear bruscamente, a gente bate
-            while self.pos + newSpeed >= occupied:
-                newSpeed -= 1
+            while self.pos + newSpeed >= occupied: newSpeed -= 1
 
             # vamos reduzir a velocidade até que chegamos num ponto onde o
             # carro da frente tem liberdade para frear
@@ -180,11 +179,7 @@ class Car:
         return
         
     def greenFlag(self):
-        if random() < self.probChangeLane and self.numLanes != 1:
-            if self.actualLane == 0: self.actualLane += 1
-            elif self.actualLane == self.numLanes - 1: self.actualLane -= 1
-            else: self.actualLane += choice([-1, 1])
-
+        if random() < self.probChangeLane and self.numLanes != 1: self.actualLane = self.changeLane()
         self.currSpeed += randint(self.minAcceleration, self.maxAcceleration)
         if self.currSpeed > self.maxSpeed: self.currSpeed = self.maxSpeed
         if self.currSpeed < self.minSpeed: self.currSpeed = self.minSpeed

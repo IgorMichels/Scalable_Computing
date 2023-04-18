@@ -128,6 +128,9 @@ class Highway:
 
     def sendStatus(self):
         with open(f'files/{str(self.actualEpoch).zfill(5)}_{self.highwayCode}.txt', 'w') as f:
+            f.write(f'Highway {self.highwayCode}\n')
+            f.write(f'MaxSpeedHighway {self.maxSpeed}\n')
+            f.write(f'MaxSpeedCar {self.speedLimitsCar[1]}\n')
             for car in self.carsSouth: f.write(f'{car.plate}, ({car.actualLane}, {car.pos})\n')
             for car in self.carsNorth: f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n')
 
