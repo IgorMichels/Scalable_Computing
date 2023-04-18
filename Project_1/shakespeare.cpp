@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include<numeric>
+#include <numeric>
 #include <thread>
 #include <vector>
 #include <string>
