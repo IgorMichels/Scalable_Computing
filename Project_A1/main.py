@@ -30,8 +30,8 @@ if __name__ == '__main__':
             speedLimitsCar = (randint(1, 6), randint(10, 20)),
             accelerationLimitsCar = (randint(-3, -1), randint(1, 3)),
             probCrash = randint(1, 5) / 100,
-            cleanLaneEpochs = randint(1, 10),
-            highwayExtension = randint(10, 15)
+            cleanLaneEpochs = randint(3, 10),
+            highwayExtension = randint(1000, 1500)
         ))
     
     t = time()

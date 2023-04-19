@@ -1,6 +1,7 @@
 import numpy as np
 from Car import Car
 from random import random
+from datetime import datetime
 
 class Highway:
     def __init__(self,
@@ -133,6 +134,7 @@ class Highway:
             f.write(f'MaxSpeedCar {self.speedLimitsCar[1]}\n')
             for car in self.carsSouth: f.write(f'{car.plate}, ({car.actualLane}, {car.pos})\n')
             for car in self.carsNorth: f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n')
+            f.write(f'{datetime.now()}')
 
     def simulate(self):
         self.updateHighwayStatus('S')
