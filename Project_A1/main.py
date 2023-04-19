@@ -1,6 +1,9 @@
 import os
 import numpy as np
 
+import random
+random.seed(0)
+
 from time import time
 from glob import glob
 from random import randint
@@ -15,6 +18,7 @@ def printStatus(highwayStatus : np.array):
         print()
 
 if __name__ == '__main__':
+    if 'extraInfoCars.txt' in os.listdir(): os.remove('extraInfoCars.txt')
     CLEAN = False
     TOTAL_HIGHWAYS = 5
     highwayCodes = np.arange(100, 100 + TOTAL_HIGHWAYS)
@@ -35,8 +39,7 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    for epoch in range(100):
-        print('simulando')
+    for epoch in range(5):
         for hw in highways:
             hw.simulate()
             # if hw.highwayCode == 101: printStatus(hw.highwayStatusSouth)

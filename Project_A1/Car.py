@@ -32,6 +32,11 @@ class Car:
         self.currSpeed = randint(self.minSpeed, self.maxSpeedLane)
         self.isCrashed = False
         self.plate = next(self.generatePlate())
+        self.name = next(self.generateName())
+        self.model, self.year = self.generateModel()
+
+        with open('extraInfoCars.txt', 'a') as f:
+            f.write(f'{self.plate},{self.name},{self.model},{self.year}\n')
 
     def generatePlate(self):
         letter1 = list('QWERTYUIOPASDFGHJKLZXCVBNM')
@@ -50,6 +55,24 @@ class Car:
         shuffle(number3)
         for l1, l2, l3, l4, n1, n2, n3 in product(letter1, letter2, letter3, letter4, number1, number2, number3):
             yield l1 + l2 + l3 + n1 + l4 + n2 + n3
+
+    def generateName(self):
+        with open('mockData/names.txt', 'r') as f: names = f.readlines()
+        with open('mockData/surnames.txt', 'r') as f: surnames = f.readlines()
+        names = [name.strip() for name in names]
+        surnames = [surname.strip() for surname in surnames]
+        shuffle(names)
+        shuffle(surnames)
+        for name, surname in product(names, surnames):
+            yield name + ' ' + surname
+
+    def generateModel(self):
+        with open('mockData/cars.txt', 'r') as f: cars = f.readlines()
+        model = choice(cars)
+        model = model.split(',')
+        year = randint(int(model[1]), int(model[2]))
+        model = model[0]
+        return model, year
 
     def crash(self):
         self.isCrashed = True
