@@ -128,13 +128,13 @@ class Highway:
                 highwayStatus[0, i, 1] = newCar.currSpeed
 
     def sendStatus(self):
-        with open(f'files/{str(self.actualEpoch).zfill(5)}_{self.highwayCode}.txt', 'w') as f:
+        with open(f'files/{datetime.now()}.txt', 'w') as f:
             f.write(f'Highway {self.highwayCode}\n')
             f.write(f'MaxSpeedHighway {self.maxSpeed}\n')
             f.write(f'MaxSpeedCar {self.speedLimitsCar[1]}\n')
             for car in self.carsSouth: f.write(f'{car.plate}, ({car.actualLane}, {car.pos})\n')
             for car in self.carsNorth: f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n')
-            f.write(f'{datetime.now()}')
+            f.write(f'{datetime.now()}\n')
 
     def simulate(self):
         self.updateHighwayStatus('S')

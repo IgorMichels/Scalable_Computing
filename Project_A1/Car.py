@@ -36,7 +36,10 @@ class Car:
         self.model, self.year = self.generateModel()
 
         with open('extraInfoCars.txt', 'a') as f:
-            f.write(f'{self.plate},{self.name},{self.model},{self.year}\n')
+            f.write(f'{self.getInfo()}\n')
+
+    def getInfo(self):
+        return f'{self.plate},{self.name},{self.model},{self.year}'
 
     def generatePlate(self):
         letter1 = list('QWERTYUIOPASDFGHJKLZXCVBNM')
