@@ -11,8 +11,8 @@ class Highway:
                  maxSpeed : float,
                  probNewCar : float,
                  probChangeLane : float,
-                 speedLimitsCar : tuple[float, float],
-                 accelerationLimitsCar : tuple[float, float],
+                 speedLimitsCar : tuple, #
+                 accelerationLimitsCar : tuple, #
                  probCrash : float,
                  cleanLaneEpochs : int,
                  highwayExtension : int
