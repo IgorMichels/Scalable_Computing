@@ -32,7 +32,7 @@ private:
     mutex model_mutex;
     mutex year_mutex;
 
-    void m_search(string plate) {
+    void query_vehicle(string plate) {
         name_mutex.lock();
         model_mutex.lock();
         year_mutex.lock();
@@ -89,7 +89,7 @@ public:
                 max_Q_Size = m_Queue.size();
             }
             insert_mutex.unlock();
-            m_search(plate);
+            query_vehicle(plate);
         }
         else{
             insert_mutex.unlock();

@@ -14,8 +14,6 @@
 #include <map>
 #include <cstring>
 
-#include "API.h"
-
 using namespace std;
 
 struct highwayData {
@@ -95,47 +93,6 @@ vector<string> getBlocks(string text, int numBlocks) {
     }
 
     return dataBlocks;
-}
-
-void updateDataBK(map<string, carData> *carInfos, highwayData *highwayInfos, string text) {
-    int pos;
-    string row;
-    string plate;
-    int actualLane;
-    int lanePosition;
-    cout << text << endl << "deu" << endl << endl << endl;
-    (*highwayInfos).carDataBlocker.lock(); // barrar leitura aqui
-    while ((pos = text.find('\n')) != string::npos) {
-        row = text.substr(0, pos);
-        cout << row << endl;
-        text.erase(0, pos + 1);
-        tie(plate, actualLane, lanePosition) = parseRow(row);
-        // (*highwayInfos).carDataBlocker.lock(); // barrar leitura aqui
-        (*carInfos)[plate].lane = actualLane;
-        (*carInfos)[plate].penultimatePosition = (*carInfos)[plate].lastPosition;
-        (*carInfos)[plate].lastPosition = (*carInfos)[plate].actualPosition;
-        (*carInfos)[plate].actualPosition = lanePosition;
-        (*carInfos)[plate].isInHighway = true;
-        // (*highwayInfos).carDataBlocker.unlock();
-    }
-
-    // cout << endl << text << endl << text.find('\n') << endl;
-    tie(plate, actualLane, lanePosition) = parseRow(text);
-    if (plate.length() == 7) {
-        // (*highwayInfos).carDataBlocker.lock(); // barrar leitura aqui
-        (*carInfos)[plate].lane = actualLane;
-        (*carInfos)[plate].penultimatePosition = (*carInfos)[plate].lastPosition;
-        (*carInfos)[plate].lastPosition = (*carInfos)[plate].actualPosition;
-        (*carInfos)[plate].actualPosition = lanePosition;
-        (*carInfos)[plate].isInHighway = true;
-        // (*highwayInfos).carDataBlocker.unlock(); // liberar leitura
-    }
-    else {
-        (*highwayInfos).highwayDataBlocker.lock(); // barrar leitura aqui
-        (*highwayInfos).infoTime = plate;
-        (*highwayInfos).highwayDataBlocker.unlock(); // liberar leitura
-    }
-    (*highwayInfos).carDataBlocker.unlock();
 }
 
 void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, string text) {
@@ -228,7 +185,6 @@ void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *
         vector<string> remove;
         if ((*(*highwayInfos)[highway]).infoTime != "") {
             for (auto item : (*(*carInfos)[highway])) {
-                // cout << item.first << " está sendo testado para apagar: " << item.second.isInHighway << endl;
                 if (item.second.isInHighway == false) remove.push_back(item.first);
             }
         }
@@ -237,68 +193,15 @@ void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *
     remove(fileName.c_str());
 }
 
-int main() {
-    int maxBlocks = 10;
-    int iters = 5;
-
-    
-    for (int t = 1; t <= maxBlocks; t++) {
-        auto start = chrono::steady_clock::now();
-        for (int i = 0; i < iters; i++) {
-            map<int, map<string, carData>*> carInfos;
-            map<int, highwayData*> highwayInfos;
+void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always) {
+    if (always) {
+        while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFiles(file, t, &carInfos, &highwayInfos);
+            for (auto file : files) readFiles(file, 1, &(*carInfos), &(*highwayInfos));
         }
-        auto end = chrono::steady_clock::now();
-        chrono::duration<double> totalTime = end - start;
-        cout << "threads: " << t << "  tempo total: " << totalTime.count() / iters << endl;
     }
-    
-
-    auto start = chrono::steady_clock::now();
-    map<int, map<string, carData>*> carInfos;
-    map<int, highwayData*> highwayInfos;
-    vector<string> files = getFiles();
-    for (auto file : files) {
-        readFiles(file, 1, &carInfos, &highwayInfos);
+    else {
+        vector<string> files = getFiles();
+        for (auto file : files) readFiles(file, 1, &(*carInfos), &(*highwayInfos));
     }
-    auto end = chrono::steady_clock::now();
-    chrono::duration<double> totalTime = end - start;
-    cout << "Total time: " << totalTime.count() << endl;
-
-    // cout << "IFZ2Z79" << endl;
-    // cout << (*(carInfos[103]))["IFZ2Z79"].lane << endl;
-    // cout << (*(carInfos[103]))["IFZ2Z79"].actualPosition << endl;
-    // cout << (*(carInfos[103]))["IFZ2Z79"].lastPosition << endl;
-    // cout << (*(carInfos[103]))["IFZ2Z79"].penultimatePosition << endl;
-
-    // for(auto it = (*(carInfos[103])).cbegin(); it != (*(carInfos[103])).cend(); ++it) {
-    //     cout << it->first << endl;
-    // }
-
-    // cout << endl;
-    // cout << (*(highwayInfos[101])).infoTime << endl;
-    // cout << (*(highwayInfos[101])).maxSpeed << endl;
-    // cout << (*(highwayInfos[101])).carMaxSpeed << endl;
-
-    // cout << "\nTestando mock de dados externos" << endl;
-    // MyClass API;
-    // string plate = "WXY-5678";
-    // API.search(plate);
-    // cout << API.get_name() << endl;
-    // cout << API.get_model() << endl;
-    // cout << API.get_year() << endl;
-
-    // (*(carInfos[101]))[plate].name = API.get_name();
-    // (*(carInfos[101]))[plate].model = API.get_model();
-    // (*(carInfos[101]))[plate].year = API.get_year();
-
-    // cout << (*(carInfos[101]))[plate].name << ' ' << API.get_name() << endl;
-    // cout << (*(carInfos[101]))[plate].model << ' ' << API.get_model() << "batata" << endl;
-    // cout << (*(carInfos[101]))[plate].year << ' ' << API.get_year() << endl;
-
-    // cout << endl;
-    return 0;
-
 }
