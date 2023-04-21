@@ -12,8 +12,9 @@
 #include <ctime>
 #include <mutex>
 #include <map>
+#include <cstring>
 
-#include "API_query.h"
+#include "API.h"
 
 using namespace std;
 
@@ -240,7 +241,7 @@ int main() {
     int maxBlocks = 10;
     int iters = 5;
 
-    /*
+    
     for (int t = 1; t <= maxBlocks; t++) {
         auto start = chrono::steady_clock::now();
         for (int i = 0; i < iters; i++) {
@@ -253,7 +254,7 @@ int main() {
         chrono::duration<double> totalTime = end - start;
         cout << "threads: " << t << "  tempo total: " << totalTime.count() / iters << endl;
     }
-    */
+    
 
     auto start = chrono::steady_clock::now();
     map<int, map<string, carData>*> carInfos;

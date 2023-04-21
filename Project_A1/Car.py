@@ -5,8 +5,8 @@ from random import random, randint, choice, shuffle
 
 class Car:
     def __init__(self,
-                 speedLimitsCar : tuple[float, float],
-                 accelerationLimitsCar : tuple[float, float],
+                 speedLimitsCar : tuple, #
+                 accelerationLimitsCar : tuple, #
                  probCrash : float,
                  probChangeLane : float,
                  actualLane : int,
