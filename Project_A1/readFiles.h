@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <sstream>
+#include <cstring>
 #include <thread>
 #include <vector>
 #include <string>
@@ -12,7 +13,6 @@
 #include <ctime>
 #include <mutex>
 #include <map>
-#include <cstring>
 
 using namespace std;
 
@@ -37,9 +37,6 @@ struct carData {
     int acceleration = 0;
     bool canCrash = false;
 };
-
-map<int, map<string, carData>*> carInfos;
-map<int, highwayData*> highwayInfos;
 
 vector<string> getFiles() {
     DIR *dr;

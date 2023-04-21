@@ -2,14 +2,14 @@
 #include "API.h"
 
 int main() {
+    map<int, map<string, carData>*> carInfos;
+    map<int, highwayData*> highwayInfos;
+
     auto start = chrono::steady_clock::now();
-    // vector<string> files = getFiles();
-    // for (auto file : files) {
-    //    readFiles(file, 1, &carInfos, &highwayInfos);
-    //}
     readFiles(&carInfos, &highwayInfos, false);
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
+
     cout << "Total time: " << totalTime.count() << endl;
 
     cout << "GAW8W32" << endl;
