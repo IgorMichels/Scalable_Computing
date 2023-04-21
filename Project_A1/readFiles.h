@@ -20,7 +20,6 @@ struct highwayData {
     int maxSpeed = 0;
     int carMaxSpeed = 0;
     string infoTime = "";
-    mutex carDataBlocker;
     mutex highwayDataBlocker;
 };
 
@@ -92,6 +91,35 @@ vector<string> getBlocks(string text, int numBlocks) {
     return dataBlocks;
 }
 
+void updateDataMultiThread(map<string, carData> *carInfos, highwayData *highwayInfos, string text) {
+    int pos;
+    string row;
+    string plate;
+    int actualLane;
+    int lanePosition;
+    while (text.length() > 0) {
+        pos = text.find('\n');
+        if (pos == -1) pos = text.length();
+        row = text.substr(0, pos);
+        text.erase(0, pos + 1);
+        tie(plate, actualLane, lanePosition) = parseRow(row);
+            if (plate.length() == 7) {
+            (*highwayInfos).highwayDataBlocker.lock(); // barrar leitura aqui
+            (*carInfos)[plate].lane = actualLane;
+            (*carInfos)[plate].penultimatePosition = (*carInfos)[plate].lastPosition;
+            (*carInfos)[plate].lastPosition = (*carInfos)[plate].actualPosition;
+            (*carInfos)[plate].actualPosition = lanePosition;
+            (*carInfos)[plate].isInHighway = true;
+            (*highwayInfos).highwayDataBlocker.unlock(); // liberar leitura
+        }
+        else {
+            (*highwayInfos).highwayDataBlocker.lock(); // barrar leitura aqui
+            (*highwayInfos).infoTime = plate;
+            (*highwayInfos).highwayDataBlocker.unlock(); // liberar leitura
+        }
+    }
+}
+
 void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, string text) {
     int pos;
     string row;
@@ -105,18 +133,14 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
         text.erase(0, pos + 1);
         tie(plate, actualLane, lanePosition) = parseRow(row);
             if (plate.length() == 7) {
-            (*highwayInfos).carDataBlocker.lock(); // barrar leitura aqui
             (*carInfos)[plate].lane = actualLane;
             (*carInfos)[plate].penultimatePosition = (*carInfos)[plate].lastPosition;
             (*carInfos)[plate].lastPosition = (*carInfos)[plate].actualPosition;
             (*carInfos)[plate].actualPosition = lanePosition;
             (*carInfos)[plate].isInHighway = true;
-            (*highwayInfos).carDataBlocker.unlock(); // liberar leitura
         }
         else {
-            (*highwayInfos).highwayDataBlocker.lock(); // barrar leitura aqui
             (*highwayInfos).infoTime = plate;
-            (*highwayInfos).highwayDataBlocker.unlock(); // liberar leitura
         }
     }
 }
@@ -170,14 +194,22 @@ void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *
         if (text.length() / 200 + 1 < maxBlocks) numBlocks = text.length() / 200 + 1;
         else numBlocks = maxBlocks;
 
-        vector<string> dataBlocks = getBlocks(text, numBlocks);
-        numBlocks = dataBlocks.size();
-        for (int i = 0; i < numBlocks; i++) {
-            thread *ti = new thread(&updateData, (*carInfos)[highway], &(*(*highwayInfos)[highway]), dataBlocks[i]);
-            threads.push_back(ti);
+        if (numBlocks > 1) {
+            vector<string> dataBlocks = getBlocks(text, numBlocks);
+            numBlocks = dataBlocks.size();
+            for (int i = 0; i < numBlocks; i++) {
+                thread *ti = new thread(&updateDataMultiThread, (*carInfos)[highway], &(*(*highwayInfos)[highway]), dataBlocks[i]);
+                threads.push_back(ti);
+            }
+            
+            for (auto th : threads) th -> join();
         }
-        
-        for (auto th : threads) th -> join();
+        else {
+            // nada pode ser lido enquanto estamos atualizando esse dicionário
+            (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
+            updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text);
+            (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
+        }
         
         vector<string> remove;
         if ((*(*highwayInfos)[highway]).infoTime != "") {

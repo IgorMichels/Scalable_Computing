@@ -1,4 +1,5 @@
-#include "readFiles.h"
+#include "transformers.h"
+//#include "readFiles.h"
 #include "API.h"
 
 int main() {
@@ -26,6 +27,9 @@ int main() {
     cout << (*(highwayInfos[101])).infoTime << endl;
     cout << (*(highwayInfos[101])).maxSpeed << endl;
     cout << (*(highwayInfos[101])).carMaxSpeed << endl;
+
+    countHighways(&highwayInfos);
+    analysisStats(&carInfos, &highwayInfos);
 
     /*
     cout << "\nTestando mock de dados externos" << endl;
