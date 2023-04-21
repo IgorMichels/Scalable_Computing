@@ -1,4 +1,4 @@
-#include "transformers.h"
+#include "transformers_Michels.h"
 //#include "readFiles.h"
 #include "API.h"
 
@@ -13,22 +13,22 @@ int main() {
 
     cout << "Total time: " << totalTime.count() << endl;
 
-    cout << "GAW8W32" << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].lane << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].actualPosition << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].lastPosition << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].penultimatePosition << endl;
+    // cout << "GAW8W32" << endl;
+    // cout << (*(carInfos[103]))["GAW8W32"].lane << endl;
+    // cout << (*(carInfos[103]))["GAW8W32"].actualPosition << endl;
+    // cout << (*(carInfos[103]))["GAW8W32"].lastPosition << endl;
+    // cout << (*(carInfos[103]))["GAW8W32"].penultimatePosition << endl;
 
     // for(auto it = (*(carInfos[103])).cbegin(); it != (*(carInfos[103])).cend(); ++it) {
     //     cout << it->first << endl;
     // }
 
-    cout << endl;
-    cout << (*(highwayInfos[101])).infoTime << endl;
-    cout << (*(highwayInfos[101])).maxSpeed << endl;
-    cout << (*(highwayInfos[101])).carMaxSpeed << endl;
+    // cout << endl;
+    // cout << (*(highwayInfos[101])).infoTime << endl;
+    // cout << (*(highwayInfos[101])).maxSpeed << endl;
+    // cout << (*(highwayInfos[101])).carMaxSpeed << endl;
 
-    countHighways(&highwayInfos);
+    // countHighways(&highwayInfos);
     analysisStats(&carInfos, &highwayInfos);
 
     /*
