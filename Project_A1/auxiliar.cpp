@@ -10,28 +10,6 @@
 using namespace std;
 
 
-void calculateSpeedAndAcceleration(map<int, map<string, carData>*>& carInfos) {
-    for (auto& p : carInfos) {
-        map<string, carData>* carMap = p.second;
-        for (auto& q : *carMap) {
-            carData& car = q.second;
-            int currentPosition = car.actualPosition;
-            int lastPosition = car.lastPosition;
-            int penultimatePosition = car.penultimatePosition;
-            int timeInterval = 1.0; // por enquanto estamos difinindo o intervalo de tempo como 1 segundo (deve ser ajustado para o tempo entre dois estados)
-
-            // Calcula a velocidade
-            double velocity = (currentPosition - lastPosition) / timeInterval;
-            car.speed = static_cast<int>(velocity); // converte a velocidade de double para int e atribui ao campo speed da struct carData
-
-            // Calcula a aceleração
-            double lastVelocity = (lastPosition - penultimatePosition) / timeInterval;
-            double acceleration = (velocity - lastVelocity) / timeInterval;
-            car.acceleration = static_cast<int>(acceleration); // converte a aceleração de double para int e atribui ao campo acceleration da struct carData
-        }
-    }
-}
-
 
 int main() {
 
