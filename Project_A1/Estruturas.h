@@ -271,8 +271,10 @@ void checkCollisions(map<int, map<string, carData>*>& carInfos) {
     }
 }
 
+map<int, int> countCarsByHighway(map<int, map<string, carData>*> carInfos) {
 
-void countCarsByHighway(map<int, map<string, carData>*> carInfos) {
+    map<int, int> cars_per_highway;
+
     for (const auto& p : carInfos) {
         int key = p.first; // obtém a chave do mapa externo
         map<string, carData>* carMap = p.second; // obtém o mapa interno
@@ -282,10 +284,33 @@ void countCarsByHighway(map<int, map<string, carData>*> carInfos) {
             carData car = q.second; // obtém o valor do mapa interno
             carCount++;
         }
-
-        cout << "Rodovia " << key << " tem " << carCount << " carros" << endl;
+        cars_per_highway[key] = carCount;
+        // cout << "Rodovia " << key << " tem " << carCount << " carros" << endl;
     }
+    return cars_per_highway;
 }
+
+map<int, int> countCarsOverLim(map<int, map<string, carData>*> carInfos, map<int, highwayData*> highwayInfos) {
+
+    map<int, int> cars_over_lim;
+
+    for (const auto& p : carInfos) {
+        int key = p.first; // obtém a chave do mapa externo
+        map<string, carData>* carMap = p.second; // obtém o mapa interno
+
+        int maxSpeed = highwayInfos[key]->maxSpeed;
+        int carCount = 0;
+        for (const auto& q : *carMap) {
+            carData car = q.second; // obtém o valor do mapa interno
+            if(maxSpeed < car.speed){
+                carCount++;
+            }
+        }
+        cars_over_lim[key] = carCount;
+    }
+    return cars_over_lim;
+}
+
 
 void calculateSpeedAndAcceleration(map<int, map<string, carData>*>& carInfos) {
     for (auto& p : carInfos) {
@@ -379,5 +404,18 @@ void checkCollisionsInAllHighways(map<int, map<string, carData>*> carInfos, map<
             cout << "No collisions in highway " << highway.first << "\n";
         }
     }
+}
+
+
+void analise(map<int, map<string, carData>*> carInfos, map<int, highwayData*> highwayInfos,
+            map<int, int>* cars_per_highway, map<int, int>* cars_over_lim, int* total_cars){
+    
+    *cars_per_highway = countCarsByHighway(carInfos);
+    *cars_over_lim = countCarsOverLim(carInfos, highwayInfos);
+    *total_cars = 0;
+    for(auto e : *cars_per_highway){
+        *total_cars += e.second;
+    }
+
 }
 
