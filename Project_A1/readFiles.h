@@ -30,12 +30,14 @@ struct carData {
     int lastPosition = 0;
     int penultimatePosition = 0; // sim, essa palavra existe, só não é muito usada (https://www.italki.com/en/post/question-92435)
     bool isInHighway = true;
-    string name = "";
-    string model = "";
-    int year = 1900;
+    // string name = "";
+    // string model = "";
+    // int year = 1900;
     int speed = 0;
     int acceleration = 0;
     bool canCrash = false;
+    bool extraInfos = false;
+    vector<int> nextPositions;
 };
 
 vector<string> getFiles() {
@@ -236,7 +238,7 @@ void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *c
         }
         for (auto plate : remove) (*(*carInfos)[highway]).erase(plate);
     }
-    // remove(fileName.c_str());
+    remove(fileName.c_str());
 }
 
 void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads) {

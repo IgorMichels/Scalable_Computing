@@ -153,7 +153,7 @@ map<string, string> checkCollision(map<int, map<string, carData>*>& carInfos,
 }
 
 
-
+/*
 void updateMaps(map<int, map<string, carData>*>& carInfos, map<int, highwayData*>* highwayInfos,
                 externalAPI * API){
 
@@ -176,6 +176,7 @@ void updateMaps(map<int, map<string, carData>*>& carInfos, map<int, highwayData*
         // (*(*highwayInfos)[p.first]).highwayDataBlocker.unlock(); // libera o acesso à rodovia
     }
 }
+*/
 
 
 void analise(map<int, map<string, carData>*> carInfos, map<int, highwayData*> highwayInfos,
