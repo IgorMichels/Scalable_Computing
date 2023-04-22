@@ -1,6 +1,0 @@
-Highway 104
-MaxSpeedHighway 15
-MaxSpeedCar 17
-KEI2L53, (2, 0)
-MBF2F53, (6, 1097)
-2023-04-21 21:30:08.099240

@@ -1,5 +1,0 @@
-Highway 103
-MaxSpeedHighway 14
-MaxSpeedCar 14
-EYW8Y88, (2, 1368)
-2023-04-21 21:30:08.093247

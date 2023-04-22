@@ -1,7 +1,0 @@
-Highway 100
-MaxSpeedHighway 10
-MaxSpeedCar 16
-CDJ2T88, (1, 0)
-MFY0J98, (2, 0)
-AIP3E52, (4, 1258)
-2023-04-21 21:30:08.062961

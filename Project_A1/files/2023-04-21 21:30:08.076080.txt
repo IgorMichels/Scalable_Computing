@@ -1,9 +1,0 @@
-Highway 101
-MaxSpeedHighway 11
-MaxSpeedCar 14
-HAK4V92, (0, 0)
-WHG0W04, (1, 0)
-WOI8F40, (2, 0)
-TSC6X68, (3, 1158)
-CEB7B85, (4, 1158)
-2023-04-21 21:30:08.076358

@@ -1,9 +1,0 @@
-Highway 103
-MaxSpeedHighway 14
-MaxSpeedCar 14
-SSD6L47, (0, 0)
-YFF1O89, (1, 0)
-EYW8Y88, (2, 1355)
-MGL6K41, (3, 1368)
-KMB8Z05, (4, 1368)
-2023-04-21 21:30:08.136401
