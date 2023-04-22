@@ -29,7 +29,7 @@ int main() {
     // cout << (*(highwayInfos[101])).carMaxSpeed << endl;
 
     // countHighways(&highwayInfos);
-    analysisStats(&carInfos, &highwayInfos);
+    // analysisStats(&carInfos, &highwayInfos);
 
     /*
     cout << "\nTestando mock de dados externos" << endl;
@@ -50,6 +50,7 @@ int main() {
 
     cout << endl;
     */
+    
     return 0;
 
 }

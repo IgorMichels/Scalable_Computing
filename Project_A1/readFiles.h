@@ -15,6 +15,7 @@
 #include <map>
 
 using namespace std;
+mutex iomutex;
 
 struct highwayData {
     int maxSpeed = 0;
@@ -97,6 +98,14 @@ void updateDataMultiThread(map<string, carData> *carInfos, highwayData *highwayI
     string plate;
     int actualLane;
     int lanePosition;
+
+    sched_param sch;
+    int policy; 
+    pthread_getschedparam(pthread_self(), &policy, &sch);
+    std::lock_guard<std::mutex> lk(iomutex);
+    std::cout << "Thread is executing at priority "
+              << sch.sched_priority << '\n';
+
     while (text.length() > 0) {
         pos = text.find('\n');
         if (pos == -1) pos = text.length();
@@ -193,12 +202,23 @@ void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *
         int numBlocks;
         if (text.length() / 200 + 1 < maxBlocks) numBlocks = text.length() / 200 + 1;
         else numBlocks = maxBlocks;
+        
+        cout << numBlocks << endl;
 
         if (numBlocks > 1) {
             vector<string> dataBlocks = getBlocks(text, numBlocks);
             numBlocks = dataBlocks.size();
             for (int i = 0; i < numBlocks; i++) {
                 thread *ti = new thread(&updateDataMultiThread, (*carInfos)[highway], &(*(*highwayInfos)[highway]), dataBlocks[i]);
+                
+                sched_param sch;
+                int policy; 
+                pthread_getschedparam((*ti).native_handle(), &policy, &sch);
+                sch.sched_priority = 20;
+                if (pthread_setschedparam((*ti).native_handle(), SCHED_FIFO, &sch)) {
+                    std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
+                }
+
                 threads.push_back(ti);
             }
             
@@ -226,11 +246,11 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFiles(file, 1, &(*carInfos), &(*highwayInfos));
+            for (auto file : files) readFiles(file, 4, &(*carInfos), &(*highwayInfos));
         }
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFiles(file, 1, &(*carInfos), &(*highwayInfos));
+        for (auto file : files) readFiles(file, 4, &(*carInfos), &(*highwayInfos));
     }
 }

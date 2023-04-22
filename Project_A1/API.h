@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 struct Data
 {
     string plate;
@@ -97,17 +96,20 @@ public:
     }
 
     string get_name(){
+        string name = m_last_query.name;
         name_mutex.unlock();
-        return m_last_query.name;
+        return name;
     }
     string get_model(){
+        string model = m_last_query.model;
         model_mutex.unlock();
-        return m_last_query.model;
+        return model;
     }
     int get_year(){
+        int year = m_last_query.year;
         m_Queue.pop_back();
         year_mutex.unlock();
-        return m_last_query.year;
+        return year;
     }
 
     void m_execute(vector<Data *> * cars, Data * car){
