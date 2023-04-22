@@ -9,7 +9,6 @@ using namespace std;
 
 struct plateData
 {
-    string plate;
     string model;
     string name;
     int year;
@@ -18,12 +17,13 @@ struct plateData
 class externalAPI {
 private:
 public:
-    string databaseFilename;
-    int maxSizeQueue;
-    vector<string> queue;
     plateData lastQueryResults;
-    int semaphore = 0;
+    string databaseFilename;
+    vector<string> queue;
     mutex semaphoreMutex;
+    int semaphore = 0;
+    int maxSizeQueue;
+    string lastPlate;
 
     externalAPI (int maxSize, string filename){
             databaseFilename = filename;
@@ -56,7 +56,7 @@ public:
             }
 
             if (tokens[0] == plate) {
-                searched.plate = tokens[0]       ;
+                lastPlate      = tokens[0]       ;
                 searched.name  = tokens[1]       ;
                 searched.model = tokens[2]       ;
                 searched.year  = stoi(tokens[3]) ;
@@ -76,8 +76,8 @@ public:
         if (queue.size() == maxSizeQueue) return false;
 
         // se a placa não está na fila, a gente insere
-        if (find(queue.begin(), queue.end(), plate) != queue.end()) queue.insert(queue.begin(), plate);        
-        
+        if (find(queue.begin(), queue.end(), plate) == queue.end()) queue.insert(queue.begin(), plate);
+
         // tenta fazer a próxima query
         query_next_plate();
         return true;
@@ -86,7 +86,7 @@ public:
     pair<string, string> get_name(){
         semaphoreMutex.lock();
         pair<string, string> result;
-        result.first = lastQueryResults.plate;
+        result.first = lastPlate;
         result.second = lastQueryResults.name;
         semaphore--;
         semaphoreMutex.unlock();
@@ -97,7 +97,7 @@ public:
     pair<string, string> get_model(){
         semaphoreMutex.lock();
         pair<string, string> result;
-        result.first = lastQueryResults.plate;
+        result.first = lastPlate;
         result.second = lastQueryResults.model;
         semaphore--;
         semaphoreMutex.unlock();
@@ -108,7 +108,7 @@ public:
     pair<string, int> get_year(){
         semaphoreMutex.lock();
         pair<string, int> result;
-        result.first = lastQueryResults.plate;
+        result.first = lastPlate;
         result.second = lastQueryResults.year;
         semaphore--;
         semaphoreMutex.unlock();
