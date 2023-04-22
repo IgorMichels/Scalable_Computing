@@ -1,5 +1,5 @@
 #include "transformers_Michels.h"
-//#include "readFiles.h"
+// #include "readFiles.h" // já incluso no import acima
 #include "API.h"
 
 int main() {
@@ -31,25 +31,65 @@ int main() {
     // countHighways(&highwayInfos);
     // analysisStats(&carInfos, &highwayInfos);
 
-    /*
     cout << "\nTestando mock de dados externos" << endl;
-    Api API;
-    string plate = "GAW8W32";
+    externalAPI &API = externalAPI::getInstance(20, "extraInfoCars.txt");
+    
+    string plate;
+    pair<string, string> name;
+    pair<string, string> model;
+    pair<string, int> year;
+
+    plate = "GAW8W32";
     API.query_vehicle(plate);
-    cout << API.get_name() << endl;
-    cout << API.get_model() << endl;
-    cout << API.get_year() << endl;
 
-    (*(carInfos[101]))[plate].name = API.get_name();
-    (*(carInfos[101]))[plate].model = API.get_model();
-    (*(carInfos[101]))[plate].year = API.get_year();
+    name = API.get_name();
+    model = API.get_model();
+    year = API.get_year();
 
-    cout << (*(carInfos[101]))[plate].name << ' ' << API.get_name() << endl;
-    cout << (*(carInfos[101]))[plate].model << ' ' << API.get_model() << endl;
-    cout << (*(carInfos[101]))[plate].year << ' ' << API.get_year() << endl;
+    cout << name.first << ' ' << name.second << endl;
+    cout << model.first << ' ' << model.second << endl;
+    cout << year.first << ' ' << year.second << endl;
 
-    cout << endl;
-    */
+    plate = "LWU9U69";
+    API.query_vehicle(plate);
+
+    plate = "WOI8F40";
+    API.query_vehicle(plate);
+
+    plate = "YLO6Y90";
+    API.query_vehicle(plate);
+
+    name = API.get_name();
+    model = API.get_model();
+    year = API.get_year();
+
+    cout << name.first << ' ' << name.second << endl;
+    cout << model.first << ' ' << model.second << endl;
+    cout << year.first << ' ' << year.second << endl;
+
+    name = API.get_name();
+    model = API.get_model();
+    year = API.get_year();
+
+    cout << name.first << ' ' << name.second << endl;
+    cout << model.first << ' ' << model.second << endl;
+    cout << year.first << ' ' << year.second << endl;
+
+    name = API.get_name();
+    model = API.get_model();
+    year = API.get_year();
+
+    cout << name.first << ' ' << name.second << endl;
+    cout << model.first << ' ' << model.second << endl;
+    cout << year.first << ' ' << year.second << endl;
+
+    name = API.get_name();
+    model = API.get_model();
+    year = API.get_year();
+
+    cout << name.first << ' ' << name.second << endl;
+    cout << model.first << ' ' << model.second << endl;
+    cout << year.first << ' ' << year.second << endl;
     
     return 0;
 

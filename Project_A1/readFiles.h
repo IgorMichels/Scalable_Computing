@@ -102,9 +102,8 @@ void updateDataMultiThread(map<string, carData> *carInfos, highwayData *highwayI
     sched_param sch;
     int policy; 
     pthread_getschedparam(pthread_self(), &policy, &sch);
-    std::lock_guard<std::mutex> lk(iomutex);
-    std::cout << "Thread is executing at priority "
-              << sch.sched_priority << '\n';
+    lock_guard<std::mutex> lk(iomutex);
+    // cout << "Thread is executing at priority " << sch.sched_priority << '\n';
 
     while (text.length() > 0) {
         pos = text.find('\n');
@@ -203,8 +202,6 @@ void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *
         if (text.length() / 200 + 1 < maxBlocks) numBlocks = text.length() / 200 + 1;
         else numBlocks = maxBlocks;
         
-        cout << numBlocks << endl;
-
         if (numBlocks > 1) {
             vector<string> dataBlocks = getBlocks(text, numBlocks);
             numBlocks = dataBlocks.size();
@@ -251,6 +248,6 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFiles(file, 4, &(*carInfos), &(*highwayInfos));
+        for (auto file : files) readFiles(file, 1, &(*carInfos), &(*highwayInfos));
     }
 }
