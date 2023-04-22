@@ -236,7 +236,7 @@ void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *c
         }
         for (auto plate : remove) (*(*carInfos)[highway]).erase(plate);
     }
-    remove(fileName.c_str());
+    // remove(fileName.c_str());
 }
 
 void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads) {
