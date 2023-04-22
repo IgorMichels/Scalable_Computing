@@ -75,11 +75,8 @@ public:
         // fila está cheia
         if (queue.size() == maxSizeQueue) return false;
 
-        // placa já está na fila
-        if (find(queue.begin(), queue.end(), plate) != queue.end()) return false;
-        
-        // insere na fila
-        queue.insert(queue.begin(), plate);
+        // se a placa não está na fila, a gente insere
+        if (find(queue.begin(), queue.end(), plate) != queue.end()) queue.insert(queue.begin(), plate);        
         
         // tenta fazer a próxima query
         query_next_plate();

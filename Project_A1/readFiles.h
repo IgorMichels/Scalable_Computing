@@ -153,7 +153,7 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
     }
 }
 
-void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
+void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
     string row;
     size_t pos;
     string text;
@@ -239,15 +239,15 @@ void readFiles(string fileName, int maxBlocks, map<int, map<string, carData>*> *
     remove(fileName.c_str());
 }
 
-void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always) {
+void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads) {
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFiles(file, 4, &(*carInfos), &(*highwayInfos));
+            for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos));
         }
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFiles(file, 1, &(*carInfos), &(*highwayInfos));
+        for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos));
     }
 }

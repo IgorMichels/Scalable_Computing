@@ -7,7 +7,7 @@ int main() {
     map<int, highwayData*> highwayInfos;
 
     auto start = chrono::steady_clock::now();
-    readFiles(&carInfos, &highwayInfos, false);
+    readFiles(&carInfos, &highwayInfos, false, 1);
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
 
