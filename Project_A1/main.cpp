@@ -7,16 +7,16 @@ int main() {
     externalAPI &API = externalAPI::getInstance(20, "extraInfoCars.txt");
 
     auto start = chrono::steady_clock::now();
-    readFiles(&carInfos, &highwayInfos, false, API);
+    readFiles(&carInfos, &highwayInfos, false);
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
     cout << "Total time: " << totalTime.count() << endl;
 
-    updateExtraInfos(carsExtraInfos, API);
+    updateExtraInfos(&carsExtraInfos);
     analysisStats(&carInfos, &highwayInfos);
 
     start = chrono::steady_clock::now();
-    updateSpeed(carInfos, &highwayInfos);
+    updateSpeed(&carInfos, &highwayInfos);
     end = chrono::steady_clock::now();totalTime = end - start;
     cout << "Total time (update): " << totalTime.count() << endl;
     /*
@@ -118,7 +118,7 @@ int main() {
     cout << year.first << ' ' << year.second << endl;
     */
 
-    // printCarInfos(carInfos, &highwayInfos, carsExtraInfos);
+    printCarInfos(&carInfos, &highwayInfos, &carsExtraInfos);
 
     return 0;
 

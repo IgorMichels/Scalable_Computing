@@ -45,6 +45,7 @@ public:
         while (getline(file, line)) {
             stringstream ss(line);
             string token;
+            cout << line << endl;
             while (getline(ss, token, ',')) {
                 tokens.push_back(token);
                 if (tokens[0] != plate) break;
@@ -94,6 +95,7 @@ public:
         pair<string, string> result;
         result.first = lastPlate;
         result.second = lastQueryResults.model;
+        cout << "get model " << lastPlate << ' ' << result.second << " oi" << endl;
         semaphore--;
         semaphoreMutex.unlock();
         query_next_plate();
@@ -111,3 +113,5 @@ public:
         return result;
     }
 };
+
+externalAPI &API = externalAPI::getInstance(20, "mockData/extraInfoCars.txt");

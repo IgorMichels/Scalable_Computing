@@ -103,7 +103,7 @@ void updateDataMultiThread(map<string, carData> *carInfos, highwayData *highwayI
     }
 }
 
-void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, string text, externalAPI &API) {
+void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, string text) {
     int pos;
     string row;
     string plate;
@@ -129,7 +129,7 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
     }
 }
 
-void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, externalAPI &API) {
+void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
     string row;
     size_t pos;
     string text;
@@ -176,7 +176,7 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
 
         // nada pode ser lido enquanto estamos atualizando esse dicionário
         (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
-        updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text, API);
+        updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text);
         (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
         
         vector<string> remove;
@@ -190,15 +190,15 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
     remove(fileName.c_str());
 }
 
-void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, externalAPI &API) {
+void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always) {
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos), API);
+            for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos));
         }
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos), API);
+        for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos));
     }
 }

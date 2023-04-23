@@ -39,7 +39,7 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    for epoch in range(100):
+    for epoch in range(10):
         for hw in highways:
             hw.simulate()
             # if hw.highwayCode == 101: printStatus(hw.highwayStatusSouth)
