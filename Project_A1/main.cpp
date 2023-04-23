@@ -7,7 +7,7 @@ int main() {
     externalAPI &API = externalAPI::getInstance(20, "extraInfoCars.txt");
 
     auto start = chrono::steady_clock::now();
-    readFiles(&carInfos, &highwayInfos, false, 1, API);
+    readFiles(&carInfos, &highwayInfos, false, API);
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
     cout << "Total time: " << totalTime.count() << endl;

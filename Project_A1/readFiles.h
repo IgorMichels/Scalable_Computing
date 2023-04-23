@@ -129,7 +129,7 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
     }
 }
 
-void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, externalAPI &API) {
+void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, externalAPI &API) {
     string row;
     size_t pos;
     string text;
@@ -174,35 +174,10 @@ void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *c
             for (auto item : (*(*carInfos)[highway])) (*(*carInfos)[highway])[item.first].isInHighway = false;
         }
 
-        int numBlocks;
-        if (text.length() / 200 + 1 < maxBlocks) numBlocks = text.length() / 200 + 1;
-        else numBlocks = maxBlocks;
-        
-        if (numBlocks > 1) {
-            vector<string> dataBlocks = getBlocks(text, numBlocks);
-            numBlocks = dataBlocks.size();
-            for (int i = 0; i < numBlocks; i++) {
-                thread *ti = new thread(&updateDataMultiThread, (*carInfos)[highway], &(*(*highwayInfos)[highway]), dataBlocks[i]);
-                
-                sched_param sch;
-                int policy; 
-                pthread_getschedparam((*ti).native_handle(), &policy, &sch);
-                sch.sched_priority = 20;
-                if (pthread_setschedparam((*ti).native_handle(), SCHED_FIFO, &sch)) {
-                    std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
-                }
-
-                threads.push_back(ti);
-            }
-            
-            for (auto th : threads) th -> join();
-        }
-        else {
-            // nada pode ser lido enquanto estamos atualizando esse dicionário
-            (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
-            updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text, API);
-            (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
-        }
+        // nada pode ser lido enquanto estamos atualizando esse dicionário
+        (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
+        updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text, API);
+        (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
         
         vector<string> remove;
         if ((*(*highwayInfos)[highway]).infoTime != "") {
@@ -215,15 +190,15 @@ void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *c
     remove(fileName.c_str());
 }
 
-void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads, externalAPI &API) {
+void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, externalAPI &API) {
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos), API);
+            for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos), API);
         }
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos), API);
+        for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos), API);
     }
 }

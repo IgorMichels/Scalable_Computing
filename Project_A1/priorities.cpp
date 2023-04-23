@@ -1,3 +1,6 @@
+#include <pthread.h>
+#include <thread>
+
 #include "transformers.h"
 
 int main() {
@@ -11,13 +14,16 @@ int main() {
     vector<thread*> threads;
     externalAPI& API = externalAPI::getInstance(20, "extraInfoCars.txt");
 
-    thread *threadReading = new thread(&readFiles, &carInfos, &highwayInfos, false, 1, API);
-    pthread_getschedparam((*threadReading).native_handle(), &policy, &sch);
-    sch.sched_priority = 20;
-    if (pthread_setschedparam((*threadReading).native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
-    threads.push_back(threadReading);
+    // readFiles(&carInfos, &highwayInfos, false, API);
 
-    for (auto th : threads) th -> join();
+    thread threadReading(readFiles, &carInfos, &highwayInfos, false, API);
+    pthread_getschedparam(threadReading.native_handle(), &policy, &sch);
+    sch.sched_priority = 20;
+    if (pthread_setschedparam(threadReading.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
+    
+    
+    
+    threadReading.join();
 
     return 0;
 
