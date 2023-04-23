@@ -1,4 +1,4 @@
-#include "transformers_Michels.h"
+#include "transformers.h"
 // #include "readFiles.h" // já incluso no import acima
 // #include "API.h"
 
@@ -9,16 +9,15 @@ int main() {
     map<int, map<string, carData>*> carInfos;
     map<string, plateData*> carsExtraInfos;
     map<int, highwayData*> highwayInfos;
+    externalAPI &API = externalAPI::getInstance(20, "extraInfoCars.txt");
 
     auto start = chrono::steady_clock::now();
-    readFiles(&carInfos, &highwayInfos, false, 1);
+    readFiles(&carInfos, &highwayInfos, false, 1, API);
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalTime = end - start;
 
     cout << "Total time: " << totalTime.count() << endl;
     
-    carsOverLimit(&carInfos, &highwayInfos);
-
     start = chrono::steady_clock::now();
     updateSpeed(carInfos, &highwayInfos);
     /*
@@ -56,9 +55,8 @@ int main() {
     // analysisStats(&carInfos, &highwayInfos);
 
     
-    /*
+    
     cout << "\nTestando mock de dados externos" << endl;
-    externalAPI &API = externalAPI::getInstance(20, "extraInfoCars.txt");
     
     string plate;
     pair<string, string> name;
@@ -128,7 +126,7 @@ int main() {
     cout << name.first << ' ' << name.second << endl;
     cout << model.first << ' ' << model.second << endl;
     cout << year.first << ' ' << year.second << endl;
-    */
+    
     
 
     return 0;

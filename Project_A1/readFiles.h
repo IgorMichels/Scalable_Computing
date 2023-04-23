@@ -14,6 +14,8 @@
 #include <mutex>
 #include <map>
 
+#include "API.h"
+
 using namespace std;
 mutex iomutex;
 
@@ -130,7 +132,7 @@ void updateDataMultiThread(map<string, carData> *carInfos, highwayData *highwayI
     }
 }
 
-void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, string text) {
+void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, string text, externalAPI &API) {
     int pos;
     string row;
     string plate;
@@ -148,6 +150,7 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
             (*carInfos)[plate].lastPosition = (*carInfos)[plate].actualPosition;
             (*carInfos)[plate].actualPosition = lanePosition;
             (*carInfos)[plate].isInHighway = true;
+            if ((*carInfos)[plate].extraInfos == false) (*carInfos)[plate].extraInfos = API.query_vehicle(plate);
         }
         else {
             (*highwayInfos).infoTime = plate;
@@ -155,7 +158,7 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
     }
 }
 
-void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
+void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, externalAPI &API) {
     string row;
     size_t pos;
     string text;
@@ -226,7 +229,7 @@ void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *c
         else {
             // nada pode ser lido enquanto estamos atualizando esse dicionário
             (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
-            updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text);
+            updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text, API);
             (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
         }
         
@@ -241,15 +244,15 @@ void readFile(string fileName, int maxBlocks, map<int, map<string, carData>*> *c
     remove(fileName.c_str());
 }
 
-void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads) {
+void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads, externalAPI &API) {
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos));
+            for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos), API);
         }
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos));
+        for (auto file : files) readFile(file, maxThreads, &(*carInfos), &(*highwayInfos), API);
     }
 }
