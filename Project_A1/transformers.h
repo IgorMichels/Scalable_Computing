@@ -1,5 +1,4 @@
 #include "readFiles.h"
-//#include "API.h"
 
 #include <iostream>
 #include <sstream>
@@ -70,18 +69,6 @@ void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
     calculateTime(time, "contagem de carros acima da velocidade");
 }
 
-/*
-função não trivial, pensar mais
-void getExtraInfo(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, map<string, plateData*> *carsExtraInfos, externalAPI &API) {
-    for (auto hw : *carInfos) {
-        (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
-        map<string, carData>* carMap = hw.second;
-        for (auto car : *carMap) API.query_vehicle(car.first);
-        (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
-    }
-}
-*/
-
 bool comparePosition(const tuple<string, vector<int>> &positionsCar1, const tuple<string, vector<int>> &positionsCar2) {
     return get<1>(positionsCar1)[0] < get<1>(positionsCar2)[0];
 }
@@ -133,4 +120,22 @@ void calculateCrash(map<int, map<string, carData>*> &carInfos, map<int, highwayD
     sort(times.begin(), times.end());
     string time = times[0];
     calculateTime(time, "possíveis colisões");
+}
+
+void updateExtraInfos(map<string, plateData> &carsExtraInfos, externalAPI &API) {
+    plateData actualPlate;
+    string plate;
+    string model;
+    string name;
+    int year;
+    while ((API.queue.size() > 0) || (API.semaphore > 0)) {
+        tie(plate, name) = API.get_name();
+        tie(plate, year) = API.get_year();
+        tie(plate, model) = API.get_model();
+
+        actualPlate.name = name;
+        actualPlate.year = year;
+        actualPlate.model = model;
+        (carsExtraInfos)[plate] = actualPlate;
+    }
 }
