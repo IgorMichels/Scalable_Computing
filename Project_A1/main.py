@@ -19,7 +19,7 @@ def printStatus(highwayStatus : np.array):
 
 if __name__ == '__main__':
     if 'extraInfoCars.txt' in os.listdir(): os.remove('extraInfoCars.txt')
-    CLEAN = False
+    CLEAN = True
     TOTAL_HIGHWAYS = 5
     highwayCodes = np.arange(100, 100 + TOTAL_HIGHWAYS)
     highways = list()
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    for epoch in range(10):
+    for epoch in range(100):
         for hw in highways:
             hw.simulate()
             # if hw.highwayCode == 101: printStatus(hw.highwayStatusSouth)

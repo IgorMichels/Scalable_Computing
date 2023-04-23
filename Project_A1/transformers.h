@@ -13,7 +13,6 @@ void calculateTime(string time, string function) {
 }
 
 void analysisStats(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
-    cout << 1 << endl;
     vector<string> times;
     while (true) {
         while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
@@ -36,7 +35,6 @@ void analysisStats(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
 }
 
 void updateSpeed(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
-    cout << 2 << endl;
     while (true) {
         while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
         for (auto &hw : *carInfos) {
@@ -54,7 +52,6 @@ void updateSpeed(map<int, map<string, carData>*> *carInfos, map<int, highwayData
 
 void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
     // int overLimit = 0;
-    cout << 3 << endl;
     int maxSpeedHw;
     vector<string> times;
     while (true) {
@@ -85,7 +82,6 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
     int vel;
     int maxSpeedCar;
     vector<string> times;
-    cout << 4 << endl;
     while (true) {
         while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
         for (auto hw : *carInfos) {
@@ -136,7 +132,6 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
 }
 
 void updateExtraInfos(map<string, plateData> *carsExtraInfos) {
-    cout << 5 << endl;
     plateData actualPlate;
     string plate;
     string model;
@@ -165,7 +160,6 @@ void updateExtraInfos(map<string, plateData> *carsExtraInfos) {
 }
 
 void printCarInfos(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, map<string, plateData> *carsExtraInfos) {
-    cout << 6 << endl;
     while (true) {
         while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
         for (auto hw : *carInfos) {
