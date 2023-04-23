@@ -1,9 +1,5 @@
 #include "readFiles.h"
 
-#include <iostream>
-#include <sstream>
-#include <chrono>
-
 void calculateTime(string time, string function) {
     tm tm{};
     stringstream ss{time};
@@ -138,4 +134,29 @@ void updateExtraInfos(map<string, plateData> &carsExtraInfos, externalAPI &API) 
         actualPlate.model = model;
         (carsExtraInfos)[plate] = actualPlate;
     }
+}
+
+void printCarInfos(map<int, map<string, carData>*> &carInfos, map<int, highwayData*> *highwayInfos, map<string, plateData> &carsExtraInfos) {
+    for (auto hw : carInfos) {
+        (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
+        map<string, carData>* carMap = hw.second;
+        cout << "Rodovia: " << hw.first << endl << endl;
+        for (auto &q : *carMap) {
+            carData &car = q.second;
+            cout << q.first << ":\n  Posição GPS: (" << car.actualPosition << ", " << car.lane << ")\n"
+                 << "  Velocidade: " << car.speed << "\n"
+                 << "  Aceleração: " << car.acceleration << "\n"
+                 << "  Mantidas essas características, ele " << (car.canCrash ? "poderá bater" : "não irá bater")
+                 << endl;
+            if (car.extraInfos) {
+                cout << " Informações extras:\n"
+                     << "  Proprietário: " << carsExtraInfos[q.first].name << "\n"
+                     << "  Model: " << carsExtraInfos[q.first].model << "\n"
+                     << "  Ano: " << carsExtraInfos[q.first].year
+                     << endl;
+            }
+            cout << "-----------------------------------------------------------" << endl;
+        }
+        (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
+    } 
 }

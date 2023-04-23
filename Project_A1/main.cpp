@@ -15,19 +15,11 @@ int main() {
     updateExtraInfos(carsExtraInfos, API);
     analysisStats(&carInfos, &highwayInfos);
 
-    /*
     start = chrono::steady_clock::now();
     updateSpeed(carInfos, &highwayInfos);
-    
-    cout << "GAW8W32" << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].lane << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].actualPosition << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].lastPosition << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].penultimatePosition << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].speed << endl;
-    cout << (*(carInfos[103]))["GAW8W32"].acceleration << endl;
     end = chrono::steady_clock::now();totalTime = end - start;
     cout << "Total time (update): " << totalTime.count() << endl;
+    /*
 
     start = chrono::steady_clock::now();
     carsOverLimit(&carInfos, &highwayInfos);
@@ -125,11 +117,8 @@ int main() {
     cout << model.first << ' ' << model.second << endl;
     cout << year.first << ' ' << year.second << endl;
     */
-    
-    for (auto &aux : carsExtraInfos) {
-        plateData &actualPlate = aux.second;
-        cout << aux.first << ' ' << actualPlate.name << ' ' << actualPlate.model << ' ' << actualPlate.year << endl;
-    }
+
+    // printCarInfos(carInfos, &highwayInfos, carsExtraInfos);
 
     return 0;
 

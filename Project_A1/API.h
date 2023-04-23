@@ -1,18 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vector>
-#include <string>
-#include <mutex>
+//#include <vector>
+//#include <string>
+//#include <mutex>
+
+#include "structs.h"
 
 using namespace std;
-
-struct plateData
-{
-    string model;
-    string name;
-    int year;
-};
 
 class externalAPI {
 private:

@@ -1,46 +1,17 @@
 #include <sys/time.h>
 #include <algorithm>
-#include <iostream>
 #include <dirent.h>
-#include <fstream>
-#include <sstream>
 #include <cstring>
 #include <thread>
-#include <vector>
-#include <string>
 #include <chrono>
 #include <tuple>
 #include <ctime>
-#include <mutex>
 #include <map>
 
 #include "API.h"
 
 using namespace std;
 mutex iomutex;
-
-struct highwayData {
-    int maxSpeed = 0;
-    int carMaxSpeed = 0;
-    string infoTime = "";
-    mutex highwayDataBlocker;
-};
-
-struct carData {
-    int lane = 0;
-    int actualPosition = 0;
-    int lastPosition = 0;
-    int penultimatePosition = 0; // sim, essa palavra existe, só não é muito usada (https://www.italki.com/en/post/question-92435)
-    bool isInHighway = true;
-    // string name = "";
-    // string model = "";
-    // int year = 1900;
-    int speed = 0;
-    int acceleration = 0;
-    bool canCrash = false;
-    bool extraInfos = false;
-    vector<int> nextPositions;
-};
 
 vector<string> getFiles() {
     DIR *dr;
