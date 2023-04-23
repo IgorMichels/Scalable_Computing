@@ -37,8 +37,12 @@ int main() {
     carsOverLimit(&carInfos, &highwayInfos);
     end = chrono::steady_clock::now();
     totalTime = end - start;
-    cout << "Total time (cars igor): " << totalTime.count() << endl;
+    cout << "Total time (cars): " << totalTime.count() << endl;
 
+    int epochs = 5;
+    // calculateNextPositions(carInfos, &highwayInfos, epochs);
+    cout << (*(carInfos[104]))["IWU4J03"].nextPositions.size() << endl;
+    calculateCrash(carInfos, &highwayInfos, epochs);
     // for(auto it = (*(carInfos[103])).cbegin(); it != (*(carInfos[103])).cend(); ++it) {
     //     cout << it->first << endl;
     // }

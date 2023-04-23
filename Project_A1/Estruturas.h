@@ -144,6 +144,7 @@ map<string, string> checkCollision(map<int, map<string, carData>*>& carInfos,
                     crashs[get<0>(e[i])] = get<0>(e[i+1]);
                     (*carMap)[get<0>(e[i])].canCrash = true;
                     (*carMap)[get<0>(e[i+1])].canCrash = true;
+                    cout << get<0>(e[i]) << " pode bater no " << get<0>(e[i+1]) << endl;
                 }
             }
         }

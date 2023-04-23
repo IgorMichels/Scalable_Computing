@@ -40,7 +40,7 @@ void updateSpeed(map<int, map<string, carData>*> &carInfos, map<int, highwayData
     for (auto &hw : carInfos) {
         (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock(); // bloqueio o acesso à rodovia
         map<string, carData>* carMap = hw.second;
-        for (auto& q : *carMap) {
+        for (auto &q : *carMap) {
             carData &car = q.second;
             if (car.lastPosition != 0) car.speed = static_cast<int>(car.actualPosition - car.lastPosition); 
             if (car.penultimatePosition != 0) car.acceleration = static_cast<int>(car.actualPosition + car.penultimatePosition -  2 * car.lastPosition);
@@ -50,7 +50,7 @@ void updateSpeed(map<int, map<string, carData>*> &carInfos, map<int, highwayData
 }
 
 void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
-    int overLimit = 0;
+    // int overLimit = 0;
     int maxSpeedHw;
     vector<string> times;
     for (auto hw : *carInfos) {
@@ -59,13 +59,14 @@ void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
         maxSpeedHw = (*(*highwayInfos)[hw.first]).maxSpeed;
         times.push_back((*(*highwayInfos)[hw.first]).infoTime);
         for (auto car : *carMap) {
-            if (abs(car.second.speed) > maxSpeedHw) overLimit++;
+            // if (abs(car.second.speed) > maxSpeedHw) overLimit++;
+            if (abs(car.second.speed) > maxSpeedHw) cout << car.first << " está acima da velocidade máxima permitida" << endl;
         }
         (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
     }
     sort(times.begin(), times.end());
     string time = times[0];
-    cout << "Número de carros acima da velocidade permitida: " << overLimit << endl;
+    // cout << "Número de carros acima da velocidade permitida: " << overLimit << endl;
     calculateTime(time, "contagem de carros acima da velocidade");
 }
 
@@ -81,22 +82,55 @@ void getExtraInfo(map<int, map<string, carData>*> *carInfos, map<int, highwayDat
 }
 */
 
-void calculateNextPositions(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, int epochs) {
+bool comparePosition(const tuple<string, vector<int>> &positionsCar1, const tuple<string, vector<int>> &positionsCar2) {
+    return get<1>(positionsCar1)[0] < get<1>(positionsCar2)[0];
+}
+
+void calculateCrash(map<int, map<string, carData>*> &carInfos, map<int, highwayData*> *highwayInfos, int epochs) {
     int vel;
     int maxSpeedCar;
-    for (auto hw : *carInfos) {
+    vector<string> times;
+    for (auto hw : carInfos) {
         (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
-        map<string, carData>* carMap = hw.second;
+        times.push_back((*(*highwayInfos)[hw.first]).infoTime);
         maxSpeedCar = (*(*highwayInfos)[hw.first]).carMaxSpeed;
-        for (auto car : *carMap) {
-            for (int i = 1; i <= epochs; i++) {
-                vel = car.second.speed + i * car.second.acceleration;
+        map<int, vector<tuple<string, vector<int>>>> lanes; // lane : plate, positions
+        map<string, carData>* carMap = hw.second;
+        for (auto &q : *carMap) {
+            carData &car = q.second;
+            for (int i = 0; i <= epochs; i++) {
+                if (i == 0) {
+                    car.nextPositions.push_back(car.actualPosition);
+                    continue;
+                }
+                vel = car.speed + i * car.acceleration;
                 if (vel > maxSpeedCar) vel = maxSpeedCar;
                 if (vel < maxSpeedCar) vel = - maxSpeedCar;
-                if (i == 1) car.second.nextPositions.push_back(car.second.actualPosition + vel);
-                else car.second.nextPositions.push_back(car.second.nextPositions.back() + vel);
+                car.nextPositions.push_back(car.nextPositions.back() + vel);
+            }
+            tuple<string, vector<int>> currentCar = {q.first, car.nextPositions};
+            lanes[car.lane].push_back(currentCar);
+            car.nextPositions.clear();
+        }
+        
+        for (auto lane : lanes){
+            vector<tuple<string, vector<int>>> actualLane = lane.second;
+            sort(actualLane.begin(), actualLane.end(), comparePosition);
+            for (int i = 0; i < actualLane.size() - 1; i++){
+                for (int j = 1; j <= epochs; j++) {
+                    if (get<1>(actualLane[i])[j] >= get<1>(actualLane[i + 1])[j]){
+                        (*carMap)[get<0>(actualLane[i])].canCrash = true;
+                        (*carMap)[get<0>(actualLane[i + 1])].canCrash = true;
+                        cout << get<0>(actualLane[i]) << " pode bater no " << get<0>(actualLane[i + 1]) << " daqui a " << j << " iteração(ões)" << endl;
+                        break;
+                    }
+                }
             }
         }
+
         (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
     }
+    sort(times.begin(), times.end());
+    string time = times[0];
+    calculateTime(time, "possíveis colisões");
 }
