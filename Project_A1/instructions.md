@@ -19,7 +19,9 @@ Compile o código fonte por
 ```sh
 clang++ -std=c++11 main.cpp -o main
 ```
-Após o término da compilação, você terá o executável `main`.
+Após o término da compilação, você terá o executável `main`. 
+
+Para executar simultaneamente os programas, abra dois terminais. No primeiro terminal, rode o mock em Python. Posteriormente, no segundo terminal, rode o executável.
 
 ## Descrição dos arquivos no repositório
 
