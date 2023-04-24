@@ -61,13 +61,19 @@ public:
                 if (tokens[0] != plate) break;
             }
 
-            if (tokens[0] == plate) {
-                lastPlate      = tokens[0]       ;
-                searched.name  = tokens[1]       ;
-                searched.model = tokens[2]       ;
-                searched.year  = stoi(tokens[3]) ;
-                // cout << "API " << tokens[0] << tokens[1] << tokens[2] << tokens[3] << endl;
-                break;
+            try {
+                if (tokens[0] == plate) {
+                    lastPlate      = tokens[0]       ;
+                    searched.name  = tokens[1]       ;
+                    searched.model = tokens[2]       ;
+                    searched.year  = stoi(tokens[3]) ;
+                    // cout << "API " << tokens[0] << tokens[1] << tokens[2] << tokens[3] << endl;
+                    break;
+                }
+            }
+            catch (...) {
+                cout << tokens[3] << endl;
+                abort;
             }
             tokens.clear();
 

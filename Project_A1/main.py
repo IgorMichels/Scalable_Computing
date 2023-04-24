@@ -39,16 +39,16 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    for epoch in range(500):
+    for epoch in range(1000):
         for hw in highways:
             hw.simulate()
             # if hw.highwayCode == 101: printStatus(hw.highwayStatusSouth)
 
-        if epoch % 10 == 0:
-            with open('extraInfoCars.txt', 'r') as f: plates = f.readlines()
-            
-            # shuffle(plates)
-            with open('mockData/extraInfoCars.txt', 'w') as f: f.writelines(plates)
+        # if epoch % 10 == 0:
+        with open('extraInfoCars.txt', 'r') as f: plates = f.readlines()
+        
+        shuffle(plates)
+        with open('mockData/extraInfoCars.txt', 'w') as f: f.writelines(plates)
 
     tf = time()
 

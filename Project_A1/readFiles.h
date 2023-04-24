@@ -37,6 +37,7 @@ int getInfo(string row) {
 tuple<string, int, int> parseRow(string row)
 {
     int pos = row.find(',');
+    if (pos == -1) return make_tuple(row, 0, 0);
     string plate = row.substr(0, pos);
     string position = row.substr(pos + 2);
     pos = position.find(',');
@@ -102,10 +103,19 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
         text = string(&buffer[0], fileLength);
         for (int i = 0; i < 3; i++) {
             pos = text.find('\n');
+            if (pos == -1) {
+                i--;
+                continue;
+            }
             row = text.substr(0, pos);
-            text.erase(0, pos + 1);
             if (i == 0) {
-                highway = getInfo(row);
+                try {
+                    highway = getInfo(row);
+                }
+                catch (...) {
+                    cout << row << " deu pau " << pos << " " << text << " essa foi a string" << (pos == -1) << " " << (text == "") << endl;
+                    abort;
+                }
                 if ((*carInfos).find(highway) == (*carInfos).end()) (*carInfos)[highway] = new map<string, carData>;
                 if ((*highwayInfos).find(highway) == (*highwayInfos).end()) (*highwayInfos)[highway] = new highwayData;
             }
@@ -115,6 +125,7 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
                 else (*(*highwayInfos)[highway]).carMaxSpeed = getInfo(row);
                 (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // barrar leitura aqui
             }
+            text.erase(0, pos + 1);
         }
         
         // nada pode ser lido enquanto estamos atualizando esse dicionário

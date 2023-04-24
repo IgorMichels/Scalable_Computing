@@ -39,13 +39,6 @@ int main() {
     sch.sched_priority = 99;
     if (pthread_setschedparam(threadCrash.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
 
-    /*
-    thread threadCarsInfos(printCarInfos, &carInfos, &highwayInfos, &carsExtraInfos);
-    pthread_getschedparam(threadCarsInfos.native_handle(), &policy, &sch);
-    sch.sched_priority = 10;
-    if (pthread_setschedparam(threadCarsInfos.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
-    */
-    
     thread threadLimit(carsOverLimit, &carInfos, &highwayInfos);
     pthread_getschedparam(threadLimit.native_handle(), &policy, &sch);
     sch.sched_priority = 10;
@@ -55,13 +48,18 @@ int main() {
     pthread_getschedparam(threadStats.native_handle(), &policy, &sch);
     sch.sched_priority = 10;
     if (pthread_setschedparam(threadStats.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
-    
+        
     /*
     thread threadInfos(updateExtraInfos, &carsExtraInfos);
     pthread_getschedparam(threadInfos.native_handle(), &policy, &sch);
-    sch.sched_priority = 1;
+    sch.sched_priority = 10;
     if (pthread_setschedparam(threadInfos.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
     */
+    
+    thread threadCarsInfos(printCarInfos, &carInfos, &highwayInfos, &carsExtraInfos);
+    pthread_getschedparam(threadCarsInfos.native_handle(), &policy, &sch);
+    sch.sched_priority = 5;
+    if (pthread_setschedparam(threadCarsInfos.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
     
     
 
