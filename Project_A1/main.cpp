@@ -1,134 +1,65 @@
+#include <pthread.h>
+
 #include "transformers.h"
+using namespace std;
 
 int main() {
+    /*
+    Os parâmetros abaixo são referentes ao número de iterações a frente que iremos
+    calcular para verificar colisões e ao tamanho máximo da fila da API.
+    */
+    int epochs = 5;
+    API.maxSizeQueue = 5;
+    
+    int policy;
+    sched_param sch;
     map<int, map<string, carData>*> carInfos;
     map<string, plateData> carsExtraInfos;
     map<int, highwayData*> highwayInfos;
-    externalAPI &API = externalAPI::getInstance(20, "extraInfoCars.txt");
 
-    /*
-    auto start = chrono::steady_clock::now();
-    readFiles(&carInfos, &highwayInfos, false);
-    auto end = chrono::steady_clock::now();
-    chrono::duration<double> totalTime = end - start;
-    cout << "Total time: " << totalTime.count() << endl;
-
-    updateExtraInfos(&carsExtraInfos);
-    analysisStats(&carInfos, &highwayInfos);
-
-    start = chrono::steady_clock::now();
-    updateSpeed(&carInfos, &highwayInfos);
-    end = chrono::steady_clock::now();totalTime = end - start;
-    cout << "Total time (update): " << totalTime.count() << endl;
-    */
-
-    readFiles(&carInfos, &highwayInfos, false);
-    updateSpeed(&carInfos, &highwayInfos);
-    calculateCrash(&carInfos, &highwayInfos, 5);
-    analysisStats(&carInfos, &highwayInfos);
-    carsOverLimit(&carInfos, &highwayInfos);
-    updateExtraInfos(&carsExtraInfos);
-    printCarInfos(&carInfos, &highwayInfos, &carsExtraInfos);
-
-    /*
-
-    start = chrono::steady_clock::now();
-    carsOverLimit(&carInfos, &highwayInfos);
-    end = chrono::steady_clock::now();
-    totalTime = end - start;
-    cout << "Total time (cars): " << totalTime.count() << endl;
-
-    int epochs = 5;
-    // calculateNextPositions(carInfos, &highwayInfos, epochs);
-    cout << (*(carInfos[104]))["IWU4J03"].nextPositions.size() << endl;
-    calculateCrash(carInfos, &highwayInfos, epochs);
-    */
+    thread threadReading(readFiles, &carInfos, &highwayInfos, true);
+    pthread_getschedparam(threadReading.native_handle(), &policy, &sch);
+    sch.sched_priority = 99;
+    if (pthread_setschedparam(threadReading.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
     
-    // for(auto it = (*(carInfos[103])).cbegin(); it != (*(carInfos[103])).cend(); ++it) {
-    //     cout << it->first << endl;
-    // }
+    thread threadSpeed(updateSpeed, &carInfos, &highwayInfos);
+    pthread_getschedparam(threadSpeed.native_handle(), &policy, &sch);
+    sch.sched_priority = 99;
+    if (pthread_setschedparam(threadSpeed.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
 
-    // cout << endl;
-    // cout << (*(highwayInfos[101])).infoTime << endl;
-    // cout << (*(highwayInfos[101])).maxSpeed << endl;
-    // cout << (*(highwayInfos[101])).carMaxSpeed << endl;
+    thread threadCrash(calculateCrash, &carInfos, &highwayInfos, epochs);
+    pthread_getschedparam(threadCrash.native_handle(), &policy, &sch);
+    sch.sched_priority = 99;
+    if (pthread_setschedparam(threadCrash.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
 
-    // countHighways(&highwayInfos);
-    // analysisStats(&carInfos, &highwayInfos);
+    thread threadLimit(carsOverLimit, &carInfos, &highwayInfos);
+    pthread_getschedparam(threadLimit.native_handle(), &policy, &sch);
+    sch.sched_priority = 5;
+    if (pthread_setschedparam(threadLimit.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
 
-    /*
-    cout << "\nTestando mock de dados externos" << endl;
+    thread threadStats(analysisStats, &carInfos, &highwayInfos);
+    pthread_getschedparam(threadStats.native_handle(), &policy, &sch);
+    sch.sched_priority = 5;
+    if (pthread_setschedparam(threadStats.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
     
-    string plate;
-    pair<string, string> name;
-    pair<string, string> model;
-    pair<string, int> year;
+    thread threadInfos(updateExtraInfos, &carsExtraInfos);
+    pthread_getschedparam(threadInfos.native_handle(), &policy, &sch);
+    sch.sched_priority = 1;
+    if (pthread_setschedparam(threadInfos.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
+    
+    thread threadCarsInfos(printCarInfos, &carInfos, &highwayInfos, &carsExtraInfos);
+    pthread_getschedparam(threadCarsInfos.native_handle(), &policy, &sch);
+    sch.sched_priority = 1;
+    if (pthread_setschedparam(threadCarsInfos.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
 
-    plate = "GAW8W32";
-    API.query_vehicle(plate);
-
-    name = API.get_name();
-    model = API.get_model();
-    year = API.get_year();
-
-    cout << name.first << ' ' << name.second << endl;
-    cout << model.first << ' ' << model.second << endl;
-    cout << year.first << ' ' << year.second << endl;
-
-    plate = "LWU9U69";
-    API.query_vehicle(plate);
-
-    plate = "WOI8F40";
-    API.query_vehicle(plate);
-
-    plate = "TBM0Z27";
-    API.query_vehicle(plate);
-
-    plate = "TBM0Z27";
-    API.query_vehicle(plate);
-
-    plate = "TBM0Z27";
-    API.query_vehicle(plate);
-
-    plate = "TBM0Z27";
-    API.query_vehicle(plate);
-
-    plate = "TBM0Z27";
-    API.query_vehicle(plate);
-
-    name = API.get_name();
-    model = API.get_model();
-    year = API.get_year();
-
-    cout << name.first << ' ' << name.second << endl;
-    cout << model.first << ' ' << model.second << endl;
-    cout << year.first << ' ' << year.second << endl;
-
-    name = API.get_name();
-    model = API.get_model();
-    year = API.get_year();
-
-    cout << name.first << ' ' << name.second << endl;
-    cout << model.first << ' ' << model.second << endl;
-    cout << year.first << ' ' << year.second << endl;
-
-    name = API.get_name();
-    model = API.get_model();
-    year = API.get_year();
-
-    cout << name.first << ' ' << name.second << endl;
-    cout << model.first << ' ' << model.second << endl;
-    cout << year.first << ' ' << year.second << endl;
-
-    name = API.get_name();
-    model = API.get_model();
-    year = API.get_year();
-
-    cout << name.first << ' ' << name.second << endl;
-    cout << model.first << ' ' << model.second << endl;
-    cout << year.first << ' ' << year.second << endl;
-    */
-
+    threadReading.join();
+    threadSpeed.join();
+    threadCrash.join();
+    threadLimit.join();
+    threadStats.join();
+    threadInfos.join();
+    threadCarsInfos.join();
+    
     return 0;
 
 }
