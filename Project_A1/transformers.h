@@ -32,6 +32,7 @@ void analysisStats(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
             cout << "Número de rodovias: " << numHighways << endl;
             cout << "Número de carros (total): " << numCars << endl;
             calculateTime(time, "contagem de veículos e rodovias");
+            times.clear();
         }
         // break;
     }
@@ -59,6 +60,7 @@ void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
             string time = times[0];
             // cout << "Número de carros acima da velocidade permitida: " << overLimit << endl;
             calculateTime(time, "contagem de carros acima da velocidade");
+            times.clear();
         }
         // break;
     }
@@ -140,6 +142,7 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
             sort(times.begin(), times.end());
             string time = times[0];
             calculateTime(time, "possíveis colisões");
+            times.clear();
         }
         // break;
     }

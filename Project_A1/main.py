@@ -47,7 +47,7 @@ if __name__ == '__main__':
         if epoch % 10 == 0:
             with open('extraInfoCars.txt', 'r') as f: plates = f.readlines()
             
-            shuffle(plates)
+            # shuffle(plates)
             with open('mockData/extraInfoCars.txt', 'w') as f: f.writelines(plates)
 
     tf = time()

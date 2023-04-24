@@ -17,8 +17,10 @@ public:
     vector<string> queue;
     mutex semaphoreMutex;
     int semaphore = 0;
+    int sizeQueue = 0;
     int maxSizeQueue;
     string lastPlate;
+    bool ifEntrance;
 
     externalAPI (int maxSize, string filename){
             databaseFilename = filename;
@@ -31,11 +33,19 @@ public:
     }
 
     void query_next_plate() {
-        if ((semaphore > 0) || (queue.size() == 0)) return;
+        semaphoreMutex.lock();
+        ifEntrance = ((semaphore > 0) || (sizeQueue == 0));
+        semaphoreMutex.unlock();
+        if (ifEntrance) return;
+
+        cout << semaphore << " e " << sizeQueue << " " << ifEntrance << endl;
 
         semaphoreMutex.lock();
         string plate = queue.back();
+        cout << "nossa plaquinha: " << plate << endl;
         queue.pop_back();
+        sizeQueue--;
+        cout << "nossa plaquinha: " << plate << endl;
 
         ifstream file(databaseFilename);
         string line;
@@ -46,6 +56,7 @@ public:
             stringstream ss(line);
             string token;
             while (getline(ss, token, ',')) {
+                // cout << token << " e a placa buscada é " << plate << endl;
                 tokens.push_back(token);
                 if (tokens[0] != plate) break;
             }
@@ -55,6 +66,7 @@ public:
                 searched.name  = tokens[1]       ;
                 searched.model = tokens[2]       ;
                 searched.year  = stoi(tokens[3]) ;
+                // cout << "API " << tokens[0] << tokens[1] << tokens[2] << tokens[3] << endl;
                 break;
             }
             tokens.clear();
@@ -68,10 +80,15 @@ public:
 
     bool query_vehicle(string plate) {
         // fila está cheia
-        if (queue.size() == maxSizeQueue) return false;
+        if (sizeQueue == maxSizeQueue) return false;
 
         // se a placa não está na fila, a gente insere
-        if (find(queue.begin(), queue.end(), plate) == queue.end()) queue.insert(queue.begin(), plate);
+        if (find(queue.begin(), queue.end(), plate) == queue.end()) {
+            semaphoreMutex.lock();
+            queue.insert(queue.begin(), plate);
+            sizeQueue++;
+            semaphoreMutex.unlock();
+        }
 
         // tenta fazer a próxima query
         query_next_plate();
