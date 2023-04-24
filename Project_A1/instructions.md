@@ -21,7 +21,7 @@ clang++ -std=c++11 main.cpp -o main
 ```
 Após o término da compilação, você terá o executável `main`. 
 
-Para executar simultaneamente os programas, abra dois terminais. No primeiro terminal, rode o mock em Python. Posteriormente, no segundo terminal, rode o executável.
+Para executar simultaneamente os programas, abra dois terminais. No primeiro terminal, rode o executável. Posteriormente, no segundo terminal, rode o mock em Python.
 
 ## Descrição dos arquivos no repositório
 
@@ -32,10 +32,9 @@ gerada.
 * Os arquivos `Car.py` e `Highway.py` contém as classes que fornecem as informações adicionais do serviço externo para o sistema de monitoramento de rodovia (mock).
 * O arquivo `main.py` contém o script que gera os dados para o sistema de monitoramento de rodovia (mock).
 * O arquivo `structs.h` é o arquivo que define estruturas que serão usadas no arquivo `main.cpp` para armazenar dados.
-* O arquivo `priorities.cpp` inclui o código que permite priorização de determinadas thread de acordo com a necessidade do problema.
 * O arquivo `transformers.cpp` é o arquivo que contém os transformadores responsáveis por gerar as análises necessárias: número de de rodovias presentes na simulação,
 número total de veículos presentes na simulação, veículos acima do limite de velocidade, informações de cada veículo, propriedades de cada veículo, e veículos que
 apresentam risco de colisão.
 * O arquivo `API.h` traz a classe externalAPI, que é a API de acesso ao serviço externo de informações adicionais.
 * O arquivo `readFiles.h` traz a header responsável por fazer a leitura dos dados gerados pelo mock e extração das informações necessárias.
-* O arquivo `main.cpp` traz o script necessário para funcionamento do sistema como um todo.
+* O arquivo `main.cpp` traz o script necessário para funcionamento do sistema como um todo, já com todas as prioridades definidas.

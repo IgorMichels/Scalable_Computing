@@ -4,9 +4,15 @@
 using namespace std;
 
 int main() {
-    sched_param sch;
-    int policy;
+    /*
+    Os parâmetros abaixo são referentes ao número de iterações a frente que iremos
+    calcular para verificar colisões e ao tamanho máximo da fila da API.
+    */
     int epochs = 5;
+    API.maxSizeQueue = 5;
+    
+    int policy;
+    sched_param sch;
     map<int, map<string, carData>*> carInfos;
     map<string, plateData> carsExtraInfos;
     map<int, highwayData*> highwayInfos;
@@ -36,12 +42,10 @@ int main() {
     sch.sched_priority = 5;
     if (pthread_setschedparam(threadStats.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
     
-    //*
     thread threadInfos(updateExtraInfos, &carsExtraInfos);
     pthread_getschedparam(threadInfos.native_handle(), &policy, &sch);
     sch.sched_priority = 1;
     if (pthread_setschedparam(threadInfos.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';
-    //*/
     
     thread threadCarsInfos(printCarInfos, &carInfos, &highwayInfos, &carsExtraInfos);
     pthread_getschedparam(threadCarsInfos.native_handle(), &policy, &sch);

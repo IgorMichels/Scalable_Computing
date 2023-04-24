@@ -66,7 +66,7 @@ void updateData(map<string, carData> *carInfos, highwayData *highwayInfos, strin
             (*carInfos)[plate].lastPosition = (*carInfos)[plate].actualPosition;
             (*carInfos)[plate].actualPosition = lanePosition;
             (*carInfos)[plate].isInHighway = true;
-            if ((*carInfos)[plate].extraInfos == false) (*carInfos)[plate].extraInfos = API.query_vehicle(plate);
+            if (((*carInfos)[plate].extraInfos == false) && (API.sizeQueue < API.maxSizeQueue)) (*carInfos)[plate].extraInfos = API.query_vehicle(plate);
         }
         else {
             (*highwayInfos).infoTime = plate;
@@ -129,7 +129,6 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
         }
 
         updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text);
-        
         vector<string> remove;
         if ((*(*highwayInfos)[highway]).infoTime != "") {
             for (auto item : (*(*carInfos)[highway])) {

@@ -15,6 +15,7 @@ def printStatus(highwayStatus : np.array):
         print()
 
 if __name__ == '__main__':
+    if 'files' not in os.listdir(): os.mkdir('files')
     if 'extraInfoCars.txt' in os.listdir(): os.remove('extraInfoCars.txt')
     CLEAN = False
     TOTAL_HIGHWAYS = 5
@@ -36,7 +37,7 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    for epoch in range(500):
+    while True:
         for hw in highways:
             hw.simulate()
         

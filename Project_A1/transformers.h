@@ -180,17 +180,17 @@ void printCarInfos(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
                 for (auto &q : *carMap) {
                     carData &car = q.second;
                     cout << q.first << ":\n  Posição GPS: (" << car.actualPosition << ", " << car.lane << ")\n"
-                        << "  Velocidade: " << car.speed << "\n"
-                        << "  Aceleração: " << car.acceleration << "\n"
-                        << "  Mantidas essas características, ele " << (car.canCrash ? "poderá bater" : "não irá bater")
-                        << endl;
+                         << "  Velocidade: " << car.speed << "\n"
+                         << "  Aceleração: " << car.acceleration << "\n"
+                         << "  Mantidas essas características, ele " << (car.canCrash ? "poderá bater" : "não irá bater")
+                         << endl;
                     if (car.extraInfos) {
                         extraInfos.lock();
                         cout << " Informações extras:\n"
-                            << "  Proprietário: " << (*carsExtraInfos)[q.first].name << "\n"
-                            << "  Model: " << (*carsExtraInfos)[q.first].model << "\n"
-                            << "  Ano: " << (*carsExtraInfos)[q.first].year
-                            << endl;
+                             << "  Proprietário: " << (*carsExtraInfos)[q.first].name << "\n"
+                             << "  Model: " << (*carsExtraInfos)[q.first].model << "\n"
+                             << "  Ano: " << (*carsExtraInfos)[q.first].year
+                             << endl;
                         extraInfos.unlock();
                     }
                     cout << "-----------------------------------------------------------" << endl;
