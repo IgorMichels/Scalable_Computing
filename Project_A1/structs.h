@@ -28,5 +28,6 @@ struct carData {
     int acceleration = 0;
     bool canCrash = false;
     bool extraInfos = false;
-    // vector<int> nextPositions;
 };
+
+bool active = true;

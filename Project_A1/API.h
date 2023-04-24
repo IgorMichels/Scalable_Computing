@@ -45,7 +45,6 @@ public:
         while (getline(file, line)) {
             stringstream ss(line);
             string token;
-            cout << line << endl;
             while (getline(ss, token, ',')) {
                 tokens.push_back(token);
                 if (tokens[0] != plate) break;
@@ -81,6 +80,11 @@ public:
     
     pair<string, string> get_name(){
         semaphoreMutex.lock();
+        if (lastQueryResults.year == 0) {
+            semaphoreMutex.unlock();
+            query_next_plate();
+            semaphoreMutex.lock();
+        }
         pair<string, string> result;
         result.first = lastPlate;
         result.second = lastQueryResults.name;
@@ -92,10 +96,14 @@ public:
     
     pair<string, string> get_model(){
         semaphoreMutex.lock();
+        if (lastQueryResults.year == 0) {
+            semaphoreMutex.unlock();
+            query_next_plate();
+            semaphoreMutex.lock();
+        }
         pair<string, string> result;
         result.first = lastPlate;
         result.second = lastQueryResults.model;
-        cout << "get model " << lastPlate << ' ' << result.second << " oi" << endl;
         semaphore--;
         semaphoreMutex.unlock();
         query_next_plate();
@@ -104,6 +112,11 @@ public:
 
     pair<string, int> get_year(){
         semaphoreMutex.lock();
+        if (lastQueryResults.year == 0) {
+            semaphoreMutex.unlock();
+            query_next_plate();
+            semaphoreMutex.lock();
+        }
         pair<string, int> result;
         result.first = lastPlate;
         result.second = lastQueryResults.year;

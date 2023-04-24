@@ -109,18 +109,21 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
                 if ((*carInfos).find(highway) == (*carInfos).end()) (*carInfos)[highway] = new map<string, carData>;
                 if ((*highwayInfos).find(highway) == (*highwayInfos).end()) (*highwayInfos)[highway] = new highwayData;
             }
-            else if (i == 1) (*(*highwayInfos)[highway]).maxSpeed = getInfo(row);
-            else (*(*highwayInfos)[highway]).carMaxSpeed = getInfo(row);
+            else {
+                (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
+                if (i == 1) (*(*highwayInfos)[highway]).maxSpeed = getInfo(row);
+                else (*(*highwayInfos)[highway]).carMaxSpeed = getInfo(row);
+                (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // barrar leitura aqui
+            }
         }
         
+        // nada pode ser lido enquanto estamos atualizando esse dicionário
+        (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
         if ((*(*highwayInfos)[highway]).infoTime != "") {
             for (auto item : (*(*carInfos)[highway])) (*(*carInfos)[highway])[item.first].isInHighway = false;
         }
 
-        // nada pode ser lido enquanto estamos atualizando esse dicionário
-        (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
         updateData((*carInfos)[highway], &(*(*highwayInfos)[highway]), text);
-        (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
         
         vector<string> remove;
         if ((*(*highwayInfos)[highway]).infoTime != "") {
@@ -128,7 +131,9 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
                 if (item.second.isInHighway == false) remove.push_back(item.first);
             }
         }
+
         for (auto plate : remove) (*(*carInfos)[highway]).erase(plate);
+        (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
     }
     remove(fileName.c_str());
 }
@@ -137,7 +142,17 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos));
+            if (files.size() == 0) {
+                active = false;
+                cout << "Aguardando novos arquivos" << endl;
+                this_thread::sleep_for(chrono::milliseconds(100));
+            }
+            else {
+                for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos));
+                active = true;
+                this_thread::sleep_for(chrono::milliseconds(10));
+            }
+            // break;
         }
     }
     else {
