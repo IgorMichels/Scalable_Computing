@@ -1,9 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-//#include <vector>
-//#include <string>
-//#include <mutex>
 
 #include "structs.h"
 
@@ -34,18 +31,14 @@ public:
 
     void query_next_plate() {
         semaphoreMutex.lock();
-        ifEntrance = ((semaphore > 0) || (sizeQueue == 0));
+        ifEntrance = ((semaphore == 0) && (sizeQueue >= 0));
         semaphoreMutex.unlock();
-        if (ifEntrance) return;
-
-        cout << semaphore << " e " << sizeQueue << " " << ifEntrance << endl;
+        if (ifEntrance == false) return;
 
         semaphoreMutex.lock();
         string plate = queue.back();
-        cout << "nossa plaquinha: " << plate << endl;
         queue.pop_back();
         sizeQueue--;
-        cout << "nossa plaquinha: " << plate << endl;
 
         ifstream file(databaseFilename);
         string line;
@@ -56,25 +49,18 @@ public:
             stringstream ss(line);
             string token;
             while (getline(ss, token, ',')) {
-                // cout << token << " e a placa buscada é " << plate << endl;
                 tokens.push_back(token);
                 if (tokens[0] != plate) break;
             }
+            
+            if (tokens[0] == plate) {
+                lastPlate      = tokens[0]       ;
+                searched.name  = tokens[1]       ;
+                searched.model = tokens[2]       ;
+                searched.year  = stoi(tokens[3]) ;
+                break;
+            }
 
-            try {
-                if (tokens[0] == plate) {
-                    lastPlate      = tokens[0]       ;
-                    searched.name  = tokens[1]       ;
-                    searched.model = tokens[2]       ;
-                    searched.year  = stoi(tokens[3]) ;
-                    // cout << "API " << tokens[0] << tokens[1] << tokens[2] << tokens[3] << endl;
-                    break;
-                }
-            }
-            catch (...) {
-                cout << tokens[3] << endl;
-                abort;
-            }
             tokens.clear();
 
         }
@@ -96,14 +82,12 @@ public:
             semaphoreMutex.unlock();
         }
 
-        // tenta fazer a próxima query
-        query_next_plate();
         return true;
     }
     
     pair<string, string> get_name(){
         semaphoreMutex.lock();
-        if (lastQueryResults.year == 0) {
+        if (semaphore == 0) {
             semaphoreMutex.unlock();
             query_next_plate();
             semaphoreMutex.lock();
@@ -113,13 +97,12 @@ public:
         result.second = lastQueryResults.name;
         semaphore--;
         semaphoreMutex.unlock();
-        query_next_plate();
         return result;
     }
     
     pair<string, string> get_model(){
         semaphoreMutex.lock();
-        if (lastQueryResults.year == 0) {
+        if (semaphore == 0) {
             semaphoreMutex.unlock();
             query_next_plate();
             semaphoreMutex.lock();
@@ -129,13 +112,12 @@ public:
         result.second = lastQueryResults.model;
         semaphore--;
         semaphoreMutex.unlock();
-        query_next_plate();
         return result;
     }
 
     pair<string, int> get_year(){
         semaphoreMutex.lock();
-        if (lastQueryResults.year == 0) {
+        if (semaphore == 0) {
             semaphoreMutex.unlock();
             query_next_plate();
             semaphoreMutex.lock();
@@ -145,7 +127,6 @@ public:
         result.second = lastQueryResults.year;
         semaphore--;
         semaphoreMutex.unlock();
-        query_next_plate();
         return result;
     }
 };

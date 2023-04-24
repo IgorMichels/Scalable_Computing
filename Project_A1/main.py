@@ -1,9 +1,6 @@
 import os
 import numpy as np
 
-import random
-# random.seed(0)
-
 from time import time
 from glob import glob
 from random import randint, shuffle
@@ -39,12 +36,10 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    for epoch in range(1000):
+    for epoch in range(500):
         for hw in highways:
             hw.simulate()
-            # if hw.highwayCode == 101: printStatus(hw.highwayStatusSouth)
-
-        # if epoch % 10 == 0:
+        
         with open('extraInfoCars.txt', 'r') as f: plates = f.readlines()
         
         shuffle(plates)

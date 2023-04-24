@@ -31,3 +31,4 @@ struct carData {
 };
 
 bool active = true;
+mutex extraInfos;

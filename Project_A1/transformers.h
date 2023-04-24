@@ -4,15 +4,7 @@ void calculateTime(string time, string function) {
     tm tm{};
     stringstream ss{time};
     ss >> get_time(&tm, "%Y-%m-%d %H:%M:%S");
-    auto tp = chrono::system_clock::from_time_t(mktime(&tm));
-    try {
-        tp = tp + chrono::microseconds{std::stoi(time.substr(20))};
-    }
-    catch (...) {
-        cout << time << endl;
-        abort;
-    }
-
+    auto tp = chrono::system_clock::from_time_t(mktime(&tm)) + chrono::microseconds{std::stoi(time.substr(20))};
     auto now = chrono::system_clock::now();
     auto duration = chrono::duration_cast<std::chrono::microseconds>(now - tp);
     cout << "Tempo de processamento (" << function << "): " << duration.count() / 1000.0 << " milisegundos" << endl;
@@ -40,7 +32,6 @@ void analysisStats(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
             calculateTime(time, "contagem de veículos e rodovias");
             times.clear();
         }
-        // break;
     }
 }
 
@@ -56,7 +47,7 @@ void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
                 maxSpeedHw = (*(*highwayInfos)[hw.first]).maxSpeed;
                 times.push_back((*(*highwayInfos)[hw.first]).infoTime);
                 for (auto car : *carMap) {
-                    if (abs(car.second.speed) > maxSpeedHw) continue; // cout << car.first << " está acima da velocidade máxima permitida" << endl;
+                    if (abs(car.second.speed) > maxSpeedHw) cout << car.first << " está acima da velocidade máxima permitida" << endl;
                 }
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
             }
@@ -65,7 +56,6 @@ void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
             calculateTime(time, "contagem de carros acima da velocidade");
             times.clear();
         }
-        // break;
     }
 }
 
@@ -78,17 +68,16 @@ void updateSpeed(map<int, map<string, carData>*> *carInfos, map<int, highwayData
         if (active) {
             while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
             for (auto &hw : *carInfos) {
-                (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock(); // bloqueio o acesso à rodovia
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
                 map<string, carData>* carMap = hw.second;
                 for (auto &q : *carMap) {
                     carData &car = q.second;
                     if (car.lastPosition != 0) car.speed = static_cast<int>(car.actualPosition - car.lastPosition); 
                     if (car.penultimatePosition != 0) car.acceleration = static_cast<int>(car.actualPosition + car.penultimatePosition -  2 * car.lastPosition);
                 }
-                (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock(); // libero o acesso à rodovia
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
             }
         }
-        // break;
     }
 }
 
@@ -103,7 +92,7 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
                 times.push_back((*(*highwayInfos)[hw.first]).infoTime);
                 maxSpeedCar = (*(*highwayInfos)[hw.first]).carMaxSpeed;
-                map<int, vector<tuple<string, vector<int>>>> lanes; // lane : plate, positions
+                map<int, vector<tuple<string, vector<int>>>> lanes;
                 map<string, carData>* carMap = hw.second;
                 for (auto &q : *carMap) {
                     vector<int> nextPositions;
@@ -131,7 +120,7 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
                             if (get<1>(actualLane[i])[j] >= get<1>(actualLane[i + 1])[j]){
                                 (*carMap)[get<0>(actualLane[i])].canCrash = true;
                                 (*carMap)[get<0>(actualLane[i + 1])].canCrash = true;
-                                // cout << get<0>(actualLane[i]) << " pode bater no " << get<0>(actualLane[i + 1]) << " daqui a " << j << " iteração(ões)" << endl;
+                                cout << get<0>(actualLane[i]) << " pode bater no " << get<0>(actualLane[i + 1]) << " daqui a " << j << " iteração(ões)" << endl;
                                 break;
                             }
                         }
@@ -145,7 +134,6 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
             calculateTime(time, "possíveis colisões");
             times.clear();
         }
-        // break;
     }
 }
 
@@ -169,15 +157,15 @@ void updateExtraInfos(map<string, plateData> *carsExtraInfos) {
                 actualPlate.name = name;
                 actualPlate.year = year;
                 actualPlate.model = model;
-                cout << name << " " << model << " " << year << endl;
+                extraInfos.lock();
                 (*carsExtraInfos)[plate] = actualPlate;
+                extraInfos.unlock();
 
                 API.semaphoreMutex.lock();
                 update = (API.queue.size() > 0) || (API.semaphore > 0);
                 API.semaphoreMutex.unlock();
             }
         }
-        // break;
     }
 }
 
@@ -197,17 +185,18 @@ void printCarInfos(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
                         << "  Mantidas essas características, ele " << (car.canCrash ? "poderá bater" : "não irá bater")
                         << endl;
                     if (car.extraInfos) {
+                        extraInfos.lock();
                         cout << " Informações extras:\n"
                             << "  Proprietário: " << (*carsExtraInfos)[q.first].name << "\n"
                             << "  Model: " << (*carsExtraInfos)[q.first].model << "\n"
                             << "  Ano: " << (*carsExtraInfos)[q.first].year
                             << endl;
+                        extraInfos.unlock();
                     }
                     cout << "-----------------------------------------------------------" << endl;
                 }
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
             }
         }
-        // break;
     }
 }

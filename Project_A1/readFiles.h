@@ -1,6 +1,7 @@
 #include <sys/time.h>
 #include <algorithm>
 #include <dirent.h>
+#include <iomanip>
 #include <cstring>
 #include <thread>
 #include <chrono>
@@ -109,27 +110,20 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
             }
             row = text.substr(0, pos);
             if (i == 0) {
-                try {
-                    highway = getInfo(row);
-                }
-                catch (...) {
-                    cout << row << " deu pau " << pos << " " << text << " essa foi a string" << (pos == -1) << " " << (text == "") << endl;
-                    abort;
-                }
+                highway = getInfo(row);
                 if ((*carInfos).find(highway) == (*carInfos).end()) (*carInfos)[highway] = new map<string, carData>;
                 if ((*highwayInfos).find(highway) == (*highwayInfos).end()) (*highwayInfos)[highway] = new highwayData;
             }
             else {
-                (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
+                (*(*highwayInfos)[highway]).highwayDataBlocker.lock();
                 if (i == 1) (*(*highwayInfos)[highway]).maxSpeed = getInfo(row);
                 else (*(*highwayInfos)[highway]).carMaxSpeed = getInfo(row);
-                (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // barrar leitura aqui
+                (*(*highwayInfos)[highway]).highwayDataBlocker.unlock();
             }
             text.erase(0, pos + 1);
         }
         
-        // nada pode ser lido enquanto estamos atualizando esse dicionário
-        (*(*highwayInfos)[highway]).highwayDataBlocker.lock(); // barrar leitura aqui
+        (*(*highwayInfos)[highway]).highwayDataBlocker.lock();
         if ((*(*highwayInfos)[highway]).infoTime != "") {
             for (auto item : (*(*carInfos)[highway])) (*(*carInfos)[highway])[item.first].isInHighway = false;
         }
@@ -144,7 +138,7 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
         }
 
         for (auto plate : remove) (*(*carInfos)[highway]).erase(plate);
-        (*(*highwayInfos)[highway]).highwayDataBlocker.unlock(); // liberar leitura
+        (*(*highwayInfos)[highway]).highwayDataBlocker.unlock();
     }
     remove(fileName.c_str());
 }
@@ -163,7 +157,6 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
                 active = true;
                 this_thread::sleep_for(chrono::milliseconds(10));
             }
-            // break;
         }
     }
     else {
