@@ -139,7 +139,6 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
         for (auto plate : remove) (*(*carInfos)[highway]).erase(plate);
         (*(*highwayInfos)[highway]).highwayDataBlocker.unlock();
     }
-    remove(fileName.c_str());
 }
 
 void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always) {
@@ -152,7 +151,10 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
                 this_thread::sleep_for(chrono::milliseconds(100));
             }
             else {
-                for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos));
+                for (auto file : files) {
+                    readFile(file, &(*carInfos), &(*highwayInfos));
+                    remove(file.c_str());
+                }
                 active = true;
                 this_thread::sleep_for(chrono::milliseconds(10));
             }
@@ -160,6 +162,9 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
     }
     else {
         vector<string> files = getFiles();
-        for (auto file : files) readFile(file, &(*carInfos), &(*highwayInfos));
+        for (auto file : files) {
+            readFile(file, &(*carInfos), &(*highwayInfos));
+            remove(file.c_str());
+        }
     }
 }
