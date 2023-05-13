@@ -28,6 +28,7 @@ vector<string> getFiles() {
         closedir(dr);
     }
     sort(files.begin(), files.end());
+    reverse(files.begin(), files.end());
     return files;
 }
 
@@ -81,6 +82,7 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
     int highway;
     fstream file;
     string plate;
+    string auxName;
     int actualLane;
     int lanePosition;
     int speedLimitCar;
@@ -113,6 +115,10 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
                 highway = getInfo(row);
                 if ((*carInfos).find(highway) == (*carInfos).end()) (*carInfos)[highway] = new map<string, carData>;
                 if ((*highwayInfos).find(highway) == (*highwayInfos).end()) (*highwayInfos)[highway] = new highwayData;
+                if ((*(*highwayInfos)[highway]).infoTime != "") {
+                    auxName = fileName.substr(6, 26);
+                    if (auxName.compare((*(*highwayInfos)[highway]).infoTime) < 0) return;
+                }
             }
             else {
                 (*(*highwayInfos)[highway]).highwayDataBlocker.lock();
@@ -148,7 +154,7 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
             if (files.size() == 0) {
                 active = false;
                 cout << "Aguardando novos arquivos" << endl;
-                this_thread::sleep_for(chrono::milliseconds(100));
+                this_thread::sleep_for(chrono::milliseconds(10));
             }
             else {
                 for (auto file : files) {
@@ -156,7 +162,7 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
                     remove(file.c_str());
                 }
                 active = true;
-                this_thread::sleep_for(chrono::milliseconds(10));
+                this_thread::sleep_for(chrono::milliseconds(1));
             }
         }
     }

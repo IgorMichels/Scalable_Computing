@@ -37,3 +37,4 @@ Project_A1/.DS_Store
 .vscode
 *.zip
 Project_A1/main
+__pycache__

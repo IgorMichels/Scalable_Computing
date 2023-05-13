@@ -1,11 +1,19 @@
 import os
+import shutil
 import numpy as np
 
 from time import time
 from glob import glob
 from random import randint, shuffle
 
+import sys
+sys.path.append('mockData/')
+
 from Highway import Highway
+
+CLEAN = False
+SIMS = 0
+TOTAL_HIGHWAYS = 50
 
 def printStatus(highwayStatus : np.array):
     nlins, ncols, _ = highwayStatus.shape
@@ -17,8 +25,6 @@ def printStatus(highwayStatus : np.array):
 if __name__ == '__main__':
     if 'files' not in os.listdir(): os.mkdir('files')
     if 'extraInfoCars.txt' in os.listdir(): os.remove('extraInfoCars.txt')
-    CLEAN = False
-    TOTAL_HIGHWAYS = 5
     highwayCodes = np.arange(100, 100 + TOTAL_HIGHWAYS)
     highways = list()
     for code in highwayCodes:
@@ -37,14 +43,20 @@ if __name__ == '__main__':
         ))
     
     t = time()
-    while True:
-        for hw in highways:
-            hw.simulate()
-        
-        with open('extraInfoCars.txt', 'r') as f: plates = f.readlines()
-        
-        shuffle(plates)
-        with open('mockData/extraInfoCars.txt', 'w') as f: f.writelines(plates)
+    if SIMS == 0:
+        while True:
+            for hw in highways: hw.simulate()
+            with open('extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
+            shuffle(plates)
+            with open('extraInfoCars.txt', 'w') as f: f.writelines(plates)
+            shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
+    else:
+        for _ in range(SIMS):
+            for hw in highways: hw.simulate()
+            with open('extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
+            shuffle(plates)
+            with open('extraInfoCars.txt', 'w') as f: f.writelines(plates)
+            shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
 
     tf = time()
 
