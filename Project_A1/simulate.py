@@ -12,6 +12,7 @@ sys.path.append('mockData/')
 from Highway import Highway
 
 CLEAN = True
+MOVE = False
 SIMS = 0
 code = 100
 for arg in sys.argv:
@@ -24,6 +25,11 @@ for arg in sys.argv:
     elif '-h' in arg:
         arg = arg.split('=')[-1]
         code = int(arg)
+    elif '-m' in arg:
+        if arg[-1] == '0': MOVE = False
+        else: MOVE = True
+
+SIMS = SIMS if SIMS != 0 else 5000
 
 if __name__ == '__main__':
     if 'files' not in os.listdir(): os.mkdir('files')
@@ -42,20 +48,12 @@ if __name__ == '__main__':
         )
     
     t = time()
-    if SIMS == 0:
-        while True:
-            hw.simulate()
-            with open(f'extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
-            shuffle(plates)
-            with open('extraInfoCars.txt', 'a') as f: f.writelines(plates)
-            shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
-    else:
-        for _ in range(SIMS):
-            hw.simulate()
-            with open(f'extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
-            shuffle(plates)
-            with open('extraInfoCars.txt', 'a') as f: f.writelines(plates)
-            shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
+    for _ in range(SIMS):
+        hw.simulate()
+        with open(f'extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
+        shuffle(plates)
+        with open('extraInfoCars.txt', 'a') as f: f.writelines(plates)
+        if MOVE: shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
 
     tf = time()
 

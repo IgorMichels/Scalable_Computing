@@ -131,7 +131,7 @@ class Highway:
 
     def sendStatus(self):
         fileName = f'{datetime.now()}.txt'
-        with open(f'mockData/{fileName}', 'w') as f:
+        with open(f'mockData/{self.highwayCode} {fileName}', 'w') as f:
             f.write(f'Highway {self.highwayCode}\n')
             f.write(f'MaxSpeedHighway {self.maxSpeed}\n')
             f.write(f'MaxSpeedCar {self.speedLimitsCar[1]}\n')
@@ -147,7 +147,7 @@ class Highway:
 
             f.write(f'{datetime.now()}\n')
 
-        shutil.move(f'mockData/{fileName}', f'files/{fileName}')
+        shutil.move(f'mockData/{self.highwayCode} {fileName}', f'files/{fileName}')
 
     def simulate(self):
         self.updateHighwayStatus('S')
