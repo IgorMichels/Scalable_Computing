@@ -8,7 +8,7 @@ import mock_pb2_grpc
 
 class Sending(mock_pb2_grpc.SendingServicer):
     def __init__(self):
-        self.cnx = mysql.connector.connect(user='root', password='B70B4A##', host='127.0.0.1', database='MOCK_SERVER')
+        self.cnx = mysql.connector.connect(user='root', password='senha', host='127.0.0.1', database='MOCK_SERVER')
         self.cursor = self.cnx.cursor()
         self.counter = 0
     def Send(self, request, context):
