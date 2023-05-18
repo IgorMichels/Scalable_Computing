@@ -1,0 +1,24 @@
+syntax = "proto3";
+// python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. mock.proto
+
+message loadRequest {
+  int32  HighWay = 1;
+  int32  MaxSpeedHighway = 2;
+  int32  MaxSpeedCar = 3;
+  string plate = 4;
+  int32  actualLane = 5;
+  int32  pos = 6;
+  int32  lastPos = 7;
+  int32  penultimatePos = 8;
+  string model = 9;
+  string name = 10;
+  int32  year = 11;
+}
+
+message loadResponse {
+  string message = 1;
+}
+
+service Sending {
+  rpc Send(loadRequest) returns (loadResponse) {}
+}
