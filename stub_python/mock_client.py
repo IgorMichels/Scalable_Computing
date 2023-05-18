@@ -15,7 +15,8 @@ def run():
                 'penultimatePos' : 5,
                 'model'          : 'Astra',
                 'name'           : 'Davi',
-                'year'           : 2010}
+                'year'           : 2010,
+                'time'           : '2023-05-14 16:42:14.772046'}
         response = stub.Send(mock_pb2.loadRequest(**dado))
     print(response.message)
 

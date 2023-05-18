@@ -24,16 +24,18 @@ def build_Schemas(cursor):
     actualLane int,
     pos int,
     lastPos int,
-    penultimatePos int);
+    penultimatePos int,
+    time varchar(50));
     """)
     cursor.execute(query)
+
 
 def insert(dic, cursor):
     
     dado = dic.copy()
     def put_QUOTE(string):
         return "'" + string + "'" # adiciona aspas em valores do tipo string
-    for k in ['plate','model','name']:
+    for k in ['plate','model','name','time']:
         dado[k] = put_QUOTE(dado[k])
         
     keys_MONITOR = ['HighWay',
@@ -73,3 +75,16 @@ def insert(dic, cursor):
     query_API += _columns + ') values (' + _values + ');'
     
     cursor.execute(query_API)
+
+# Esse earquivo só deve ser execurado caso o schema ainda não tenha sido criado
+if __name__ == '__main__':
+    cnx = mysql.connector.connect(user='<seu usuário>', password='<sua senha>'
+                              host='<seu host>',
+                              database='MOCK_SERVER')
+    cursor = cnx.cursor()
+
+
+    build_Schemas(cursor)
+    cursor.close()
+    cnx.close()
+    # cnx.commit()

@@ -13,6 +13,7 @@ message loadRequest {
   string model = 9;
   string name = 10;
   int32  year = 11;
+  string time = 12;
 }
 
 message loadResponse {

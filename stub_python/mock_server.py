@@ -8,7 +8,7 @@ import mock_pb2_grpc
 
 class Sending(mock_pb2_grpc.SendingServicer):
     def __init__(self):
-        self.cnx = mysql.connector.connect(user='root', password='senha', host='127.0.0.1', database='MOCK_SERVER')
+        self.cnx = mysql.connector.connect(user='<seu usuário>', password='<sua senha>', host='<seu host>', database='MOCK_SERVER')
         self.cursor = self.cnx.cursor()
         self.counter = 0
     def Send(self, request, context):
@@ -22,10 +22,11 @@ class Sending(mock_pb2_grpc.SendingServicer):
                 'penultimatePos' : request.penultimatePos,
                 'model'          : request.model,
                 'name'           : request.name,
-                'year'           : request.year}
+                'year'           : request.year,
+                'time'           : request.time}
         insert(dado, self.cursor)
         self.counter += 1
-        if (self.counter % 10) == 0:
+        if (self.counter % 1) == 0:
             self.cnx.commit()
         return mock_pb2.loadResponse(message='Sended')
 
