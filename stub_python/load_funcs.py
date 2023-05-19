@@ -1,5 +1,5 @@
 import mysql.connector
-
+from getpass import getpass
 
 def build_Schemas(cursor):
     query = ("""
@@ -19,14 +19,11 @@ def build_Schemas(cursor):
     time varchar(50) PRIMARY KEY,
     data TEXT);
     """)
-    cursor.execute(query)
-
+    cursor.execute(query, multi = True)
 
 def insert(dic, cursor):
-    
     dado = dic.copy()
-    def put_QUOTE(string):
-        return "'" + string + "'" # adiciona aspas em valores do tipo string
+    put_QUOTE = lambda string : "'" + string + "'" # adiciona aspas em valores do tipo string
     for k in ['plate','model','name','time','data']:
         dado[k] = put_QUOTE(dado[k])
         
@@ -63,13 +60,17 @@ def insert(dic, cursor):
 
 # Esse earquivo só deve ser execurado caso o schema ainda não tenha sido criado
 if __name__ == '__main__':
-    cnx = mysql.connector.connect(user='<seu usuário>', password='<sua senha>',
-                              host='<seu host>',
-                              database='MOCK_SERVER')
+    print('Insira suas credenciais do mysql:')
+    user = input('usuário: ')
+    password = getpass('senha: ')
+    host = input('host: ')
+    database = input('database: ')
+    cnx = mysql.connector.connect(user = user,
+                                  password = password,
+                                  host = host,
+                                  database = database)
+    
     cursor = cnx.cursor()
-
-
     build_Schemas(cursor)
     cursor.close()
     cnx.close()
-    # cnx.commit()
