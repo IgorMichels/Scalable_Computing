@@ -131,23 +131,20 @@ class Highway:
 
     def sendStatus(self):
         fileName = f'{datetime.now()}.txt'
-        with open(f'mockData/{self.highwayCode} {fileName}', 'w') as f:
-            f.write(f'Highway {self.highwayCode}\n')
-            f.write(f'MaxSpeedHighway {self.maxSpeed}\n')
-            f.write(f'MaxSpeedCar {self.speedLimitsCar[1]}\n')
-            for car in self.carsSouth:
-                if car.penultimatePos is not None: f.write(f'{car.plate}, ({car.actualLane}, {car.penultimatePos})\n')
-                if car.lastPos is not None: f.write(f'{car.plate}, ({car.actualLane}, {car.lastPos})\n')
-                f.write(f'{car.plate}, ({car.actualLane}, {car.pos})\n')
-            
-            for car in self.carsNorth:
-                if car.penultimatePos is not None: f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.penultimatePos})\n')
-                if car.lastPos is not None: f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.lastPos})\n')
-                f.write(f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n')
-
-            f.write(f'{datetime.now()}\n')
-
-        shutil.move(f'mockData/{self.highwayCode} {fileName}', f'files/{fileName}')
+        #highwaydatetime = str(datetime.now())
+        highwaydata = f'Highway {self.highwayCode}\n'
+        highwaydata += f'MaxSpeedHighway {self.maxSpeed}\n'
+        highwaydata += f'MaxSpeedCar {self.speedLimitsCar[1]}\n'
+        for car in self.carsSouth:
+            if car.penultimatePos is not None: highwaydata += f'{car.plate}, ({car.actualLane}, {car.penultimatePos})\n'
+            if car.lastPos is not None: highwaydata +=f'{car.plate}, ({car.actualLane}, {car.lastPos})\n'
+            highwaydata += f'{car.plate}, ({car.actualLane}, {car.pos})\n'
+        for car in self.carsNorth:
+            if car.penultimatePos is not None: highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.penultimatePos})\n'
+            if car.lastPos is not None: highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.lastPos})\n'
+            highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n'
+        highwaydata += str(datetime.now())
+        return highwaydata
 
     def simulate(self):
         self.updateHighwayStatus('S')
