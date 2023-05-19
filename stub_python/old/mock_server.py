@@ -8,16 +8,22 @@ import mock_pb2_grpc
 
 class Sending(mock_pb2_grpc.SendingServicer):
     def __init__(self):
-        self.cnx = mysql.connector.connect(user='<usuário>', password='<senha>', host='<host>', database='MOCK_SERVER')
+        self.cnx = mysql.connector.connect(user='root', password='B70B4A##', host='127.0.0.1', database='MOCK_SERVER')
         self.cursor = self.cnx.cursor()
         self.counter = 0
     def Send(self, request, context):
-        dado = {'time'           : request.time,
-                'data'           : request.data,
+        dado = {'HighWay'        : request.HighWay,
+                'MaxSpeedHighway': request.MaxSpeedHighway,
+                'MaxSpeedCar'    : request.MaxSpeedCar,
                 'plate'          : request.plate,
+                'actualLane'     : request.actualLane,
+                'pos'            : request.pos,
+                'lastPos'        : request.lastPos,
+                'penultimatePos' : request.penultimatePos,
                 'model'          : request.model,
                 'name'           : request.name,
-                'year'           : request.year}
+                'year'           : request.year,
+                'time'           : request.time}
         insert(dado, self.cursor)
         self.counter += 1
         if (self.counter % 1) == 0:

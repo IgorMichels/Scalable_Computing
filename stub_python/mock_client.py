@@ -1,22 +1,18 @@
 import grpc
 import mock_pb2
 import mock_pb2_grpc
+from datetime import datetime
 
 def run():
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = mock_pb2_grpc.SendingStub(channel)
-        dado = {'HighWay'        : 100,
-                'MaxSpeedHighway': 100,
-                'MaxSpeedCar'    : 120,
-                'plate'          : 'AAAA000',
-                'actualLane'     : 0,
-                'pos'            : 10,
-                'lastPos'        : 7,
-                'penultimatePos' : 5,
-                'model'          : 'Astra',
-                'name'           : 'Davi',
-                'year'           : 2010,
-                'time'           : '2023-05-14 16:42:14.772046'}
+        data = 'highway 100\n MaxSpeed 90\n'
+        dado = {'time' : str(datetime.now()),
+                'data' : data,
+                'plate': 'AAAA000',
+                'model': 'Astra',
+                'name' : 'Ana',
+                'year' : 2010}
         response = stub.Send(mock_pb2.loadRequest(**dado))
     print(response.message)
 

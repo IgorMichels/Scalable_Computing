@@ -16,8 +16,16 @@ def build_Schemas(cursor):
 
     drop table if exists MONITOR;
     create table if not exists MONITOR  (
-    time varchar(50) PRIMARY KEY,
-    data TEXT);
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    HighWay int,
+    MaxSpeedHighway int,
+    MaxSpeedCar int,
+    plate char(7),
+    actualLane int,
+    pos int,
+    lastPos int,
+    penultimatePos int,
+    time varchar(50));
     """)
     cursor.execute(query)
 
@@ -27,12 +35,19 @@ def insert(dic, cursor):
     dado = dic.copy()
     def put_QUOTE(string):
         return "'" + string + "'" # adiciona aspas em valores do tipo string
-    for k in ['plate','model','name','time','data']:
+    for k in ['plate','model','name','time']:
         dado[k] = put_QUOTE(dado[k])
         
-    keys_MONITOR = ['time','data']
+    keys_MONITOR = ['HighWay',
+             'MaxSpeedHighway',
+             'MaxSpeedCar',
+             'plate',
+             'actualLane',
+             'pos',
+             'lastPos',
+             'penultimatePos']
 
-    query_MONITOR = """ insert ignore into MONITOR ("""
+    query_MONITOR = """ insert into MONITOR ("""
     _columns = ''
     _values = ''
     for key in keys_MONITOR: # adiciona chave e valor na tabela MONITOR
@@ -63,7 +78,7 @@ def insert(dic, cursor):
 
 # Esse earquivo só deve ser execurado caso o schema ainda não tenha sido criado
 if __name__ == '__main__':
-    cnx = mysql.connector.connect(user='<seu usuário>', password='<sua senha>',
+    cnx = mysql.connector.connect(user='<seu usuário>', password='<sua senha>'
                               host='<seu host>',
                               database='MOCK_SERVER')
     cursor = cnx.cursor()
