@@ -31,10 +31,12 @@
 *.out
 *.app
 
-Project_A1/_pycache_
+Project_A1/__pycache__
 Project_A1/.DS_Store
 .DS_Store
 .vscode
 *.zip
 Project_A1/main
 __pycache__
+.ipynb_checkpoints
+Project_A1/main

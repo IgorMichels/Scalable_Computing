@@ -15,6 +15,8 @@ struct highwayData {
     int maxSpeed = 0;
     int carMaxSpeed = 0;
     string infoTime = "";
+    string timeCrash = "";
+    string timeOverSpeed = "";
     mutex highwayDataBlocker;
 };
 
@@ -27,6 +29,7 @@ struct carData {
     int speed = 0;
     int acceleration = 0;
     bool canCrash = false;
+    bool overSpeed = false;
     bool extraInfos = false;
 };
 

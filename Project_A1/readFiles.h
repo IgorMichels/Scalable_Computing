@@ -170,7 +170,7 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
         vector<string> files = getFiles();
         for (auto file : files) {
             readFile(file, &(*carInfos), &(*highwayInfos));
-            remove(file.c_str());
+            // remove(file.c_str());
         }
     }
 }

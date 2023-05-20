@@ -17,7 +17,7 @@ int main() {
     map<string, plateData> carsExtraInfos;
     map<int, highwayData*> highwayInfos;
 
-    thread threadReading(readFiles, &carInfos, &highwayInfos, true);
+    thread threadReading(readFiles, &carInfos, &highwayInfos, false);
     pthread_getschedparam(threadReading.native_handle(), &policy, &sch);
     sch.sched_priority = 99;
     if (pthread_setschedparam(threadReading.native_handle(), SCHED_FIFO, &sch)) cout << "Failed to setschedparam: " << strerror(errno) << '\n';

@@ -37,24 +37,19 @@ void analysisStats(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
 
 void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
     int maxSpeedHw;
-    vector<string> times;
     while (true) {
         if (active) {
             while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
             for (auto hw : *carInfos) {
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
+                (*(*highwayInfos)[hw.first]).timeOverSpeed = (*(*highwayInfos)[hw.first]).infoTime;
                 map<string, carData>* carMap = hw.second;
                 maxSpeedHw = (*(*highwayInfos)[hw.first]).maxSpeed;
-                times.push_back((*(*highwayInfos)[hw.first]).infoTime);
                 for (auto car : *carMap) {
-                    if (abs(car.second.speed) > maxSpeedHw) cout << car.first << " está acima da velocidade máxima permitida" << endl;
+                    if (abs(car.second.speed) > maxSpeedHw) car.second.overSpeed = true;
                 }
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
             }
-            sort(times.begin(), times.end());
-            string time = times[0];
-            calculateTime(time, "contagem de carros acima da velocidade");
-            times.clear();
         }
     }
 }
@@ -84,13 +79,12 @@ void updateSpeed(map<int, map<string, carData>*> *carInfos, map<int, highwayData
 void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, int epochs) {
     int vel;
     int maxSpeedCar;
-    vector<string> times;
     while (true) {
         if (active) {
             while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
             for (auto &hw : *carInfos) {
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
-                times.push_back((*(*highwayInfos)[hw.first]).infoTime);
+                (*(*highwayInfos)[hw.first]).timeCrash = (*(*highwayInfos)[hw.first]).infoTime;
                 maxSpeedCar = (*(*highwayInfos)[hw.first]).carMaxSpeed;
                 map<int, vector<tuple<string, vector<int>>>> lanes;
                 map<string, carData>* carMap = hw.second;
@@ -120,7 +114,6 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
                             if (get<1>(actualLane[i])[j] >= get<1>(actualLane[i + 1])[j]){
                                 (*carMap)[get<0>(actualLane[i])].canCrash = true;
                                 (*carMap)[get<0>(actualLane[i + 1])].canCrash = true;
-                                cout << get<0>(actualLane[i]) << " pode bater no " << get<0>(actualLane[i + 1]) << " daqui a " << j << " iteração(ões)" << endl;
                                 break;
                             }
                         }
@@ -129,10 +122,6 @@ void calculateCrash(map<int, map<string, carData>*> *carInfos, map<int, highwayD
 
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
             }
-            sort(times.begin(), times.end());
-            string time = times[0];
-            calculateTime(time, "possíveis colisões");
-            times.clear();
         }
     }
 }
@@ -170,9 +159,65 @@ void updateExtraInfos(map<string, plateData> *carsExtraInfos) {
 }
 
 void printCarInfos(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, map<string, plateData> *carsExtraInfos) {
+    string time;
+    string analysisTime;
+    vector<string> times;
+    map<int, vector<string>> analysisTimesHighways;
+    vector<float> analysisTotalTime;
     while (true) {
         if (active) {
             while ((*carInfos).size() == 0) this_thread::sleep_for(chrono::milliseconds(100));
+            long int numCars = 0;
+            long int numHighways = (*highwayInfos).size();
+            for (auto it = (*(carInfos)).cbegin(); it != (*(carInfos)).cend(); ++it) {
+                (*(*highwayInfos)[it->first]).highwayDataBlocker.lock();
+                times.push_back((*(*highwayInfos)[it->first]).infoTime);
+                numCars += (*(*carInfos)[it->first]).size();
+                (*(*highwayInfos)[it->first]).highwayDataBlocker.unlock();
+            }
+
+            sort(times.begin(), times.end());
+            time = times[0];
+            cout << "Estatísticas gerais da simulação:" << endl;
+            cout << "Número de rodovias: " << numHighways << endl;
+            cout << "Número de carros (total): " << numCars << endl;
+            calculateTime(time, "contagem de veículos e rodovias");
+            times.clear();
+
+            for (auto &hw : *carInfos) {
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
+                map<string, carData>* carMap = hw.second;
+                times.push_back((*(*highwayInfos)[hw.first]).timeCrash);
+                cout << "Carros com risco de colisão na rodovia " << hw.first << ":" << endl << endl;
+                for (auto &q : *carMap) {
+                    carData &car = q.second;
+                    if (car.canCrash) cout << q.first << endl;
+                    }
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
+                }
+
+            sort(times.begin(), times.end());
+            time = times[0];
+            calculateTime(time, "possíveis colisões");
+            times.clear();
+
+            for (auto &hw : *carInfos) {
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
+                map<string, carData>* carMap = hw.second;
+                times.push_back((*(*highwayInfos)[hw.first]).timeOverSpeed);
+                cout << "Carros acima da velocidade permitida na rodovia " << hw.first << ":" << endl << endl;
+                for (auto &q : *carMap) {
+                    carData &car = q.second;
+                    if (car.overSpeed) cout << q.first << endl;
+                    }
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
+                }
+
+            sort(times.begin(), times.end());
+            time = times[0];
+            calculateTime(time, "veículos acima da velocidade");
+            times.clear();
+
             for (auto &hw : *carInfos) {
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
                 map<string, carData>* carMap = hw.second;
@@ -197,6 +242,27 @@ void printCarInfos(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
                 }
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
             }
+
+            /*
+            for (auto &hw : *carInfos) {
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
+                map<string, carData>* carMap = hw.second;
+                if (((*(*highwayInfos)[hw.first]).timeCrash != "") & ((*(*highwayInfos)[hw.first]).timeOverSpeed != "")) {
+                    if ((*(*highwayInfos)[hw.first]).timeCrash.compare((*(*highwayInfos)[hw.first]).timeOverSpeed) < 0) analysisTime = (*(*highwayInfos)[hw.first]).timeCrash;
+                    else analysisTime = (*(*highwayInfos)[hw.first]).timeOverSpeed;
+                    if (analysisTime.compare((analysisTimesHighways[hw.first]).back()) != 0) {
+                        analysisTimesHighways[hw.first].push_back(analysisTime);
+                    }
+                }
+                (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
+                }
+
+            //sort(times.begin(), times.end());
+            //time = times[0];
+            calculateTime(time, "veículos acima da velocidade");
+            //times.clear();
+            */
+
         }
     }
 }
