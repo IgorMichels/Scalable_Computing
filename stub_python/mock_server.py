@@ -29,15 +29,16 @@ class Sending(mock_pb2_grpc.SendingServicer):
         insert(dado, self.cursor)
         self.counter += 1
         self.cnx.commit()
-        return mock_pb2.loadResponse(message = 'Received')
+        return mock_pb2.loadResponse(message = 'O feio vai se fuder caralho, que merda')
 
 def serve():
     print('Iniciando servidor')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers = 10))
     mock_pb2_grpc.add_SendingServicer_to_server(Sending(), server)
-    server.add_insecure_port('[::]:50051')
+    # port = server.add_insecure_port('[::]:50051')
+    port = server.add_insecure_port('192.168.0.45:50051')
     server.start()
-    print('Servidor iniciado')
+    print(f'Servidor iniciado na porta {port}')
     server.wait_for_termination()
 
 if __name__ == '__main__':
