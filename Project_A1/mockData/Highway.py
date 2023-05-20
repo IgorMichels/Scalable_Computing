@@ -131,7 +131,7 @@ class Highway:
 
     def sendStatus(self):
         fileName = f'{datetime.now()}.txt'
-        #highwaydatetime = str(datetime.now())
+        highwaydatetime = str(datetime.now())
         highwaydata = f'Highway {self.highwayCode}\n'
         highwaydata += f'MaxSpeedHighway {self.maxSpeed}\n'
         highwaydata += f'MaxSpeedCar {self.speedLimitsCar[1]}\n'
@@ -143,13 +143,13 @@ class Highway:
             if car.penultimatePos is not None: highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.penultimatePos})\n'
             if car.lastPos is not None: highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.lastPos})\n'
             highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n'
-        highwaydata += str(datetime.now())
-        return highwaydata
+        highwaydata += highwaydatetime
+        return {'time':highwaydatetime,'data':highwaydata}
 
     def simulate(self):
         self.updateHighwayStatus('S')
         self.updateHighwayStatus('N')
-        self.sendStatus()
+        self.client_info = self.sendStatus()
         self.actualEpoch += 1
 
     def simEpochs(self,

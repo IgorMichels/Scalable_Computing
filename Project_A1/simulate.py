@@ -50,6 +50,7 @@ if __name__ == '__main__':
     t = time()
     for _ in range(SIMS):
         hw.simulate()
+        hw_for_client = hw.client_info
         with open(f'extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
         shuffle(plates)
         with open('extraInfoCars.txt', 'a') as f: f.writelines(plates)
