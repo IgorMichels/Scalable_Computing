@@ -7,7 +7,20 @@ void calculateTime(string time, string function) {
     auto tp = chrono::system_clock::from_time_t(mktime(&tm)) + chrono::microseconds{std::stoi(time.substr(20))};
     auto now = chrono::system_clock::now();
     auto duration = chrono::duration_cast<std::chrono::microseconds>(now - tp);
-    cout << "Tempo de processamento (" << function << "): " << duration.count() / 1000.0 << " milisegundos" << endl;
+    if (function == "") {
+        fstream file;
+        file.open("times/analysis_time_n_highways.txt", ios::out | ios::app);
+        if (!file) {
+            cout << "File does not exist\n";
+        }
+        else
+        {
+            file << duration.count() / 1000.0 << "\n";
+        }
+    }
+    else {
+        cout << "Tempo de processamento (" << function << "): " << duration.count() / 1000.0 << " milisegundos" << endl;
+    }
 }
 
 void carsOverLimit(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
@@ -221,14 +234,15 @@ void printCarInfos(map<int, map<string, carData>*> *carInfos, map<int, highwayDa
             for (auto &hw : *carInfos) {
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.lock();
                 map<string, carData>* carMap = hw.second;
-                if (((*(*highwayInfos)[hw.first]).timeCrash != "") & ((*(*highwayInfos)[hw.first]).timeOverSpeed != "")) {
+                if (((*(*highwayInfos)[hw.first]).timeCrash != "") && ((*(*highwayInfos)[hw.first]).timeOverSpeed != "")) {
                     if ((*(*highwayInfos)[hw.first]).timeCrash.compare((*(*highwayInfos)[hw.first]).timeOverSpeed) < 0) analysisTime = (*(*highwayInfos)[hw.first]).timeCrash;
                     else analysisTime = (*(*highwayInfos)[hw.first]).timeOverSpeed;
-                    if ((analysisTimesHighways[hw.first]).size() == 0) analysisTimesHighways[hw.first].push_back(analysisTime);
-                    if (analysisTime.compare((analysisTimesHighways[hw.first]).back()) != 0) analysisTimesHighways[hw.first].push_back(analysisTime);
+                    if (((analysisTimesHighways[hw.first]).size() == 0) || (analysisTime.compare((analysisTimesHighways[hw.first]).back()) != 0)) {
+                        analysisTimesHighways[hw.first].push_back(analysisTime);
+                        calculateTime(analysisTime, "");
+                    }
                 }
                 (*(*highwayInfos)[hw.first]).highwayDataBlocker.unlock();
-                calculateTime(analysisTime, "cálculo total das análises");
             }
         }
     }
