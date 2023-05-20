@@ -5,6 +5,10 @@ from Car import Car
 from random import random
 from datetime import datetime
 
+import sys
+sys.path.append('../')
+from mock_client import run
+
 class Highway:
     def __init__(self,
                  code : int,
@@ -17,7 +21,8 @@ class Highway:
                  accelerationLimitsCar : tuple, #
                  probCrash : float,
                  cleanLaneEpochs : int,
-                 highwayExtension : int
+                 highwayExtension : int,
+                 connection : str
                  ):
     
         self.highwayCode = code
@@ -36,6 +41,7 @@ class Highway:
         self.carsSouth = list()
         self.carsNorth = list()
         self.actualEpoch = 0
+        self.connection = connection
 
     def updateHighwayStatus(self,
                             direction : str):
@@ -150,6 +156,11 @@ class Highway:
         self.updateHighwayStatus('S')
         self.updateHighwayStatus('N')
         self.client_info = self.sendStatus()
+        self.client_info['plate'] = 'AAAA000'
+        self.client_info['model'] = 'Astra'
+        self.client_info['name'] = 'Ana'
+        self.client_info['year'] = 0
+        run(self.client_info, self.connection)
         self.actualEpoch += 1
 
     def simEpochs(self,

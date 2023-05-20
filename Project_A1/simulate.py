@@ -13,7 +13,7 @@ from Highway import Highway
 
 CLEAN = True
 MOVE = False
-SIMS = 0
+SIMS = 10
 code = 100
 for arg in sys.argv:
     if '-c' in arg:
@@ -45,15 +45,16 @@ if __name__ == '__main__':
             probCrash = randint(1, 5) / 100,
             cleanLaneEpochs = randint(3, 10),
             highwayExtension = randint(1000, 1500),
+            connection = '192.168.0.45:50051'
         )
     
     t = time()
     for _ in range(SIMS):
         hw.simulate()
         hw_for_client = hw.client_info
-        with open(f'extraInfoCarsLinear.txt', 'r') as f: plates = f.readlines()
+        with open(f'extraInfoCarsLinear.txt', 'r', encoding='latin-1') as f: plates = f.readlines()
         shuffle(plates)
-        with open('extraInfoCars.txt', 'a') as f: f.writelines(plates)
+        with open('extraInfoCars.txt', 'a', encoding='latin-1') as f: f.writelines(plates)
         if MOVE: shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
 
     tf = time()

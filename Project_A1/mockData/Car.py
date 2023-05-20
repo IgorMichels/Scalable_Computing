@@ -62,8 +62,8 @@ class Car:
             yield l1 + l2 + l3 + n1 + l4 + n2 + n3
 
     def generateName(self):
-        with open('mockData/names.txt', 'r') as f: names = f.readlines()
-        with open('mockData/surnames.txt', 'r') as f: surnames = f.readlines()
+        with open('mockData/names.txt', 'r', encoding='utf-8') as f: names = f.readlines()
+        with open('mockData/surnames.txt', 'r', encoding='utf-8') as f: surnames = f.readlines()
         names = [name.strip() for name in names]
         surnames = [surname.strip() for surname in surnames]
         shuffle(names)
