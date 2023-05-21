@@ -17,7 +17,7 @@ class Client:
         print(response.message)
 
 if __name__ == '__main__':
-    data = 'highway 100\n MaxSpeed 90\n'
+    data = 'highway 100\nMaxSpeed 90\n'
     dado = {'time' : str(datetime.now()),
             'data' : None,
             'plate': 'AAAA000',

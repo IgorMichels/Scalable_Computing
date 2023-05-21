@@ -3,13 +3,13 @@ import grpc
 import mock_pb2
 import mock_pb2_grpc
 
-def insert(dic):
-    if dic['data'] != '':
-        with open(f"{dic['time']}.txt", 'w') as f:
-            f.writelines(dic['data'])
+def insert(request):
+    if request.data != '':
+        with open(f'../files/{request.time}.txt', 'w') as f:
+            f.writelines(request.data)
     else:
-        with open('extraCarInfos.txt') as f:
-            f.write(f"{dic['plate']},{dic['name']},{dic['model']},{dic['year']}\n")
+        with open('extraCarInfos.txt', 'a') as f:
+            f.write(f"{request.plate},{request.name},{request.model},{request.year}\n")
 
 class Server(mock_pb2_grpc.SendingServicer):
     def __init__(self):
