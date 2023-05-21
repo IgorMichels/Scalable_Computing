@@ -9,7 +9,7 @@ sys.path.append('mockData/')
 
 from Highway import Highway
 
-SIMS = 100
+SIMS = 1000
 code = 101
 for arg in sys.argv:
     if '-s' in arg:

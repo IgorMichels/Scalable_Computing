@@ -12,9 +12,7 @@ class Client:
     def send(self, data):
         with grpc.insecure_channel(self.address) as channel:
             stub = mock_pb2_grpc.SendingStub(channel)
-            response = stub.Send(mock_pb2.loadRequest(**data))
-
-        print(response.message)
+            stub.Send(mock_pb2.loadRequest(**data))
 
 if __name__ == '__main__':
     data = 'highway 100\nMaxSpeed 90\n'

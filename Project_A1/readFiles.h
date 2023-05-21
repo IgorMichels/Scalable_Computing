@@ -27,8 +27,8 @@ vector<string> getFiles() {
         }
         closedir(dr);
     }
-    sort(files.begin(), files.end());
-    reverse(files.begin(), files.end());
+    // sort(files.begin(), files.end());
+    // reverse(files.begin(), files.end());
     return files;
 }
 
@@ -147,20 +147,34 @@ void readFile(string fileName, map<int, map<string, carData>*> *carInfos, map<in
     }
 }
 
-void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always) {
+void readFilesVector(vector<string> files, map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos) {
+    for (auto file : files) {
+        readFile(file, &(*carInfos), &(*highwayInfos));
+        remove(file.c_str());
+    }
+}
+
+void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*> *highwayInfos, bool always, int maxThreads = 5) {
+    vector<vector<string>> filesVector;
+    filesVector.reserve(maxThreads);
+    vector<thread*> threads;
     if (always) {
         while (true) {
             vector<string> files = getFiles();
-            if (files.size() == 0) {
+            int n = files.size();
+            if (n == 0) {
                 active = false;
                 cout << "Aguardando novos arquivos" << endl;
                 this_thread::sleep_for(chrono::milliseconds(10));
             }
             else {
-                for (auto file : files) {
-                    readFile(file, &(*carInfos), &(*highwayInfos));
-                    remove(file.c_str());
+                for (int i = 0; i < n; i++) filesVector[i % maxThreads].push_back(files[i]);
+                for (auto fileVector : filesVector) {
+                    thread *ti = new thread(&readFilesVector, &(*carInfos), &(*highwayInfos));
+                    threads.push_back(ti);
                 }
+
+                for (thread * th : threads) th -> join();
                 active = true;
                 this_thread::sleep_for(chrono::milliseconds(1));
             }
@@ -170,7 +184,7 @@ void readFiles(map<int, map<string, carData>*> *carInfos, map<int, highwayData*>
         vector<string> files = getFiles();
         for (auto file : files) {
             readFile(file, &(*carInfos), &(*highwayInfos));
-            // remove(file.c_str());
+            remove(file.c_str());
         }
     }
 }
