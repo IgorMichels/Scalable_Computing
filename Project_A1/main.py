@@ -19,4 +19,4 @@ command = ''
 for code in codes:
     command += 'python3 ' + ' '.join(args) + f' -h={code} & ' 
 
-subprocess.run(command[:-3] + ' -m=1', shell = True)
+subprocess.run(command[:-3], shell = True)

@@ -37,11 +37,15 @@ class Car:
         self.name = next(self.generateName())
         self.model, self.year = self.generateModel()
 
-        with open('extraInfoCarsLinear.txt', 'a') as f:
-            f.write(f'{self.getInfo()}\n')
-
     def getInfo(self):
-        return f'{self.plate},{self.name},{self.model},{self.year}'
+        infos = {'time' : None,
+                 'data' : None,
+                 'plate': self.plate,
+                 'model': self.model,
+                 'name' : self.name,
+                 'year' : self.year}
+        
+        return infos
 
     def generatePlate(self):
         letter1 = list('QWERTYUIOPASDFGHJKLZXCVBNM')

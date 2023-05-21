@@ -1,33 +1,23 @@
 import os
-import shutil
 import numpy as np
 
 from time import time
-from glob import glob
-from random import randint, shuffle
+from random import randint
 
 import sys
 sys.path.append('mockData/')
 
 from Highway import Highway
 
-CLEAN = True
-MOVE = False
-SIMS = 10
-code = 100
+SIMS = 100
+code = 101
 for arg in sys.argv:
-    if '-c' in arg:
-        if arg[-1] == '0': CLEAN = False
-        else: CLEAN = True
-    elif '-s' in arg:
+    if '-s' in arg:
         arg = arg.split('=')[-1]
         SIMS = int(arg)
     elif '-h' in arg:
         arg = arg.split('=')[-1]
         code = int(arg)
-    elif '-m' in arg:
-        if arg[-1] == '0': MOVE = False
-        else: MOVE = True
 
 SIMS = SIMS if SIMS != 0 else 5000
 
@@ -45,22 +35,12 @@ if __name__ == '__main__':
             probCrash = randint(1, 5) / 100,
             cleanLaneEpochs = randint(3, 10),
             highwayExtension = randint(1000, 1500),
-            connection = '192.168.0.45:50051'
+            address = '192.168.0.45:50051'
         )
     
     t = time()
     for _ in range(SIMS):
         hw.simulate()
-        hw_for_client = hw.client_info
-        with open(f'extraInfoCarsLinear.txt', 'r', encoding='latin-1') as f: plates = f.readlines()
-        shuffle(plates)
-        with open('extraInfoCars.txt', 'a', encoding='latin-1') as f: f.writelines(plates)
-        if MOVE: shutil.move('extraInfoCars.txt', 'mockData/extraInfoCars.txt')
 
     tf = time()
-
-    if CLEAN:
-        files = glob('files/*.txt')
-        for file in files: os.remove(file)
-
     print(f'Total time: {tf - t:.2f} seconds')

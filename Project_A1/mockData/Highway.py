@@ -7,7 +7,7 @@ from datetime import datetime
 
 import sys
 sys.path.append('../')
-from mock_client import run
+from mock_client import Client
 
 class Highway:
     def __init__(self,
@@ -17,12 +17,12 @@ class Highway:
                  maxSpeed : float,
                  probNewCar : float,
                  probChangeLane : float,
-                 speedLimitsCar : tuple, #
-                 accelerationLimitsCar : tuple, #
+                 speedLimitsCar : tuple,
+                 accelerationLimitsCar : tuple,
                  probCrash : float,
                  cleanLaneEpochs : int,
                  highwayExtension : int,
-                 connection : str
+                 address : str
                  ):
     
         self.highwayCode = code
@@ -41,7 +41,7 @@ class Highway:
         self.carsSouth = list()
         self.carsNorth = list()
         self.actualEpoch = 0
-        self.connection = connection
+        self.connection = Client(address)
 
     def updateHighwayStatus(self,
                             direction : str):
@@ -132,11 +132,12 @@ class Highway:
                              direction[0]
                              )
                 cars.append(newCar)
+                self.connection.send(newCar.getInfo())
                 highwayStatus[0, i, 0] = 1
                 highwayStatus[0, i, 1] = newCar.currSpeed
 
     def sendStatus(self):
-        fileName = f'{datetime.now()}.txt'
+        time = f'{datetime.now()}'
         highwaydatetime = str(datetime.now())
         highwaydata = f'Highway {self.highwayCode}\n'
         highwaydata += f'MaxSpeedHighway {self.maxSpeed}\n'
@@ -150,17 +151,19 @@ class Highway:
             if car.lastPos is not None: highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.lastPos})\n'
             highwaydata += f'{car.plate}, ({self.numLanesS + car.actualLane}, {self.highwayExtension - car.pos})\n'
         highwaydata += highwaydatetime
-        return {'time':highwaydatetime,'data':highwaydata}
+        data = {'time' : time,
+                'data' : highwaydata,
+                'plate': None,
+                'model': None,
+                'name' : None,
+                'year' : None}
+        
+        self.connection.send(data)
 
     def simulate(self):
         self.updateHighwayStatus('S')
         self.updateHighwayStatus('N')
         self.client_info = self.sendStatus()
-        self.client_info['plate'] = 'AAAA000'
-        self.client_info['model'] = 'Astra'
-        self.client_info['name'] = 'Ana'
-        self.client_info['year'] = 0
-        run(self.client_info, self.connection)
         self.actualEpoch += 1
 
     def simEpochs(self,
