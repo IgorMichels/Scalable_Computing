@@ -38,3 +38,9 @@ apresentam risco de colisão.
 * O arquivo `API.h` traz a classe externalAPI, que é a API de acesso ao serviço externo de informações adicionais.
 * O arquivo `readFiles.h` traz a header responsável por fazer a leitura dos dados gerados pelo mock e extração das informações necessárias.
 * O arquivo `main.cpp` traz o script necessário para funcionamento do sistema como um todo, já com todas as prioridades definidas.
+
+## Código com RPC
+
+A compilação e execução do código em C++ permanece a mesma. Para o simulador, devemos trocar o endereço IP do servidor no arquivo `mock_server.py` (linha 27, dentro da pasta `MockData`) e no arquivo `simulate.py` (linha 38). Tendo feitas tais alterações, o servidor está configurado e o cliente estará apto a se comunicar com o mesmo.
+
+Por fim, para executar o programa, basta executar o comando `python main.py -h={a} -t={b} -s={c}`, onde $a$ é o código do primeira rodovia, $b$ é o total de rodovias presente na simulação e $c$ é o número de iterações desejado para cada rodovia. Por default, no caso de $c = 0$ são consideradas 5000 iterações.
