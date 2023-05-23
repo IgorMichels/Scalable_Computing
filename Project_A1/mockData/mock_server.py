@@ -24,7 +24,7 @@ def serve():
     print('Iniciando servidor')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers = 10))
     mock_pb2_grpc.add_SendingServicer_to_server(Server(), server)
-    port = server.add_insecure_port('192.168.0.45:50051')
+    port = server.add_insecure_port('10.22.140.122:50051')
     server.start()
     print(f'Servidor iniciado na porta {port}')
     server.wait_for_termination()

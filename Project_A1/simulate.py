@@ -9,7 +9,7 @@ sys.path.append('mockData/')
 
 from Highway import Highway
 
-SIMS = 1000
+SIMS = 5000
 code = 101
 for arg in sys.argv:
     if '-s' in arg:
@@ -35,7 +35,7 @@ if __name__ == '__main__':
             probCrash = randint(1, 5) / 100,
             cleanLaneEpochs = randint(3, 10),
             highwayExtension = randint(1000, 1500),
-            address = '192.168.0.45:50051'
+            address = '10.22.140.122:50051'
         )
     
     t = time()

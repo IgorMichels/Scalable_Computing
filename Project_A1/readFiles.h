@@ -27,8 +27,8 @@ vector<string> getFiles() {
         }
         closedir(dr);
     }
-    // sort(files.begin(), files.end());
-    // reverse(files.begin(), files.end());
+    sort(files.begin(), files.end());
+    reverse(files.begin(), files.end());
     return files;
 }
 
