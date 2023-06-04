@@ -34,8 +34,7 @@ if __name__ == '__main__':
             accelerationLimitsCar = (randint(-3, -1), randint(1, 3)),
             probCrash = randint(1, 5) / 100,
             cleanLaneEpochs = randint(3, 10),
-            highwayExtension = randint(1000, 1500),
-            address = '10.22.140.122:50051'
+            highwayExtension = randint(1000, 1500)
         )
     
     t = time()
