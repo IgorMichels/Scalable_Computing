@@ -181,8 +181,6 @@ class Car:
             self.currSpeed = newSpeed
             self.actualLane = newLane
             self.pos += self.currSpeed
-            print(f'Posição: {self.pos}')
-            print(f'Pista: {self.actualLane}')
             return
         
         if ind != 1:
@@ -195,8 +193,6 @@ class Car:
                 self.currSpeed = newSpeed
                 self.actualLane += ind - 1
                 self.pos += self.currSpeed
-                print(f'Posição: {self.pos}')
-                print(f'Pista: {self.actualLane}')
                 return
             
         # se não conseguimos uma posição até agora, então vamos escolher a menos pior
@@ -212,8 +208,6 @@ class Car:
         self.actualLane += best - 1
         self.currSpeed += self.minAcceleration
         self.pos += self.currSpeed
-        print(f'Posição: {self.pos}')
-        print(f'Pista: {self.actualLane}')
         return
         
     def greenFlag(self):

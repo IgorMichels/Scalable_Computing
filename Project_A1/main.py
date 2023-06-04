@@ -17,6 +17,6 @@ for arg in sys.argv:
 codes = [*range(INITIAL, INITIAL + TOTAL)]
 command = ''
 for code in codes:
-    command += 'python ' + ' '.join(args) + f' -h={code} & ' 
+    command += 'python3 ' + ' '.join(args) + f' -h={code} & ' 
 
 subprocess.run(command[:-3], shell = True)
