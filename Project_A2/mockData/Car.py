@@ -1,6 +1,5 @@
 import numpy as np
 
-from itertools import product
 from random import random, randint, choice, shuffle
 
 class Car:
@@ -13,7 +12,9 @@ class Car:
                  numLanes : int,
                  maxSpeed : int,
                  highwayExtension : int,
-                 direction : str
+                 direction : str,
+                 highwayCode : int,
+                 plate : str
                  ):
         
         self.minSpeed = speedLimitsCar[0]
@@ -33,55 +34,8 @@ class Car:
         self.penultimatePos = None
         self.currSpeed = randint(self.minSpeed, self.maxSpeedLane)
         self.isCrashed = False
-        self.plate = next(self.generatePlate())
-        self.name = next(self.generateName())
-        self.model, self.year = self.generateModel()
-
-    def getInfo(self):
-        infos = {'time' : None,
-                 'data' : None,
-                 'plate': self.plate,
-                 'model': self.model,
-                 'name' : self.name,
-                 'year' : self.year}
-        
-        return infos
-
-    def generatePlate(self):
-        letter1 = list('QWERTYUIOPASDFGHJKLZXCVBNM')
-        letter2 = list('QWERTYUIOPASDFGHJKLZXCVBNM')
-        letter3 = list('QWERTYUIOPASDFGHJKLZXCVBNM')
-        letter4 = list('QWERTYUIOPASDFGHJKLZXCVBNM')
-        number1 = list('1234567890')
-        number2 = list('1234567890')
-        number3 = list('1234567890')
-        shuffle(letter1)
-        shuffle(letter2)
-        shuffle(letter3)
-        shuffle(letter4)
-        shuffle(number1)
-        shuffle(number2)
-        shuffle(number3)
-        for l1, l2, l3, l4, n1, n2, n3 in product(letter1, letter2, letter3, letter4, number1, number2, number3):
-            yield l1 + l2 + l3 + n1 + l4 + n2 + n3
-
-    def generateName(self):
-        with open('mockData/names.txt', 'r', encoding='utf-8') as f: names = f.readlines()
-        with open('mockData/surnames.txt', 'r', encoding='utf-8') as f: surnames = f.readlines()
-        names = [name.strip() for name in names]
-        surnames = [surname.strip() for surname in surnames]
-        shuffle(names)
-        shuffle(surnames)
-        for name, surname in product(names, surnames):
-            yield name + ' ' + surname
-
-    def generateModel(self):
-        with open('mockData/cars.txt', 'r') as f: cars = f.readlines()
-        model = choice(cars)
-        model = model.split(',')
-        year = randint(int(model[1]), int(model[2]))
-        model = model[0]
-        return model, year
+        self.highwayCode = highwayCode
+        self.plate = plate
 
     def crash(self):
         self.isCrashed = True
@@ -93,10 +47,12 @@ class Car:
         if np.sum(highwayStatus[self.pos, self.actualLane:self.numLanes, 0] == 1) >= 2:
             self.pos += self.currSpeed
             self.actualLane += 1
+            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
             return
         elif np.sum(highwayStatus[self.pos, :self.actualLane, 0] == 1) >= 1:
             self.pos += self.currSpeed
             self.actualLane -= 1
+            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
             return
 
         # se não, busca em que pista está o carro que está
@@ -108,17 +64,21 @@ class Car:
             if np.sum(highwayStatus[i, self.actualLane + 1:self.numLanes, 0] == 1) >= 1:
                 self.pos += self.currSpeed
                 self.actualLane += 1
+                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
                 return
             elif highwayStatus[i, self.actualLane, 0] == 1:
                 self.pos += self.currSpeed
+                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
                 return
             elif np.sum(highwayStatus[i, :self.actualLane, 0] == 1) >= 1:
                 self.pos += self.currSpeed
                 self.actualLane -= 1
+                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
                 return
 
         # não há carros atrás
         self.pos += self.currSpeed
+        print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
         return
     
     def changeLane(self):
@@ -181,8 +141,7 @@ class Car:
             self.currSpeed = newSpeed
             self.actualLane = newLane
             self.pos += self.currSpeed
-            print(f'Posição: {self.pos}')
-            print(f'Pista: {self.actualLane}')
+            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
             return
         
         if ind != 1:
@@ -195,8 +154,7 @@ class Car:
                 self.currSpeed = newSpeed
                 self.actualLane += ind - 1
                 self.pos += self.currSpeed
-                print(f'Posição: {self.pos}')
-                print(f'Pista: {self.actualLane}')
+                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
                 return
             
         # se não conseguimos uma posição até agora, então vamos escolher a menos pior
@@ -212,8 +170,7 @@ class Car:
         self.actualLane += best - 1
         self.currSpeed += self.minAcceleration
         self.pos += self.currSpeed
-        print(f'Posição: {self.pos}')
-        print(f'Pista: {self.actualLane}')
+        print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
         return
         
     def greenFlag(self):
@@ -223,6 +180,7 @@ class Car:
         if self.currSpeed < self.minSpeed: self.currSpeed = self.minSpeed
         
         self.pos += self.currSpeed
+        print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
         return
 
     def updateCar(self,
@@ -231,7 +189,10 @@ class Car:
         self.penultimatePos = self.lastPos
         self.lastPos = self.pos
 
-        if self.isCrashed: return
+        if self.isCrashed:
+            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+            return
+        
         if random() < self.probCrash: self.willCrash = True
 
         # carro vai causar uma colisão

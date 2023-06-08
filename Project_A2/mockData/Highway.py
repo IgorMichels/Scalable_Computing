@@ -2,8 +2,9 @@ import numpy as np
 import shutil
 
 from Car import Car
-from random import random
+from random import random, shuffle
 from datetime import datetime
+from itertools import product
 
 import sys
 sys.path.append('../')
@@ -39,6 +40,17 @@ class Highway:
         self.carsSouth = list()
         self.carsNorth = list()
         self.actualEpoch = 0
+
+    def createPlate(self):
+        letters = list('QWERTYUIOPASDFGHJKLZXCVBNM')
+        numbers1 = list('1234567890')
+        numbers2 = list('1234567890')
+        while True:
+            shuffle(letters)
+            shuffle(numbers1)
+            shuffle(numbers2)
+            for l, n1, n2 in product(letters, numbers1, numbers2):
+                yield f'{l}{n1}{n2}'
 
     def updateHighwayStatus(self,
                             direction : str):
@@ -126,8 +138,10 @@ class Highway:
                              numLanes,
                              self.maxSpeed,
                              self.highwayExtension,
-                             direction[0]
-                             )
+                             direction[0],
+                             self.highwayCode,
+                             self.createPlate()
+                            )
                 cars.append(newCar)
                 highwayStatus[0, i, 0] = 1
                 highwayStatus[0, i, 1] = newCar.currSpeed
