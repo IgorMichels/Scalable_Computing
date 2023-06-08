@@ -1,6 +1,7 @@
 import numpy as np
 
 from random import random, randint, choice, shuffle
+from datetime import datetime
 
 class Car:
     def __init__(self,
@@ -47,12 +48,12 @@ class Car:
         if np.sum(highwayStatus[self.pos, self.actualLane:self.numLanes, 0] == 1) >= 2:
             self.pos += self.currSpeed
             self.actualLane += 1
-            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+            print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
             return
         elif np.sum(highwayStatus[self.pos, :self.actualLane, 0] == 1) >= 1:
             self.pos += self.currSpeed
             self.actualLane -= 1
-            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+            print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
             return
 
         # se não, busca em que pista está o carro que está
@@ -64,21 +65,21 @@ class Car:
             if np.sum(highwayStatus[i, self.actualLane + 1:self.numLanes, 0] == 1) >= 1:
                 self.pos += self.currSpeed
                 self.actualLane += 1
-                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+                print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
                 return
             elif highwayStatus[i, self.actualLane, 0] == 1:
                 self.pos += self.currSpeed
-                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+                print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
                 return
             elif np.sum(highwayStatus[i, :self.actualLane, 0] == 1) >= 1:
                 self.pos += self.currSpeed
                 self.actualLane -= 1
-                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+                print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
                 return
 
         # não há carros atrás
         self.pos += self.currSpeed
-        print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+        print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
         return
     
     def changeLane(self):
@@ -141,7 +142,7 @@ class Car:
             self.currSpeed = newSpeed
             self.actualLane = newLane
             self.pos += self.currSpeed
-            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+            print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
             return
         
         if ind != 1:
@@ -154,7 +155,7 @@ class Car:
                 self.currSpeed = newSpeed
                 self.actualLane += ind - 1
                 self.pos += self.currSpeed
-                print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+                print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
                 return
             
         # se não conseguimos uma posição até agora, então vamos escolher a menos pior
@@ -170,7 +171,7 @@ class Car:
         self.actualLane += best - 1
         self.currSpeed += self.minAcceleration
         self.pos += self.currSpeed
-        print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+        print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
         return
         
     def greenFlag(self):
@@ -180,7 +181,7 @@ class Car:
         if self.currSpeed < self.minSpeed: self.currSpeed = self.minSpeed
         
         self.pos += self.currSpeed
-        print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+        print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
         return
 
     def updateCar(self,
@@ -190,7 +191,7 @@ class Car:
         self.lastPos = self.pos
 
         if self.isCrashed:
-            print(f'Plate: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}')
+            print(f'Placa: {self.plate}\nPosição: {self.pos}\nPista: {self.actualLane}\nRodovia: {self.highwayCode}\nHorário: {datetime.now()}')
             return
         
         if random() < self.probCrash: self.willCrash = True

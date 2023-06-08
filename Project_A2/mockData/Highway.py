@@ -1,9 +1,9 @@
 import numpy as np
+import threading
 import shutil
 
 from Car import Car
 from random import random, shuffle
-from datetime import datetime
 from itertools import product
 
 import sys
@@ -74,11 +74,17 @@ class Highway:
 
         oldCarsPositions = list()
         newCarsPositions = list()
-        for i, car in enumerate(cars):
+        threads = list()
+        for car in cars:
             oldPos, oldLane = car.pos, car.actualLane
             oldCarsPositions.append([oldPos, oldLane])
-            car.updateCar(highwayStatus)
-
+            # car.updateCar(highwayStatus)
+            threads.append(threading.Thread(target = car.updateCar, args = (highwayStatus, )))
+            threads[-1].start()
+        
+        for thread in threads: thread.join()
+        
+        for car in cars:
             # remove carro da posição anterior se ele não está batido
             if not car.isCrashed: 
                 highwayStatus[oldPos, oldLane, 0] = 0
@@ -147,8 +153,13 @@ class Highway:
                 highwayStatus[0, i, 1] = newCar.currSpeed
 
     def simulate(self):
-        self.updateHighwayStatus('S')
-        self.updateHighwayStatus('N')
+        t1 = threading.Thread(target = self.updateHighwayStatus, args = ('S', ))
+        t2 = threading.Thread(target = self.updateHighwayStatus, args = ('N', ))
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+
         self.actualEpoch += 1
 
     def simEpochs(self,
