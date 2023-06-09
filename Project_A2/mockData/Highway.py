@@ -146,7 +146,8 @@ class Highway:
                              self.highwayExtension,
                              direction[0],
                              self.highwayCode,
-                             self.createPlate()
+                             next(self.createPlate()),
+                             self.numLanesS
                             )
                 cars.append(newCar)
                 highwayStatus[0, i, 0] = 1
