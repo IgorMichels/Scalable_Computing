@@ -7,7 +7,7 @@ sys.path.append('mockData/')
 
 from Highway import Highway
  
-SIMS = 50
+SIMS = 500
 TOTAL = 1
 INITIAL = 100
 for arg in sys.argv:
@@ -51,4 +51,4 @@ if __name__ == '__main__':
         
     for thread in threads: thread.join()
     tf = time()
-    print(f'Total time: {tf - t:.2f} seconds')
+    # print(f'Total time: {tf - t:.2f} seconds')
