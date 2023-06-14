@@ -39,6 +39,7 @@ def consume(topic):
 
         async def consume_messages():
             while True:
+                print(channel.basic_get(queue=queue_name))
                 method, properties, body = await channel.basic_get(queue=queue_name)
                 if method is not None:
                     callback(channel, method, properties, body)
