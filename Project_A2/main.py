@@ -7,7 +7,7 @@ sys.path.append('mockData/')
 
 from Highway import Highway
  
-SIMS = 500
+SIMS = 20
 TOTAL = 1
 INITIAL = 100
 for arg in sys.argv:
