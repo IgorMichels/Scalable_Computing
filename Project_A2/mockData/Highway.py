@@ -1,10 +1,11 @@
 import numpy as np
 import threading
-import shutil
 
 from Car import Car
 from random import random, shuffle
 from itertools import product
+from db_connection import *
+from communication import SendHighwayInfo
 
 import sys
 sys.path.append('../')
@@ -40,6 +41,8 @@ class Highway:
         self.carsSouth = list()
         self.carsNorth = list()
         self.actualEpoch = 0
+
+        SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension)
 
     def createPlate(self):
         letters = list('QWERTYUIOPASDFGHJKLZXCVBNM')
