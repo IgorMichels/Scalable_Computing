@@ -6,10 +6,13 @@ import sys
 sys.path.append('mockData/')
 
 from Highway import Highway
+from db_connection import *
  
 SIMS = 20
 TOTAL = 1
 INITIAL = 100
+REMOVE_INITIAL = True
+REMOVE_FINAL = False
 for arg in sys.argv:
     if '-s' in arg:
         arg = arg.split('=')[-1]
@@ -20,9 +23,18 @@ for arg in sys.argv:
     elif '-h' in arg:
         arg = arg.split('=')[-1]
         INITIAL = int(arg)
+    elif '-ri' in arg:
+        arg = arg.split('=')[-1]
+        REMOVE_INITIAL = arg == '1'
+    elif '-rf' in arg:
+        arg = arg.split('=')[-1]
+        REMOVE_FINAL = arg == '1'
 
 codes = [*range(INITIAL, INITIAL + TOTAL)]
 SIMS = SIMS if SIMS != 0 else 5000
+if REMOVE_INITIAL:
+    db_cars.delete_many({})
+    db_highways.delete_many({})
 
 if __name__ == '__main__':
     highways = list()
@@ -52,3 +64,7 @@ if __name__ == '__main__':
     for thread in threads: thread.join()
     tf = time()
     # print(f'Total time: {tf - t:.2f} seconds')
+
+    if REMOVE_FINAL:
+        db_cars.delete_many({})
+        db_highways.delete_many({})
