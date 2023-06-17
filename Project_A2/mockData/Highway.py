@@ -42,7 +42,7 @@ class Highway:
         self.carsNorth = list()
         self.actualEpoch = 0
 
-        SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension)
+        SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension, self.speedLimitsCar[1])
 
     def createPlate(self):
         letters = list('QWERTYUIOPASDFGHJKLZXCVBNM')

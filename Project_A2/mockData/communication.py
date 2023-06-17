@@ -6,19 +6,20 @@ app = Celery('communication', broker = 'amqp://guest@localhost//', backend = 'rp
 
 @app.task
 def SendCarInfo(plate, pos, lane, highway, time):
-    dic_data = {'plate' : plate,
-                'pos' : pos,
-                'lane' :lane,
-                'highway' :highway,
-                'time' : time}
+    dic_data = {'plate'   : plate,
+                'pos'     : pos,
+                'lane'    : lane,
+                'highway' : highway,
+                'time'    : time}
     
     db_cars.insert_one(dic_data)
 
 @app.task
-def SendHighwayInfo(code, maxSpeed, extension):
-    dic_data = {'highway' : code,
+def SendHighwayInfo(code, maxSpeed, extension, maxSpeedCars):
+    dic_data = {'highway'           : code,
                 'highway_max_speed' : maxSpeed,
-                'highway_extension' : extension}
+                'highway_extension' : extension,
+                'car_max_speed'     : maxSpeedCars}
     
     db_highways.insert_one(dic_data)
 

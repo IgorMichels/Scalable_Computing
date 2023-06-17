@@ -1,7 +1,10 @@
 import sys
 from pyspark.sql import SparkSession
+from pyspark.sql.window import Window
+from pyspark.sql import functions as F
 
 from pprint import pprint
+from time import time
 
 sys.path.append('mockData/')
 from db_connection import *
@@ -37,6 +40,18 @@ if __name__ == '__main__':
         .config('spark.mongodb.write.connection.uri', 'mongodb://localhost:27017') \
         .getOrCreate()
 
+    t1 = time()
+    df_highways = spark \
+        .read \
+        .format('mongodb') \
+        .option('database', 'mock') \
+        .option('collection', 'highways') \
+        .load() \
+        .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed')
+
+    print_df(df_highways, show_count = True)
+
+    t2 = time()
     df_cars = spark \
         .read \
         .format('mongodb') \
@@ -45,15 +60,32 @@ if __name__ == '__main__':
         .load() \
         .select('plate', 'pos', 'lane', 'highway', 'time')
 
-    df_highways = spark \
-        .read \
-        .format('mongodb') \
-        .option('database', 'mock') \
-        .option('collection', 'highways') \
-        .load() \
-        .select('highway', 'highway_extension', 'highway_max_speed')
-
-    data = orders_with_info_df = df_cars.join(df_highways, ['highway'], 'left')
-    data.coalesce(1).write.csv('data_df')
-    print_df(data, show_count = True)
+    t3 = time()
+    window = Window.partitionBy('plate', 'highway').orderBy('time')
+    data = df_cars.join(df_highways, ['highway'], 'left')
+    data = data.withColumn('last_pos', F.lag('pos', 1).over(window))
+    data = data.withColumn('penultimate_pos', F.lag('pos', 2).over(window))
+    data = data.withColumn('speed', data['pos'] - data['last_pos'])
+    data = data.withColumn('acceleration', data['pos'] - 2 * data['last_pos'] + data['penultimate_pos'])
+    data = data.withColumn('process_time', F.coalesce(F.lag('time', 2).over(window),
+                                                      F.lag('time', 1).over(window),
+                                                      data['time']))
     
+    # colisão de primeira ordem
+    window = Window.partitionBy('plate', 'highway').orderBy(F.col('time').desc())
+    colision_df = data.withColumn('row_number', F.row_number() \
+                                                    .over(window)) \
+                                                    .filter((F.col('row_number') == 1) &
+                                                            (F.col('pos') >= 0) & 
+                                                            (F.col('pos') <= F.col('highway_extension')))
+    
+    colision_df = colision_df.select('plate', 'highway', 'lane', 'pos', 'speed', 'acceleration', 'car_max_speed')
+    
+    # data = data.join(data, ['highway', 'lane'], 'left')
+    
+
+
+    tf = time()
+    print_df(colision_df, show_count = True)
+    print(f'{tf - t2} segundos')
+    print(f'{tf - t1} segundos')
