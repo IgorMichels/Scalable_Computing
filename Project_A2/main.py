@@ -63,7 +63,7 @@ if __name__ == '__main__':
         
     for thread in threads: thread.join()
     tf = time()
-    # print(f'Total time: {tf - t:.2f} seconds')
+    print(f'Total time: {tf - t:.2f} seconds')
 
     if REMOVE_FINAL:
         db_cars.delete_many({})

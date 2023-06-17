@@ -15,7 +15,6 @@ def NextDoc(collection):
     _ = collection.delete_one({'_id': ID})
     transformer(doc)
 
-DEBUG = True
 def print_df(dataframe, show_schema=False, show_count=False, preview_count=20):
     """
     Print dataframe with adittional information
@@ -25,10 +24,9 @@ def print_df(dataframe, show_schema=False, show_count=False, preview_count=20):
     :param show_count: True to print the number of rows
     :param preview_count: number of rows to preview
     """
-    if DEBUG:
-        if show_schema: dataframe.printSchema()
-        if show_count: print(f'{dataframe.count()} rows\n')
-        dataframe.show(n=preview_count)
+    if show_schema: dataframe.printSchema()
+    if show_count: print(f'{dataframe.count()} rows\n')
+    dataframe.show(n=preview_count)
 
 if __name__ == '__main__':
     spark = SparkSession\
@@ -39,11 +37,23 @@ if __name__ == '__main__':
         .config('spark.mongodb.write.connection.uri', 'mongodb://localhost:27017') \
         .getOrCreate()
 
-    df = spark \
+    df_cars = spark \
         .read \
         .format('mongodb') \
         .option('database', 'mock') \
         .option('collection', 'cars') \
-        .load()
+        .load() \
+        .select('plate', 'pos', 'lane', 'highway', 'time')
+
+    df_highways = spark \
+        .read \
+        .format('mongodb') \
+        .option('database', 'mock') \
+        .option('collection', 'highways') \
+        .load() \
+        .select('highway', 'highway_extension', 'highway_max_speed')
+
+    data = orders_with_info_df = df_cars.join(df_highways, ['highway'], 'left')
+    data.coalesce(1).write.csv('data_df')
+    print_df(data, show_count = True)
     
-    print_df(df, show_count = True)

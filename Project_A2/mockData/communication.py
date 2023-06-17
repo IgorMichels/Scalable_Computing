@@ -6,7 +6,6 @@ app = Celery('communication', broker = 'amqp://guest@localhost//', backend = 'rp
 
 @app.task
 def SendCarInfo(plate, pos, lane, highway, time):
-    print(f'Carro {plate} estava na pista {lane} e posição {pos} da rodovia {highway} às {time}.')
     dic_data = {'plate' : plate,
                 'pos' : pos,
                 'lane' :lane,
@@ -17,11 +16,13 @@ def SendCarInfo(plate, pos, lane, highway, time):
 
 @app.task
 def SendHighwayInfo(code, maxSpeed, extension):
-    dic_data = {'highway_code' : code,
-                'max_speed' : maxSpeed,
-                'extension' : extension}
+    dic_data = {'highway' : code,
+                'highway_max_speed' : maxSpeed,
+                'highway_extension' : extension}
     
     db_highways.insert_one(dic_data)
 
 # rabbitmq-server
 # celery -A communication worker --loglevel=info
+# brew services start mongodb-community@6.0
+# brew services stop mongodb-community@6.0
