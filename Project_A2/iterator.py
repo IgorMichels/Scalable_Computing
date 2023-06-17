@@ -1,6 +1,9 @@
-from pprint import pprint
-from pymongo import MongoClient
+import sys
 
+from pprint import pprint
+
+sys.path.append('mockData/')
+from db_connection import *
 
 def transformer(doc):
     pprint(doc)
@@ -10,3 +13,6 @@ def NextDoc(collection):
     ID = doc['_id']
     _ = collection.delete_one({"_id": ID})
     transformer(doc)
+
+if __name__ == '__main__':
+    NextDoc(db_highways)
