@@ -41,6 +41,7 @@ class Highway:
         self.carsSouth = list()
         self.carsNorth = list()
         self.actualEpoch = 0
+        self.currPlates = list()
 
         SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension, self.speedLimitsCar[1])
 
@@ -53,7 +54,9 @@ class Highway:
             shuffle(numbers1)
             shuffle(numbers2)
             for l, n1, n2 in product(letters, numbers1, numbers2):
-                yield f'{l}{n1}{n2}'
+                plate = f'{l}{n1}{n2}'
+                if plate in self.currPlates: continue
+                yield plate
 
     def updateHighwayStatus(self,
                             direction : str):
@@ -133,7 +136,10 @@ class Highway:
                         car2.crash()
                         break
 
-        for i in drop[::-1]: cars.pop(i)
+        for i in drop[::-1]:
+            removed_car = cars.pop(i)
+            removed_plate = removed_car.plate
+            self.currPlates.remove(removed_plate)
 
         # adiciona novos carros
         for i in range(numLanes):
@@ -153,6 +159,7 @@ class Highway:
                              self.numLanesS
                             )
                 cars.append(newCar)
+                self.currPlates.append(newCar.plate)
                 highwayStatus[0, i, 0] = 1
                 highwayStatus[0, i, 1] = newCar.currSpeed
 

@@ -130,16 +130,20 @@ if __name__ == '__main__':
              F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
              F.count(F.col('plate_other_car')).alias('possible_crashes'))
 
+    window = Window.partitionBy('plate', 'highway').orderBy(F.col('time'))
     historic = spark \
         .read \
         .format('mongodb') \
         .option('database', 'mock') \
         .option('collection', 'cars') \
         .load() \
-        .select('plate', 'pos', 'highway', 'time') \
-        .join(df_highways, ['highway'], 'left')
+        .select('plate', 'pos', 'lane', 'highway', 'time') \
+        .join(df_highways, ['highway'], 'left') \
+        .withColumn('exiting', (F.col('pos') < 0) | (F.col('pos') > F.col('highway_extension'))) \
+        .withColumn('exiting', F.col('exiting').cast('integer')) \
+        .withColumn('times', F.sum('exiting').over(window)) \
+        .orderBy(F.col('times').desc())
     
-    window = Window.partitionBy('plate', 'highway').orderBy(F.col('time'))
     historic_info = historic \
         .withColumn('cross_time', F.row_number().over(window)) \
         .filter((F.col('pos') < 0) |
@@ -167,11 +171,12 @@ if __name__ == '__main__':
     aux = data.filter((F.col('plate') == 'I33') & (F.col('highway') == 201))
 
     tf = time()
-    print_df(last_iter_data, show_count = True)
-    print_df(colision_df, show_count = True)
-    print_df(overspeed_cars, show_count = True)
-    print_df(stats, show_count = True)
-    print_df(top100, show_count = True)
-    print_df(historic_info, show_count=True)
+    #print_df(last_iter_data, show_count = True)
+    #print_df(colision_df, show_count = True)
+    #print_df(overspeed_cars, show_count = True)
+    #print_df(stats, show_count = True)
+    #print_df(top100, show_count = True)
+    #print_df(historic_info, show_count=True)
+    print_df(historic, show_count=True)
     print(f'{tf - t2} segundos')
     print(f'{tf - t1} segundos')
