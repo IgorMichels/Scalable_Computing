@@ -11,6 +11,7 @@ sys.path.append('mockData/')
 from db_connection import *
 
 T = 50
+NUM_MAX_TICKETS = 10
 
 def transformer(doc):
     pprint(doc)
@@ -141,14 +142,14 @@ if __name__ == '__main__':
         .load() \
         .select('plate', 'pos', 'lane', 'highway', 'time') \
         .join(df_highways, ['highway'], 'left') \
-        .withColumn('exiting', (F.col('pos') < 0) | (F.col('pos') > F.col('highway_extension'))) \
-        .withColumn('exiting', F.col('exiting').cast('integer')) \
+        .withColumn('exiting', ((F.col('pos') < 0) | (F.col('pos') > F.col('highway_extension'))).cast('integer')) \
         .withColumn('times', 1 - F.col('exiting') + F.sum('exiting').over(window)) \
         .withColumn('last_pos', F.lag('pos', 1).over(window)) \
-        .withColumn('speed', F.coalesce(F.col('pos') - F.col('last_pos'), F.lit(0))) \
-        .withColumn('ticket', ((F.abs(F.col('speed')) > F.col('highway_max_speed')) &
-                               (F.abs(F.lag('speed', 1).over(window)) <= F.col('highway_max_speed'))).cast('integer')) \
-        .orderBy(F.col('ticket').desc())
+        .withColumn('speed', F.coalesce(F.abs(F.col('pos') - F.col('last_pos')), F.lit(0))) \
+        .withColumn('ticket', ((F.col('speed') > F.col('highway_max_speed')) &
+                               (F.lag('speed', 1).over(window) <= F.col('highway_max_speed'))).cast('integer')) \
+        .withColumn('tickets_last_T_periods', F.sum('ticket').over(window.rowsBetween(- T, 0))) \
+        .orderBy(F.col('tickets_last_T_periods').desc())
     
     historic_info = historic \
         .withColumn('cross_time', F.row_number().over(window)) \
