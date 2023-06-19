@@ -133,6 +133,7 @@ if __name__ == '__main__':
              F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
              F.count(F.col('plate_other_car')).alias('possible_crashes'))
 
+    high_acc= 40
     window = Window.partitionBy('plate', 'highway').orderBy('time')
     historic = spark \
         .read \
@@ -149,8 +150,20 @@ if __name__ == '__main__':
         .withColumn('ticket', ((F.col('speed') > F.col('highway_max_speed')) &
                                (F.lag('speed', 1).over(window) <= F.col('highway_max_speed'))).cast('integer')) \
         .withColumn('tickets_last_T_periods', F.sum('ticket').over(window.rowsBetween(- T, 0))) \
+        .withColumn('last_lane', F.coalesce(F.lag('lane', 1).over(window), F.lit(0))) \
+        .withColumn('switched_lane', F.col('last_lane') == F.col('lane')) \
+        .withColumn('times_switching',F.sum('switched_lane').over(window.rowsBetween, - T, 0)) \
+        .withColumn('high_speed', F.col('speed')>= 0.9*F.col('highway_max_speed')) \
+        .withColumn('acceleration', F.col('pos') - 2 * F.col('last_pos') + F.col('penultimate_pos')) \
+        .withColumn('high_acceleration', F.col('acceleration') >= high_acc) \
         .orderBy(F.col('tickets_last_T_periods').desc())
-    
+
+    N_events = 10
+    dangerous_driving = historic \
+        .filter(F.col('times_switching')+F.col('high_speed')+F.col('high_acceleration')>= N_events ) \
+        .select('highway','plate') \
+        .distinct()
+
     cars_forbidden = historic \
         .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
         .select('highway', 'plate') \
