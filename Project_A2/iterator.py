@@ -10,6 +10,9 @@ from time import time
 sys.path.append('mockData/')
 from db_connection import *
 
+T = 50
+NUM_MAX_TICKETS = 5
+
 def transformer(doc):
     pprint(doc)
 
@@ -130,13 +133,41 @@ if __name__ == '__main__':
              F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
              F.count(F.col('plate_other_car')).alias('possible_crashes'))
 
-    # top 100 carros com mais rodovias
-    top100 = spark \
+    window = Window.partitionBy('plate', 'highway').orderBy('time')
+    historic = spark \
         .read \
         .format('mongodb') \
         .option('database', 'mock') \
         .option('collection', 'cars') \
         .load() \
+        .select('plate', 'pos', 'lane', 'highway', 'time') \
+        .join(df_highways, ['highway'], 'left') \
+        .withColumn('exiting', ((F.col('pos') < 0) | (F.col('pos') > F.col('highway_extension'))).cast('integer')) \
+        .withColumn('times', 1 - F.col('exiting') + F.sum('exiting').over(window)) \
+        .withColumn('last_pos', F.lag('pos', 1).over(window)) \
+        .withColumn('speed', F.coalesce(F.abs(F.col('pos') - F.col('last_pos')), F.lit(0))) \
+        .withColumn('ticket', ((F.col('speed') > F.col('highway_max_speed')) &
+                               (F.lag('speed', 1).over(window) <= F.col('highway_max_speed'))).cast('integer')) \
+        .withColumn('tickets_last_T_periods', F.sum('ticket').over(window.rowsBetween(- T, 0))) \
+        .orderBy(F.col('tickets_last_T_periods').desc())
+    
+    cars_forbidden = historic \
+        .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
+        .select('highway', 'plate') \
+        .distinct()
+    
+    historic_info = historic \
+        .withColumn('cross_time', F.row_number().over(window)) \
+        .filter((F.col('pos') < 0) |
+                (F.col('pos') > F.col('highway_extension'))) \
+        .withColumn('last_cross_time', F.coalesce(F.lag('cross_time', 1).over(window), F.lit(0))) \
+        .withColumn('crossing_time', F.col('cross_time') - F.col('last_cross_time')) \
+        .groupBy('highway') \
+        .agg(F.mean(F.col('crossing_time')).alias('mean_crossing_time')) \
+        .select('highway', 'mean_crossing_time')
+
+    # top 100 carros com mais rodovias
+    top100 = historic \
         .select('plate', 'highway') \
         .dropDuplicates(['plate', 'highway']) \
         .groupBy('plate') \
@@ -152,10 +183,13 @@ if __name__ == '__main__':
     aux = data.filter((F.col('plate') == 'I33') & (F.col('highway') == 201))
 
     tf = time()
-    print_df(last_iter_data, show_count = True)
-    print_df(colision_df, show_count = True)
-    print_df(overspeed_cars, show_count = True)
-    print_df(stats, show_count = True)
-    print_df(top100, show_count = True)
+    #print_df(last_iter_data, show_count = True)
+    #print_df(colision_df, show_count = True)
+    #print_df(overspeed_cars, show_count = True)
+    #print_df(stats, show_count = True)
+    #print_df(top100, show_count = True)
+    #print_df(historic_info, show_count=True)
+    #print_df(historic, show_count=True)
+    print_df(cars_forbidden, show_count=True)
     print(f'{tf - t2} segundos')
     print(f'{tf - t1} segundos')
