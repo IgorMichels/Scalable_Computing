@@ -13,6 +13,10 @@ from db_connection import *
 T = 50
 NUM_MAX_TICKETS = 5
 
+N_RISK_EVENTS = 10
+HIGH_ACC = 6
+HIGH_SPEED_COEF = .9
+
 def transformer(doc):
     pprint(doc)
 
@@ -133,7 +137,6 @@ if __name__ == '__main__':
              F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
              F.count(F.col('plate_other_car')).alias('possible_crashes'))
 
-    high_acc= 40
     window = Window.partitionBy('plate', 'highway').orderBy('time')
     historic = spark \
         .read \
@@ -155,14 +158,13 @@ if __name__ == '__main__':
         .withColumn('last_lane', F.coalesce(F.lag('lane', 1).over(window), F.col('lane'))) \
         .withColumn('switched_lane', (F.col('last_lane') != F.col('lane')).cast('integer')) \
         .withColumn('times_switching', F.sum('switched_lane').over(window.rowsBetween(- T, 0))) \
-        .withColumn('high_speed', (F.col('speed') >= 2 * F.col('highway_max_speed')).cast('integer')) \
+        .withColumn('high_speed', (F.col('speed') >= HIGH_SPEED_COEF * F.col('highway_max_speed')).cast('integer')) \
         .withColumn('high_speed_events', F.sum('high_speed').over(window.rowsBetween(- T, 0))) \
-        .withColumn('high_acceleration', (F.col('acceleration') >= high_acc).cast('integer')) \
+        .withColumn('high_acceleration', (F.col('acceleration') >= HIGH_ACC).cast('integer')) \
         .withColumn('high_acceleration_events', F.sum('high_acceleration').over(window.rowsBetween(- T, 0)))
 
-    N_events = 10
     dangerous_driving = historic \
-        .filter(F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events') >= N_events) \
+        .filter(F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events') >= N_RISK_EVENTS) \
         .select('highway','plate') \
         .distinct()
 
