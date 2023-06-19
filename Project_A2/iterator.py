@@ -146,21 +146,23 @@ if __name__ == '__main__':
         .withColumn('exiting', ((F.col('pos') < 0) | (F.col('pos') > F.col('highway_extension'))).cast('integer')) \
         .withColumn('times', 1 - F.col('exiting') + F.sum('exiting').over(window)) \
         .withColumn('last_pos', F.lag('pos', 1).over(window)) \
+        .withColumn('penultimate_pos', F.lag('pos', 2).over(window)) \
         .withColumn('speed', F.coalesce(F.abs(F.col('pos') - F.col('last_pos')), F.lit(0))) \
+        .withColumn('acceleration', F.col('pos') - 2 * F.col('last_pos') + F.col('penultimate_pos')) \
         .withColumn('ticket', ((F.col('speed') > F.col('highway_max_speed')) &
                                (F.lag('speed', 1).over(window) <= F.col('highway_max_speed'))).cast('integer')) \
         .withColumn('tickets_last_T_periods', F.sum('ticket').over(window.rowsBetween(- T, 0))) \
-        .withColumn('last_lane', F.coalesce(F.lag('lane', 1).over(window), F.lit(0))) \
-        .withColumn('switched_lane', F.col('last_lane') == F.col('lane')) \
-        .withColumn('times_switching',F.sum('switched_lane').over(window.rowsBetween, - T, 0)) \
-        .withColumn('high_speed', F.col('speed')>= 0.9*F.col('highway_max_speed')) \
-        .withColumn('acceleration', F.col('pos') - 2 * F.col('last_pos') + F.col('penultimate_pos')) \
-        .withColumn('high_acceleration', F.col('acceleration') >= high_acc) \
-        .orderBy(F.col('tickets_last_T_periods').desc())
+        .withColumn('last_lane', F.coalesce(F.lag('lane', 1).over(window), F.col('lane'))) \
+        .withColumn('switched_lane', (F.col('last_lane') != F.col('lane')).cast('integer')) \
+        .withColumn('times_switching', F.sum('switched_lane').over(window.rowsBetween(- T, 0))) \
+        .withColumn('high_speed', (F.col('speed') >= 2 * F.col('highway_max_speed')).cast('integer')) \
+        .withColumn('high_speed_events', F.sum('high_speed').over(window.rowsBetween(- T, 0))) \
+        .withColumn('high_acceleration', (F.col('acceleration') >= high_acc).cast('integer')) \
+        .withColumn('high_acceleration_events', F.sum('high_acceleration').over(window.rowsBetween(- T, 0)))
 
     N_events = 10
     dangerous_driving = historic \
-        .filter(F.col('times_switching')+F.col('high_speed')+F.col('high_acceleration')>= N_events ) \
+        .filter(F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events') >= N_events) \
         .select('highway','plate') \
         .distinct()
 
@@ -200,8 +202,9 @@ if __name__ == '__main__':
     #print_df(overspeed_cars, show_count = True)
     #print_df(stats, show_count = True)
     #print_df(top100, show_count = True)
-    print_df(historic_info, show_count=True)
+    #print_df(historic_info, show_count=True)
     #print_df(historic, show_count=True)
     #print_df(cars_forbidden, show_count=True)
+    print_df(dangerous_driving, show_count=True)
     print(f'{tf - t2} segundos')
     print(f'{tf - t1} segundos')
