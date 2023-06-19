@@ -11,7 +11,7 @@ sys.path.append('mockData/')
 from db_connection import *
 
 T = 50
-NUM_MAX_TICKETS = 10
+NUM_MAX_TICKETS = 5
 
 def transformer(doc):
     pprint(doc)
@@ -151,6 +151,11 @@ if __name__ == '__main__':
         .withColumn('tickets_last_T_periods', F.sum('ticket').over(window.rowsBetween(- T, 0))) \
         .orderBy(F.col('tickets_last_T_periods').desc())
     
+    cars_forbidden = historic \
+        .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
+        .select('highway', 'plate') \
+        .distinct()
+    
     historic_info = historic \
         .withColumn('cross_time', F.row_number().over(window)) \
         .filter((F.col('pos') < 0) |
@@ -184,6 +189,7 @@ if __name__ == '__main__':
     #print_df(stats, show_count = True)
     #print_df(top100, show_count = True)
     #print_df(historic_info, show_count=True)
-    print_df(historic, show_count=True)
+    #print_df(historic, show_count=True)
+    print_df(cars_forbidden, show_count=True)
     print(f'{tf - t2} segundos')
     print(f'{tf - t1} segundos')
