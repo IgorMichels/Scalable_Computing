@@ -169,13 +169,13 @@ if __name__ == '__main__':
         .select('highway', 'plate') \
         .distinct()
     
+    window = Window.partitionBy('plate', 'highway', 'times').orderBy('time')
     historic_info = historic \
         .withColumn('cross_time', F.row_number().over(window)) \
         .filter(F.col('exiting') == 1) \
-        .withColumn('last_cross_time', F.coalesce(F.lag('cross_time', 1).over(window), F.lit(0))) \
-        .withColumn('crossing_time', F.col('cross_time') - F.col('last_cross_time')) \
         .groupBy('highway') \
-        .agg(F.mean(F.col('crossing_time')).alias('mean_crossing_time'), F.mean(F.col('speed')).alias('mean_speed')) \
+        .agg(F.mean(F.col('cross_time')).alias('mean_crossing_time'),
+             F.mean(F.col('speed')).alias('mean_speed')) \
         .select('highway', 'mean_speed', 'mean_crossing_time')
 
     # top 100 carros com mais rodovias
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     accidents = last_iter_data \
                     .groupBy('highway', 'lane', 'pos') \
                     .agg(F.count('plate').alias('cars_on_cell')) \
-                    .filter(F.col('cars_on_cell') > 1) #\.agg((F.sum('cars_on_cell') - F.count('cars_on_cell')).alias('accidents'))
+                    .filter(F.col('cars_on_cell') > 1)
 
     aux = data.filter((F.col('plate') == 'I33') & (F.col('highway') == 201))
 
