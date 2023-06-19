@@ -42,8 +42,12 @@ class Highway:
         self.carsNorth = list()
         self.actualEpoch = 0
         self.currPlates = list()
+        self.interval_ip = int(random() * .45 * self.highwayExtension)
+        self.interval_fp = int((1 - random() * .5) * self.highwayExtension)
+        self.max_risk_events = max(0, (self.interval_fp - self.interval_ip) // self.speedLimitsCar[1] - 1)
 
-        SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension, self.speedLimitsCar[1])
+        SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension, self.speedLimitsCar[1],
+                              self.interval_ip, self.interval_fp, self.max_risk_events)
 
     def createPlate(self):
         letters = list('QWERTYUIOPASDFGHJKLZXCVBNM')

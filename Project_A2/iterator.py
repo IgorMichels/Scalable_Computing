@@ -57,7 +57,7 @@ if __name__ == '__main__':
         .option('database', 'mock') \
         .option('collection', 'highways') \
         .load() \
-        .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed')
+        .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed', 'interval_start', 'interval_end', 'max_risk_events')
 
     t2 = time()
     df_cars = spark \
@@ -151,10 +151,12 @@ if __name__ == '__main__':
         .withColumn('last_pos', F.lag('pos', 1).over(window)) \
         .withColumn('penultimate_pos', F.lag('pos', 2).over(window)) \
         .withColumn('speed', F.coalesce(F.abs(F.col('pos') - F.col('last_pos')), F.lit(0))) \
-        .withColumn('acceleration', F.col('pos') - 2 * F.col('last_pos') + F.col('penultimate_pos')) \
+        .withColumn('acceleration', F.abs(F.col('pos') - 2 * F.col('last_pos') + F.col('penultimate_pos'))) \
         .withColumn('ticket', ((F.col('speed') > F.col('highway_max_speed')) &
                                (F.lag('speed', 1).over(window) <= F.col('highway_max_speed'))).cast('integer')) \
         .withColumn('tickets_last_T_periods', F.sum('ticket').over(window.rowsBetween(- T, 0))) \
+        .withColumn('in_critical_interval', ((F.col('pos') >= F.col('interval_start')) &
+                                             (F.col('pos') <= F.col('interval_end'))).cast('integer')) \
         .withColumn('last_lane', F.coalesce(F.lag('lane', 1).over(window), F.col('lane'))) \
         .withColumn('switched_lane', (F.col('last_lane') != F.col('lane')).cast('integer')) \
         .withColumn('times_switching', F.sum('switched_lane').over(window.rowsBetween(- T, 0))) \
@@ -164,7 +166,7 @@ if __name__ == '__main__':
         .withColumn('high_acceleration_events', F.sum('high_acceleration').over(window.rowsBetween(- T, 0)))
 
     dangerous_driving = historic \
-        .filter(F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events') >= N_RISK_EVENTS) \
+        .filter(F.col('in_critical_interval') * (F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events')) >= N_RISK_EVENTS) \
         .select('highway','plate') \
         .distinct()
 
