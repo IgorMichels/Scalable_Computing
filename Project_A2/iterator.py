@@ -9,6 +9,9 @@ from time import time, sleep
 
 sys.path.append('mockData/')
 from db_connection import *
+from conn_postgres import *
+
+con = Connect(host='localhost',database='',user='',password='')
 
 T = 50
 NUM_MAX_TICKETS = 5
@@ -71,9 +74,9 @@ if __name__ == '__main__':
                 .withColumn('process_time', F.lag('time', 2).over(window_1)) \
                 .withColumn('row_number', F.row_number().over(window_2)) \
                 .filter((F.col('row_number') == 1) &
-                        (F.col('pos') >= 0) & 
+                        (F.col('pos') >= 0) &
                         (F.col('pos') <= F.col('highway_extension')))
-            
+
             new_time_filter = last_iter_data.select(F.max('process_time')).collect()[0].asDict()['max(process_time)']
             if new_time_filter == time_filter: sleep(0.1)
             else: update = True
@@ -109,7 +112,7 @@ if __name__ == '__main__':
             .withColumn('speed', F.abs(F.col('speed'))) \
             .withColumn('speed_other_car', F.abs(F.col('speed_other_car'))) \
             .select('highway', 'plate', 'speed', 'plate_other_car', 'speed_other_car')
-        
+
         t_colision = time()
 
         last_iter_data = last_iter_data \
@@ -118,13 +121,13 @@ if __name__ == '__main__':
             .union(colision_df.select('highway', 'plate_other_car', 'plate')),
                 ['highway', 'plate'],
                 'left')
-        
+
         # veículos acima da velocidade
         overspeed_cars = last_iter_data \
             .filter(F.col('speed') > F.col('highway_max_speed')) \
             .withColumn('can_crash', F.when(F.col('plate_other_car').isNotNull(), 1).otherwise(0)) \
             .select('highway', 'plate', 'speed', 'highway_max_speed', 'can_crash')
-        
+
         t_overspeed_cars = time()
 
         # estatísticas gerais
@@ -133,7 +136,7 @@ if __name__ == '__main__':
                 F.countDistinct('highway').alias('highway_count'),
                 F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
                 F.count(F.col('plate_other_car')).alias('possible_crashes'))
-        
+
         t_stats = time()
 
         t_historic_analysis = time()
@@ -169,16 +172,16 @@ if __name__ == '__main__':
             .filter(F.col('in_critical_interval') * (F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events')) >= F.col('max_risk_events')) \
             .select('highway','plate') \
             .distinct()
-        
+
         t_dangerous_driving = time()
 
         cars_forbidden = historic \
             .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
             .select('highway', 'plate') \
             .distinct()
-        
+
         t_cars_forbidden = time()
-        
+
         window = Window.partitionBy('highway', 'plate').orderBy('time')
         accidents = historic \
             .filter(F.col('speed') == 0) \
@@ -210,7 +213,7 @@ if __name__ == '__main__':
             .join(accidents, ['highway'], 'full') \
             .join(cross_time, ['highway'], 'full') \
             .orderBy(F.col('mean_crossing_time').desc())
-        
+
         t_historic_info = time()
 
         # top 100 carros com mais rodovias
@@ -221,23 +224,38 @@ if __name__ == '__main__':
             .agg(F.countDistinct('highway').alias('highways_passed')) \
             .orderBy(F.col('highways_passed').desc()) \
             .limit(100)
-        
+
         t_top100 = time()
+        con.insert_colision(df_rows = colision_df.collect())
         print_df(colision_df, show_count = True)
         print(f'{t_colision - t_load_cars} segundos')
+
+        con.insert_overspeed(df_rows = overspeed_cars.collect())
         print_df(overspeed_cars, show_count = True)
         print(f'{t_overspeed_cars - t_load_cars} segundos')
+
+        con.insert_statistics(df_rows = stats.collect())
         print_df(stats, show_count = True)
         print(f'{t_stats - t_load_cars} segundos')
+
+        con.insert_dangerous_driving(df_rows = dangerous_driving.collect())
         print_df(dangerous_driving, show_count = True)
         print(f'{t_dangerous_driving - t_historic_analysis} segundos')
+
+        con.insert_cars_forbidden(df_rows = cars_forbidden.collect())
         print_df(cars_forbidden, show_count = True)
         print(f'{t_cars_forbidden - t_historic_analysis} segundos')
+
+        con.insert_historic_info(df_rows = historic_info.collect())
         print_df(historic_info, show_count = True)
         print(f'{t_historic_info - t_historic_analysis} segundos')
+
+        con.insert_top100(df_rows = top100.collect())
         print_df(top100, show_count = True)
         print(f'{t_top100 - t_historic_analysis} segundos')
         print(f'Total: {time() - t_load_cars} segundos')
 
         time_filter = new_time_filter
         update = False
+
+con.close()
