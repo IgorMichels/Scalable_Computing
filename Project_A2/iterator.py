@@ -47,42 +47,37 @@ spark = SparkSession\
     .getOrCreate()
 
 df_highways = spark \
-        .read \
-        .format('mongodb') \
-        .option('database', 'mock') \
-        .option('collection', 'highways') \
-        .load() \
-        .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed',
-                'interval_start', 'interval_end', 'max_risk_events')
+    .read \
+    .format('mongodb') \
+    .option('database', 'mock') \
+    .option('collection', 'highways') \
+    .load() \
+    .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed',
+            'interval_start', 'interval_end', 'max_risk_events')
 
 if __name__ == '__main__':
     os.system('clear')
 
     t_load_cars = time()
-    df_cars = spark \
+    window_1 = Window.partitionBy('plate', 'highway').orderBy('time')
+    window_2 = Window.partitionBy('plate', 'highway').orderBy(F.col('time').desc())
+    last_iter_data = spark \
         .read \
         .format('mongodb') \
         .option('database', 'mock') \
         .option('collection', 'cars') \
         .load() \
-        .select('plate', 'pos', 'lane', 'highway', 'time')
-
-    window = Window.partitionBy('plate', 'highway').orderBy('time')
-    data = df_cars \
+        .select('plate', 'pos', 'lane', 'highway', 'time') \
         .join(df_highways, ['highway'], 'left') \
-        .withColumn('last_pos', F.lag('pos', 1).over(window)) \
-        .withColumn('penultimate_pos', F.lag('pos', 2).over(window)) \
+        .withColumn('last_pos', F.lag('pos', 1).over(window_1)) \
+        .withColumn('penultimate_pos', F.lag('pos', 2).over(window_1)) \
         .withColumn('speed', F.col('pos') - F.col('last_pos')) \
         .withColumn('acceleration', F.col('pos') - 2 * F.col('last_pos') + F.col('penultimate_pos')) \
-        .withColumn('process_time', F.lag('time', 2).over(window))
-    
-    # colisão de primeira ordem
-    window = Window.partitionBy('plate', 'highway').orderBy(F.col('time').desc())
-    last_iter_data = data.withColumn('row_number', F.row_number() \
-                                                    .over(window)) \
-                                                    .filter((F.col('row_number') == 1) &
-                                                            (F.col('pos') >= 0) & 
-                                                            (F.col('pos') <= F.col('highway_extension')))
+        .withColumn('process_time', F.lag('time', 2).over(window_1)) \
+        .withColumn('row_number', F.row_number().over(window_2)) \
+        .filter((F.col('row_number') == 1) &
+                (F.col('pos') >= 0) & 
+                (F.col('pos') <= F.col('highway_extension')))
     
     window = Window.partitionBy('highway', 'lane').orderBy('pos')
     colision_df = last_iter_data \
@@ -116,17 +111,26 @@ if __name__ == '__main__':
         .withColumn('speed_other_car', F.abs(F.col('speed_other_car'))) \
         .select('highway', 'plate', 'speed', 'plate_other_car', 'speed_other_car')
     
-    last_iter_data = last_iter_data.join(colision_df \
-                                            .select('highway', 'plate', 'plate_other_car') \
-                                            .union(colision_df.select('highway', 'plate_other_car', 'plate')),
-                                         ['highway', 'plate'],
-                                         'left')
+    t_colision = time()
+    print_df(colision_df, show_count = True)
+    print(f'{t_colision - t_load_cars} segundos')
+
+    last_iter_data = last_iter_data \
+        .join(colision_df \
+        .select('highway', 'plate', 'plate_other_car') \
+        .union(colision_df.select('highway', 'plate_other_car', 'plate')),
+               ['highway', 'plate'],
+               'left')
     
     # veículos acima da velocidade
     overspeed_cars = last_iter_data \
         .filter(F.col('speed') > F.col('highway_max_speed')) \
         .withColumn('can_crash', F.when(F.col('plate_other_car').isNotNull(), 1).otherwise(0)) \
         .select('highway', 'plate', 'speed', 'highway_max_speed', 'can_crash')
+    
+    t_overspeed_cars = time()
+    print_df(overspeed_cars, show_count = True)
+    print(f'{t_overspeed_cars - t_load_cars} segundos')
 
     # estatísticas gerais
     stats = last_iter_data \
@@ -134,7 +138,12 @@ if __name__ == '__main__':
              F.countDistinct('highway').alias('highway_count'),
              F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
              F.count(F.col('plate_other_car')).alias('possible_crashes'))
+    
+    t_stats = time()
+    print_df(stats, show_count = True)
+    print(f'{t_stats - t_load_cars} segundos')
 
+    t_historic_analysis = time()
     window = Window.partitionBy('plate', 'highway').orderBy('time')
     historic = spark \
         .read \
@@ -167,11 +176,19 @@ if __name__ == '__main__':
         .filter(F.col('in_critical_interval') * (F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events')) >= F.col('max_risk_events')) \
         .select('highway','plate') \
         .distinct()
+    
+    t_dangerous_driving = time()
+    print_df(dangerous_driving, show_count = True)
+    print(f'{t_dangerous_driving - t_historic_analysis} segundos')
 
     cars_forbidden = historic \
         .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
         .select('highway', 'plate') \
         .distinct()
+    
+    t_cars_forbidden = time()
+    print_df(cars_forbidden, show_count = True)
+    print(f'{t_cars_forbidden - t_historic_analysis} segundos')
     
     window = Window.partitionBy('highway', 'plate').orderBy('time')
     accidents = historic \
@@ -203,7 +220,11 @@ if __name__ == '__main__':
         .select('highway', 'mean_speed') \
         .join(accidents, ['highway'], 'full') \
         .join(cross_time, ['highway'], 'full') \
-        .orderBy(F.col('accidents').desc())
+        .orderBy(F.col('mean_crossing_time').desc())
+    
+    t_historic_info = time()
+    print_df(historic_info, show_count = True)
+    print(f'{t_historic_info - t_historic_analysis} segundos')
 
     # top 100 carros com mais rodovias
     top100 = historic \
@@ -213,17 +234,8 @@ if __name__ == '__main__':
         .agg(F.countDistinct('highway').alias('highways_passed')) \
         .orderBy(F.col('highways_passed').desc()) \
         .limit(100)
-
-    aux = data.filter((F.col('plate') == 'I33') & (F.col('highway') == 201))
-
-    tf = time()
-    #print_df(last_iter_data, show_count = True)
-    #print_df(colision_df, show_count = True)
-    #print_df(overspeed_cars, show_count = True)
-    #print_df(stats, show_count = True)
-    #print_df(top100, show_count = True)
-    print_df(historic_info, show_count=True)
-    #print_df(historic, show_count=True)
-    #print_df(cars_forbidden, show_count=True)
-    print(f'{tf - t_load_cars} segundos')
-
+    
+    t_top100 = time()
+    print_df(top100, show_count = True)
+    print(f'{t_top100 - t_historic_analysis} segundos')
+    print(f'Total: {time() - t_load_cars} segundos')
