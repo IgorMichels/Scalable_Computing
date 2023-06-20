@@ -13,7 +13,6 @@ from db_connection import *
 T = 50
 NUM_MAX_TICKETS = 5
 
-N_RISK_EVENTS = 10
 HIGH_ACC = 6
 HIGH_SPEED_COEF = .9
 
@@ -166,7 +165,7 @@ if __name__ == '__main__':
         .withColumn('high_acceleration_events', F.sum('high_acceleration').over(window.rowsBetween(- T, 0)))
 
     dangerous_driving = historic \
-        .filter(F.col('in_critical_interval') * (F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events')) >= N_RISK_EVENTS) \
+        .filter(F.col('in_critical_interval') * (F.col('times_switching') + F.col('high_speed_events') + F.col('high_acceleration_events')) >= F.col('max_risk_events')) \
         .select('highway','plate') \
         .distinct()
 
@@ -175,14 +174,36 @@ if __name__ == '__main__':
         .select('highway', 'plate') \
         .distinct()
     
+    window = Window.partitionBy('highway', 'plate').orderBy('time')
+    accidents = historic \
+        .filter(F.col('speed') == 0) \
+        .withColumn('last_time', F.lag('time', 1).over(window)) \
+        .filter(F.col('last_time').isNotNull()) \
+        .withColumn('check_time', (F.col('last_time') <= F.lag('time').over(Window.partitionBy('highway').orderBy('time')))) \
+        .withColumn('check_plate', (F.col('plate') != F.lag('plate').over(Window.partitionBy('highway').orderBy('time')))) \
+        .filter(F.col('check_time') & F.col('check_plate') == 1) \
+        .select('highway', 'lane', 'pos', 'plate') \
+        .distinct() \
+        .groupBy('highway', 'lane', 'pos') \
+        .agg((F.count('plate') - F.lit(1)).alias('accidents')) \
+        .groupBy('highway') \
+        .agg(F.sum('accidents').alias('accidents'))
+
     window = Window.partitionBy('plate', 'highway', 'times').orderBy('time')
-    historic_info = historic \
+    cross_time = historic \
         .withColumn('cross_time', F.row_number().over(window)) \
         .filter(F.col('exiting') == 1) \
         .groupBy('highway') \
-        .agg(F.mean(F.col('cross_time')).alias('mean_crossing_time'),
-             F.mean(F.col('speed')).alias('mean_speed')) \
-        .select('highway', 'mean_speed', 'mean_crossing_time')
+        .agg(F.mean(F.col('cross_time')).alias('mean_crossing_time')) \
+        .select('highway', 'mean_crossing_time') \
+
+    window = Window.partitionBy('plate', 'highway', 'times').orderBy('time')
+    historic_info = historic \
+        .groupBy('highway') \
+        .agg(F.mean(F.col('speed')).alias('mean_speed')) \
+        .select('highway', 'mean_speed') \
+        .join(accidents, ['highway'], 'full') \
+        .join(cross_time, ['highway'], 'full')
 
     # top 100 carros com mais rodovias
     top100 = historic \
@@ -193,11 +214,6 @@ if __name__ == '__main__':
         .orderBy(F.col('highways_passed').desc()) \
         .limit(100)
 
-    accidents = last_iter_data \
-                    .groupBy('highway', 'lane', 'pos') \
-                    .agg(F.count('plate').alias('cars_on_cell')) \
-                    .filter(F.col('cars_on_cell') > 1)
-
     aux = data.filter((F.col('plate') == 'I33') & (F.col('highway') == 201))
 
     tf = time()
@@ -206,9 +222,8 @@ if __name__ == '__main__':
     #print_df(overspeed_cars, show_count = True)
     #print_df(stats, show_count = True)
     #print_df(top100, show_count = True)
-    #print_df(historic_info, show_count=True)
+    print_df(historic_info, show_count=True)
     #print_df(historic, show_count=True)
     #print_df(cars_forbidden, show_count=True)
-    print_df(dangerous_driving, show_count=True)
     print(f'{tf - t2} segundos')
     print(f'{tf - t1} segundos')
