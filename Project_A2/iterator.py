@@ -112,8 +112,6 @@ if __name__ == '__main__':
         .select('highway', 'plate', 'speed', 'plate_other_car', 'speed_other_car')
     
     t_colision = time()
-    print_df(colision_df, show_count = True)
-    print(f'{t_colision - t_load_cars} segundos')
 
     last_iter_data = last_iter_data \
         .join(colision_df \
@@ -129,8 +127,6 @@ if __name__ == '__main__':
         .select('highway', 'plate', 'speed', 'highway_max_speed', 'can_crash')
     
     t_overspeed_cars = time()
-    print_df(overspeed_cars, show_count = True)
-    print(f'{t_overspeed_cars - t_load_cars} segundos')
 
     # estatísticas gerais
     stats = last_iter_data \
@@ -140,8 +136,6 @@ if __name__ == '__main__':
              F.count(F.col('plate_other_car')).alias('possible_crashes'))
     
     t_stats = time()
-    print_df(stats, show_count = True)
-    print(f'{t_stats - t_load_cars} segundos')
 
     t_historic_analysis = time()
     window = Window.partitionBy('plate', 'highway').orderBy('time')
@@ -178,8 +172,6 @@ if __name__ == '__main__':
         .distinct()
     
     t_dangerous_driving = time()
-    print_df(dangerous_driving, show_count = True)
-    print(f'{t_dangerous_driving - t_historic_analysis} segundos')
 
     cars_forbidden = historic \
         .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
@@ -187,8 +179,6 @@ if __name__ == '__main__':
         .distinct()
     
     t_cars_forbidden = time()
-    print_df(cars_forbidden, show_count = True)
-    print(f'{t_cars_forbidden - t_historic_analysis} segundos')
     
     window = Window.partitionBy('highway', 'plate').orderBy('time')
     accidents = historic \
@@ -223,8 +213,6 @@ if __name__ == '__main__':
         .orderBy(F.col('mean_crossing_time').desc())
     
     t_historic_info = time()
-    print_df(historic_info, show_count = True)
-    print(f'{t_historic_info - t_historic_analysis} segundos')
 
     # top 100 carros com mais rodovias
     top100 = historic \
@@ -236,6 +224,18 @@ if __name__ == '__main__':
         .limit(100)
     
     t_top100 = time()
+    print_df(colision_df, show_count = True)
+    print(f'{t_colision - t_load_cars} segundos')
+    print_df(overspeed_cars, show_count = True)
+    print(f'{t_overspeed_cars - t_load_cars} segundos')
+    print_df(stats, show_count = True)
+    print(f'{t_stats - t_load_cars} segundos')
+    print_df(dangerous_driving, show_count = True)
+    print(f'{t_dangerous_driving - t_historic_analysis} segundos')
+    print_df(cars_forbidden, show_count = True)
+    print(f'{t_cars_forbidden - t_historic_analysis} segundos')
+    print_df(historic_info, show_count = True)
+    print(f'{t_historic_info - t_historic_analysis} segundos')
     print_df(top100, show_count = True)
     print(f'{t_top100 - t_historic_analysis} segundos')
     print(f'Total: {time() - t_load_cars} segundos')
