@@ -46,19 +46,19 @@ spark = SparkSession\
     .config('spark.mongodb.write.connection.uri', 'mongodb://localhost:27017') \
     .getOrCreate()
 
-if __name__ == '__main__':
-    os.system('clear')
-
-    t1 = time()
-    df_highways = spark \
+df_highways = spark \
         .read \
         .format('mongodb') \
         .option('database', 'mock') \
         .option('collection', 'highways') \
         .load() \
-        .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed', 'interval_start', 'interval_end', 'max_risk_events')
+        .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed',
+                'interval_start', 'interval_end', 'max_risk_events')
 
-    t2 = time()
+if __name__ == '__main__':
+    os.system('clear')
+
+    t_load_cars = time()
     df_cars = spark \
         .read \
         .format('mongodb') \
@@ -67,7 +67,6 @@ if __name__ == '__main__':
         .load() \
         .select('plate', 'pos', 'lane', 'highway', 'time')
 
-    t3 = time()
     window = Window.partitionBy('plate', 'highway').orderBy('time')
     data = df_cars \
         .join(df_highways, ['highway'], 'left') \
@@ -203,7 +202,8 @@ if __name__ == '__main__':
         .agg(F.mean(F.col('speed')).alias('mean_speed')) \
         .select('highway', 'mean_speed') \
         .join(accidents, ['highway'], 'full') \
-        .join(cross_time, ['highway'], 'full')
+        .join(cross_time, ['highway'], 'full') \
+        .orderBy(F.col('accidents').desc())
 
     # top 100 carros com mais rodovias
     top100 = historic \
@@ -225,5 +225,5 @@ if __name__ == '__main__':
     print_df(historic_info, show_count=True)
     #print_df(historic, show_count=True)
     #print_df(cars_forbidden, show_count=True)
-    print(f'{tf - t2} segundos')
-    print(f'{tf - t1} segundos')
+    print(f'{tf - t_load_cars} segundos')
+
