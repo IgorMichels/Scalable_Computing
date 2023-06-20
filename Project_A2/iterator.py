@@ -6,12 +6,17 @@ from pyspark.sql.window import Window
 from pyspark.sql import functions as F
 
 from time import time, sleep
+from getpass import getpass
 
 sys.path.append('mockData/')
 from db_connection import *
 from conn_postgres import *
 
-con = Connect(host='localhost',database='',user='',password='')
+user = input('Digite seu usuário: ')
+password = getpass()
+database = input('Digite o nome do database: ')
+
+con = Connect(host='localhost',database=database,user=user,password=password)
 
 T = 50
 NUM_MAX_TICKETS = 5
