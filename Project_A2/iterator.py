@@ -1,10 +1,10 @@
 import os
 import sys
+import numpy as np
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql import functions as F
 
-from pprint import pprint
 from time import time
 
 sys.path.append('mockData/')
@@ -15,15 +15,6 @@ NUM_MAX_TICKETS = 5
 
 HIGH_ACC = 6
 HIGH_SPEED_COEF = .9
-
-def transformer(doc):
-    pprint(doc)
-
-def NextDoc(collection):
-    doc = collection.find_one()
-    ID = doc['_id']
-    _ = collection.delete_one({'_id': ID})
-    transformer(doc)
 
 def print_df(dataframe, show_schema=False, show_count=False, preview_count=10):
     """
@@ -53,7 +44,9 @@ df_highways = spark \
     .option('collection', 'highways') \
     .load() \
     .select('highway', 'highway_extension', 'highway_max_speed', 'car_max_speed',
-            'interval_start', 'interval_end', 'max_risk_events')
+            'interval_start', 'interval_end', 'max_risk_events', 'highway_time')
+
+time_filter = df_highways.select(F.min('highway_time')).collect()[0].asDict()['min(highway_time)']
 
 if __name__ == '__main__':
     os.system('clear')

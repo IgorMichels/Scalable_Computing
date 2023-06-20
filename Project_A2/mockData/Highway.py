@@ -49,7 +49,7 @@ class Highway:
         self.max_risk_events = max(0, (self.interval_fp - self.interval_ip) // self.speedLimitsCar[1] - 1)
 
         SendHighwayInfo.delay(self.highwayCode, self.maxSpeed, self.highwayExtension, self.speedLimitsCar[1],
-                              self.interval_ip, self.interval_fp, self.max_risk_events)
+                              self.interval_ip, self.interval_fp, self.max_risk_events, datetime.now())
 
     def createPlate(self):
         letters = list('QWERTYUIOPASDFGHJKLZXCVBNM')
@@ -201,14 +201,14 @@ class Highway:
                 highwayStatus[0, i, 1] = newCar.currSpeed
 
     def simulate(self):
-        #t1 = threading.Thread(target = self.updateHighwayStatus, args = ('S', ))
-        #t2 = threading.Thread(target = self.updateHighwayStatus, args = ('N', ))
-        #t1.start()
-        #t2.start()
-        #t1.join()
-        #t2.join()
-        self.updateHighwayStatus('S')
-        self.updateHighwayStatus('N')
+        t1 = threading.Thread(target = self.updateHighwayStatus, args = ('S', ))
+        t2 = threading.Thread(target = self.updateHighwayStatus, args = ('N', ))
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+        #self.updateHighwayStatus('S')
+        #self.updateHighwayStatus('N')
 
         self.actualEpoch += 1
 
