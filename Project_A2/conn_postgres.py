@@ -1,7 +1,7 @@
 import psycopg2
 
 class Connect:
-    def __init__(self, host, database, user, password):
+    def __init__(self, host, database, user, password, query=False):
         
         # Informa os dados da conexão
         self.user     = user     # input('Digite seu usuário: ')
@@ -11,7 +11,7 @@ class Connect:
         self.conn     = psycopg2.connect(host=self.host, database=self.database,
                                          user=self.user, password=self.passw)
         self.cursor = self.conn.cursor()
-        self._start()
+        if not query: self._start()
         
     # Inicia a conexão
     def _start(self):
@@ -211,4 +211,30 @@ class Connect:
         
     # ---------------------------------------------------------------------------------------------
     
-        
+    def select_colision(self):
+        self.cursor.execute('SELECT * FROM STATS.colision;')
+        return self.cursor.fetchall()
+    
+    def select_overspeed(self):
+        self.cursor.execute('SELECT * FROM STATS.overspeed;')
+        return self.cursor.fetchall()
+    
+    def select_statistics(self):
+        self.cursor.execute('SELECT * FROM STATS.statistics;')
+        return self.cursor.fetchall()
+    
+    def select_dangerous_driving(self):
+        self.cursor.execute('SELECT * FROM STATS.dangerous_driving;')
+        return self.cursor.fetchall()
+    
+    def select_cars_forbidden(self):
+        self.cursor.execute('SELECT * FROM STATS.cars_forbidden;')
+        return self.cursor.fetchall()
+    
+    def select_historic_info(self):
+        self.cursor.execute('SELECT * FROM STATS.historic_info;')
+        return self.cursor.fetchall()
+    
+    def select_top100(self):
+        self.cursor.execute('SELECT * FROM STATS.top100;')
+        return self.cursor.fetchall()

@@ -1,21 +1,15 @@
-import psycopg2
+from conn_postgres import Connect
 
-conn = psycopg2.connect(database = '', 
-                        user = '', 
-                        host = 'localhost',
-                        password = '',
-                        port = 5432
-                       )
-    
-cur = conn.cursor()
-cur.execute('SELECT * FROM stats.analysis_time;')
-rows = cur.fetchall()
-for row in rows: print(row)
+conn = Connect('localhost', '', '', '', query=True)
 
-print()
-cur.execute('SELECT analysis, AVG(time) FROM stats.analysis_time GROUP BY analysis;')
-rows = cur.fetchall()
-for row in rows: print(row)
+def print_query(data):
+    for row in data: print(row)
+    print()
 
-cur.close()
-conn.close()
+print_query(conn.select_colision())
+print_query(conn.select_overspeed())
+print_query(conn.select_statistics())
+print_query(conn.select_dangerous_driving())
+print_query(conn.select_cars_forbidden())
+print_query(conn.select_historic_info())
+print_query(conn.select_top100())
