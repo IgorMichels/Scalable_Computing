@@ -1,6 +1,5 @@
 import os
 import sys
-import numpy as np
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql import functions as F
@@ -9,14 +8,18 @@ from time import time, sleep
 from getpass import getpass
 
 sys.path.append('mockData/')
+from conn_postgres import Connect
 from db_connection import *
-from conn_postgres import *
 
 user = input('Digite seu usuário: ')
 password = getpass()
 database = input('Digite o nome do database: ')
 
-con = Connect(host='localhost',database=database,user=user,password=password)
+conn = Connect(host='localhost',
+               database=database,
+               user=user,
+               password=password
+              )
 
 T = 50
 NUM_MAX_TICKETS = 5
@@ -231,36 +234,29 @@ if __name__ == '__main__':
             .limit(100)
 
         t_top100 = time()
-        con.insert_colision(df_rows = colision_df.collect())
-        print_df(colision_df, show_count = True)
-        print(f'{t_colision - t_load_cars} segundos')
+        
+        conn.insert_colision(df_rows = colision_df.collect())
+        conn.insert_analysis_time('Colisão', t_colision - t_load_cars)
+        
+        conn.insert_overspeed(df_rows = overspeed_cars.collect())
+        conn.insert_analysis_time('Veículos acima da velocidade', t_overspeed_cars - t_load_cars)
+        
+        conn.insert_statistics(df_rows = stats.collect())
+        conn.insert_analysis_time('Estatísticas gerais', t_stats - t_load_cars)
+        
+        conn.insert_dangerous_driving(df_rows = dangerous_driving.collect())
+        conn.insert_analysis_time('Direção perigosa', t_dangerous_driving - t_historic_analysis)
+        
+        conn.insert_cars_forbidden(df_rows = cars_forbidden.collect())
+        conn.insert_analysis_time('Carros proibidos de circular', t_cars_forbidden - t_historic_analysis)
 
-        con.insert_overspeed(df_rows = overspeed_cars.collect())
-        print_df(overspeed_cars, show_count = True)
-        print(f'{t_overspeed_cars - t_load_cars} segundos')
+        conn.insert_historic_info(df_rows = historic_info.collect())
+        conn.insert_analysis_time('Histórico', t_historic_info - t_historic_analysis)
 
-        con.insert_statistics(df_rows = stats.collect())
-        print_df(stats, show_count = True)
-        print(f'{t_stats - t_load_cars} segundos')
-
-        con.insert_dangerous_driving(df_rows = dangerous_driving.collect())
-        print_df(dangerous_driving, show_count = True)
-        print(f'{t_dangerous_driving - t_historic_analysis} segundos')
-
-        con.insert_cars_forbidden(df_rows = cars_forbidden.collect())
-        print_df(cars_forbidden, show_count = True)
-        print(f'{t_cars_forbidden - t_historic_analysis} segundos')
-
-        con.insert_historic_info(df_rows = historic_info.collect())
-        print_df(historic_info, show_count = True)
-        print(f'{t_historic_info - t_historic_analysis} segundos')
-
-        con.insert_top100(df_rows = top100.collect())
-        print_df(top100, show_count = True)
-        print(f'{t_top100 - t_historic_analysis} segundos')
-        print(f'Total: {time() - t_load_cars} segundos')
+        conn.insert_top100(df_rows = top100.collect())
+        conn.insert_analysis_time('Top 100', t_top100 - t_historic_analysis)
 
         time_filter = new_time_filter
         update = False
 
-con.close()
+conn.close()

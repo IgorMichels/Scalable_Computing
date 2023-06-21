@@ -76,15 +76,21 @@ class Connect:
                 plate CHAR(3),
                 highways_passed INT
             );
+
+            DROP TABLE IF EXISTS STATS.analysis_time;
+            CREATE TABLE STATS.analysis_time
+            (
+                analysis VARCHAR(28),
+                time FLOAT
+            );
         '''
-        _cur = self.conn.cursor()
-        _cur.execute(create)
+        
+        self.cursor.execute(create)
         self.conn.commit()
         
     # Fecha a conexão
     def close(self):
         self.conn.close()
-        
 
     # Inserção no banco ---------------------------------------------------------------------------
         '''
@@ -198,6 +204,9 @@ class Connect:
             self.cursor.execute(query, tuple(data))
         
         self.conn.commit()
+
+    def insert_analysis_time(self, analysis, time):
+        self.cursor.execute(f'''INSERT INTO STATS.analysis_time (analysis, time) VALUES ('{analysis}', {time})''')
         
     # ---------------------------------------------------------------------------------------------
     
