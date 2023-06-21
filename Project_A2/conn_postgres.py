@@ -238,3 +238,20 @@ class Connect:
     def select_top100(self):
         self.cursor.execute('SELECT * FROM STATS.top100;')
         return self.cursor.fetchall()
+    
+    def select_analysis_time(self):
+        query = '''
+            WITH aux AS (
+                SELECT analysis, time, ROW_NUMBER() OVER(PARTITION BY analysis ORDER BY update_time DESC) AS n
+                FROM stats.analysis_time
+            )
+            SELECT analysis, time
+            FROM aux
+            WHERE n = 1
+        '''
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+    
+    def select_mean_analysis_time(self):
+        self.cursor.execute('SELECT analysis, AVG(time) FROM stats.analysis_time GROUP BY analysis;')
+        return self.cursor.fetchall()
