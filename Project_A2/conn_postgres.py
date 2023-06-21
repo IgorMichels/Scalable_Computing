@@ -81,7 +81,8 @@ class Connect:
             CREATE TABLE STATS.analysis_time
             (
                 analysis VARCHAR(28),
-                time FLOAT
+                time FLOAT,
+                update_time TIMESTAMP
             );
         '''
         
@@ -206,7 +207,7 @@ class Connect:
         self.conn.commit()
 
     def insert_analysis_time(self, analysis, time):
-        self.cursor.execute(f'''INSERT INTO STATS.analysis_time (analysis, time) VALUES ('{analysis}', {time})''')
+        self.cursor.execute(f'''INSERT INTO STATS.analysis_time (analysis, time, update_time) VALUES ('{analysis}', {time}, NOW())''')
         
     # ---------------------------------------------------------------------------------------------
     
