@@ -1,4 +1,5 @@
 import psycopg2
+import pandas.io.sql as psql
 
 class Connect:
     def __init__(self, host, database, user, password, query=False):
@@ -212,46 +213,103 @@ class Connect:
     # ---------------------------------------------------------------------------------------------
     
     def select_colision(self):
-        self.cursor.execute('SELECT * FROM STATS.colision;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT
+                highway AS "Highway",
+                plate AS "Plate 1",
+                speed AS "Speed 1",
+                plate_other_car AS "Plate 2",
+                speed_other_car AS "Speed 2"
+            FROM STATS.colision;
+        '''
+        return psql.read_sql_query(query, self.conn)
     
     def select_overspeed(self):
-        self.cursor.execute('SELECT * FROM STATS.overspeed;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT
+                highway AS "Highway",
+                plate AS "Plate",
+                speed AS "Speed",
+                highway_max_speed AS "Max speed",
+                can_crash AS "Can crash"
+            FROM STATS.overspeed;
+        '''
+        return psql.read_sql_query(query, self.conn)
     
     def select_statistics(self):
-        self.cursor.execute('SELECT * FROM STATS.statistics;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT
+                cars_count AS "Cars",
+                highway_count AS "Highways",
+                overspeed_cars AS "Cars overspeed",
+                possible_crashes AS "Possible Crashes"
+            FROM STATS.statistics;
+        '''
+        data = psql.read_sql_query(query, self.conn).T
+        data.columns = ['Total']
+        return data
     
     def select_dangerous_driving(self):
-        self.cursor.execute('SELECT * FROM STATS.dangerous_driving;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT DISTINCT
+                highway AS "Highway",
+                plate AS "Plate"
+            FROM STATS.dangerous_driving;
+        '''
+        return psql.read_sql_query(query, self.conn)
     
     def select_cars_forbidden(self):
-        self.cursor.execute('SELECT * FROM STATS.cars_forbidden;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT DISTINCT
+                highway AS "Highway",
+                plate AS "Plate"
+            FROM STATS.cars_forbidden;
+        '''
+        return psql.read_sql_query(query, self.conn)
     
     def select_historic_info(self):
-        self.cursor.execute('SELECT * FROM STATS.historic_info;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT
+                highway AS "Highway",
+                mean_speed AS "Mean speed",
+                accidents AS "Accidents",
+                mean_crossing_time AS "Mean crossing time"
+            FROM STATS.historic_info;
+        '''
+        return psql.read_sql_query(query, self.conn)
     
     def select_top100(self):
-        self.cursor.execute('SELECT * FROM STATS.top100;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT
+                plate AS "Plate",
+                highways_passed AS "Highways"
+            FROM STATS.top100;
+        '''
+        return psql.read_sql_query(query, self.conn)
     
     def select_analysis_time(self):
         query = '''
             WITH aux AS (
-                SELECT analysis, time, ROW_NUMBER() OVER(PARTITION BY analysis ORDER BY update_time DESC) AS n
+                SELECT
+                    analysis,
+                    time,
+                    ROW_NUMBER() OVER(PARTITION BY analysis ORDER BY update_time DESC) AS n
                 FROM stats.analysis_time
             )
-            SELECT analysis, time
+            SELECT
+                analysis AS "Analysis",
+                time AS "Time"
             FROM aux
             WHERE n = 1
         '''
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
+        return psql.read_sql_query(query, self.conn)
     
     def select_mean_analysis_time(self):
-        self.cursor.execute('SELECT analysis, AVG(time) FROM stats.analysis_time GROUP BY analysis;')
-        return self.cursor.fetchall()
+        query = '''
+            SELECT
+                analysis AS "Analysis",
+                AVG(time) AS "Mean time"
+            FROM stats.analysis_time
+            GROUP BY analysis;
+        '''
+        return psql.read_sql_query(query, self.conn)
