@@ -141,9 +141,9 @@ if __name__ == '__main__':
         # estatísticas gerais
         stats = last_iter_data \
             .agg(F.count('plate').alias('cars_count'),
-                F.countDistinct('highway').alias('highway_count'),
-                F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
-                F.count(F.col('plate_other_car')).alias('possible_crashes'))
+                 F.countDistinct('highway').alias('highway_count'),
+                 F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
+                 F.count(F.col('plate_other_car')).alias('possible_crashes'))
 
         t_stats = time()
 
