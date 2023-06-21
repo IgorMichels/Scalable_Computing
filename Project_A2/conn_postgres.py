@@ -8,171 +8,196 @@ class Connect:
         self.host     = host     # input('Digite o host: ')
         self.passw    = password # input('Digite a senha: ')
         self.database = database # input('Digite o nome do database: ')
-        self.con      = psycopg2.connect(host=self.host, database=self.database,
+        self.conn     = psycopg2.connect(host=self.host, database=self.database,
                                          user=self.user, password=self.passw)
-        self.cursor = self.con.cursor()
+        self.cursor = self.conn.cursor()
         self._start()
         
     # Inicia a conexão
     def _start(self):
-        create = """
-            create schema IF NOT EXISTS STATS;
+        create = '''
+            CREATE SCHEMA IF NOT EXISTS STATS;
 
-            drop table if exists STATS.colision;
-                CREATE TABLE STATS.colision
-                (
+            DROP TABLE IF EXISTS STATS.colision;
+            CREATE TABLE STATS.colision
+            (
                 highway INT,
-                plate VARCHAR(10),
+                plate CHAR(3),
                 speed FLOAT,
-                plate_other_car VARCHAR(10),
+                plate_other_car CHAR(3),
                 speed_other_car FLOAT
-                );
+            );
 
-                drop table if exists STATS.overspeed;
-                CREATE TABLE STATS.overspeed
-                (
+            DROP TABLE IF EXISTS STATS.overspeed;
+            CREATE TABLE STATS.overspeed
+            (
                 highway INT,
-                plate VARCHAR(10),
+                plate CHAR(3),
                 speed FLOAT,
                 highway_max_speed INT,
                 can_crash INT
-                );
+            );
 
-                drop table if exists STATS.statistics;
-                CREATE TABLE STATS.statistics
-                (
+            DROP TABLE IF EXISTS STATS.statistics;
+            CREATE TABLE STATS.statistics
+            (
                 cars_count INT,
                 highway_count INT,
                 overspeed_cars INT,
                 possible_crashes INT
-                );
+            );
 
-                drop table if exists STATS.dangerous_driving;
-                CREATE TABLE STATS.dangerous_driving
-                (
+            DROP TABLE IF EXISTS STATS.dangerous_driving;
+            CREATE TABLE STATS.dangerous_driving
+            (
                 highway INT,
-                plate VARCHAR(10)
-                );
+                plate CHAR(3)
+            );
 
-                drop table if exists STATS.cars_forbidden;
-                CREATE TABLE STATS.cars_forbidden
-                (
+            DROP TABLE IF EXISTS STATS.cars_forbidden;
+            CREATE TABLE STATS.cars_forbidden
+            (
                 highway INT,
-                plate VARCHAR(10)
-                );
+                plate CHAR(3)
+            );
 
-                drop table if exists STATS.historic_info;
-                CREATE TABLE STATS.historic_info
-                (
+            DROP TABLE IF EXISTS STATS.historic_info;
+            CREATE TABLE STATS.historic_info
+            (
                 highway INT,
                 mean_speed FLOAT,
                 accidents INT,
                 mean_crossing_time FLOAT
-                );
+            );
 
-                drop table if exists STATS.top100;
-                CREATE TABLE STATS.top100
-                (
-                plate VARCHAR(10),
+            DROP TABLE IF EXISTS STATS.top100;
+            CREATE TABLE STATS.top100
+            (
+                plate CHAR(3),
                 highways_passed INT
-                );
-            """
-        _cur = self.con.cursor()
+            );
+        '''
+        _cur = self.conn.cursor()
         _cur.execute(create)
-        self.con.commit()
+        self.conn.commit()
         
     # Fecha a conexão
     def close(self):
-        self.con.close()
+        self.conn.close()
         
 
     # Inserção no banco ---------------------------------------------------------------------------
-        """
+        '''
           :param df_rows: lista dos registros do dataframe para serem convertidos em tupla
-        """
+        '''
 
     def insert_colision(self, df_rows):
-
+        self.cursor.execute('DELETE FROM STATS.colision')
         for data in df_rows:
-            query = """insert into STATS.colision (
-                        highway,
-                        plate,
-                        speed,
-                        plate_other_car,
-                        speed_other_car) 
-                        values (%s,%s,%s,%s,%s)"""
+            query = '''
+                INSERT INTO STATS.colision (
+                    highway,
+                    plate,
+                    speed,
+                    plate_other_car,
+                    speed_other_car
+                )
+                VALUES (%s, %s, %s, %s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
-
+        
+        self.conn.commit()
 
     def insert_overspeed(self, df_rows):
-
+        self.cursor.execute('DELETE FROM STATS.overspeed')
         for data in df_rows:
-            query = """insert into STATS.overspeed (
-                        highway,
-                        plate,
-                        speed,
-                        highway_max_speed,
-                        can_crash) 
-                        values (%s,%s,%s,%s,%s)"""
+            query = '''
+                INSERT INTO STATS.overspeed (
+                    highway,
+                    plate,
+                    speed,
+                    highway_max_speed,
+                    can_crash
+                )
+                VALUES (%s, %s, %s, %s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
+        
+        self.conn.commit()
 
     def insert_statistics(self, df_rows):
-        self.cursor.execute("DELETE FROM STATS.statistics") # Apaga as estatísticas antigas
-        
+        self.cursor.execute('DELETE FROM STATS.statistics')
         for data in df_rows:
-            query = """insert into STATS.statistics (
-                        cars_count,
-                        highway_count,
-                        overspeed_cars,
-                        possible_crashes) 
-                        values (%s,%s,%s,%s)"""
+            query = '''
+                INSERT INTO STATS.statistics (
+                    cars_count,
+                    highway_count,
+                    overspeed_cars,
+                    possible_crashes
+                )
+                VALUES (%s, %s, %s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
+        
+        self.conn.commit()
 
     def insert_dangerous_driving(self, df_rows):
-
+        self.cursor.execute('DELETE FROM STATS.dangerous_driving')
         for data in df_rows:
-            query = """insert into STATS.dangerous_driving (
-                        highway,
-                        plate) 
-                        values (%s,%s)"""
+            query = '''
+                INSERT INTO STATS.dangerous_driving (
+                    highway,
+                    plate
+                )
+                VALUES (%s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
+        
+        self.conn.commit()
 
     def insert_cars_forbidden(self, df_rows):
-
+        self.cursor.execute('DELETE FROM STATS.cars_forbidden')
         for data in df_rows:
-            query = """insert into STATS.cars_forbidden (
-                        highway,
-                        plate) 
-                        values (%s,%s)"""
+            query = '''
+                INSERT INTO STATS.cars_forbidden (
+                    highway,
+                    plate
+                )
+                VALUES (%s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
+        
+        self.conn.commit()
 
     def insert_historic_info(self, df_rows):
-
+        self.cursor.execute('DELETE FROM STATS.historic_info')
         for data in df_rows:
-            query = """insert into STATS.historic_info (
-                        highway,
-                        mean_speed,
-                        accidents,
-                        mean_crossing_time) 
-                        values (%s,%s,%s,%s)"""
+            query = '''
+                INSERT INTO STATS.historic_info (
+                    highway,
+                    mean_speed,
+                    accidents,
+                    mean_crossing_time
+                )
+                VALUES (%s, %s, %s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
+        
+        self.conn.commit()
 
     def insert_top100(self, df_rows):
-        self.cursor.execute("DELETE FROM STATS.top100") # Apaga o ranking antigo
-        
+        self.cursor.execute('DELETE FROM STATS.top100')
         for data in df_rows:
-            query = """insert into STATS.top100 (
-                        plate,
-                        highways_passed) 
-                        values (%s,%s)"""
+            query = '''
+                INSERT INTO STATS.top100 (
+                    plate,
+                    highways_passed
+                )
+                VALUES (%s, %s)
+            '''
             self.cursor.execute(query, tuple(data))
-        self.con.commit()
+        
+        self.conn.commit()
         
     # ---------------------------------------------------------------------------------------------
     
