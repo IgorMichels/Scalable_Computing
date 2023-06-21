@@ -3,12 +3,11 @@ import pandas.io.sql as psql
 
 class Connect:
     def __init__(self, host, database, user, password, query=False):
-        
         # Informa os dados da conexão
-        self.user     = user     # input('Digite seu usuário: ')
-        self.host     = host     # input('Digite o host: ')
-        self.passw    = password # input('Digite a senha: ')
-        self.database = database # input('Digite o nome do database: ')
+        self.user     = user
+        self.host     = host     
+        self.passw    = password 
+        self.database = database 
         self.conn     = psycopg2.connect(host=self.host, database=self.database,
                                          user=self.user, password=self.passw)
         self.cursor = self.conn.cursor()
@@ -94,11 +93,11 @@ class Connect:
     def close(self):
         self.conn.close()
 
-    # Inserção no banco ---------------------------------------------------------------------------
+    # Inserção no banco
         '''
           :param df_rows: lista dos registros do dataframe para serem convertidos em tupla
         '''
-
+    # Insere os carros com risco de colisão
     def insert_colision(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.colision')
         for data in df_rows:
@@ -113,9 +112,9 @@ class Connect:
                 VALUES (%s, %s, %s, %s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Insere os carros acima da velocidade
     def insert_overspeed(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.overspeed')
         for data in df_rows:
@@ -130,9 +129,9 @@ class Connect:
                 VALUES (%s, %s, %s, %s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Insere estatísticas gerais da simulação
     def insert_statistics(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.statistics')
         for data in df_rows:
@@ -146,9 +145,9 @@ class Connect:
                 VALUES (%s, %s, %s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Insere carros com direção perigosa
     def insert_dangerous_driving(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.dangerous_driving')
         for data in df_rows:
@@ -160,9 +159,9 @@ class Connect:
                 VALUES (%s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Insere carros proibidos de circular
     def insert_cars_forbidden(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.cars_forbidden')
         for data in df_rows:
@@ -174,9 +173,9 @@ class Connect:
                 VALUES (%s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Inseri informações históricas das rodovias
     def insert_historic_info(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.historic_info')
         for data in df_rows:
@@ -190,9 +189,9 @@ class Connect:
                 VALUES (%s, %s, %s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Insere top 100 carros que mais passaram por rodovias
     def insert_top100(self, df_rows):
         self.cursor.execute('DELETE FROM STATS.top100')
         for data in df_rows:
@@ -204,14 +203,14 @@ class Connect:
                 VALUES (%s, %s)
             '''
             self.cursor.execute(query, tuple(data))
-        
         self.conn.commit()
 
+    # Insere o tempo para computar cada análise
     def insert_analysis_time(self, analysis, time):
         self.cursor.execute(f'''INSERT INTO STATS.analysis_time (analysis, time, update_time) VALUES ('{analysis}', {time}, NOW())''')
         
-    # ---------------------------------------------------------------------------------------------
-    
+    # Consulta no banco
+    # Consulta os carros com risco de colisão
     def select_colision(self):
         query = '''
             SELECT
@@ -224,6 +223,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta os carros acima da velocidade
     def select_overspeed(self):
         query = '''
             SELECT
@@ -236,6 +236,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta estatísticas gerais da simulação
     def select_statistics(self):
         query = '''
             SELECT
@@ -249,6 +250,7 @@ class Connect:
         data.columns = ['Total']
         return data
     
+    # Consulta carros com direção perigosa
     def select_dangerous_driving(self):
         query = '''
             SELECT DISTINCT
@@ -258,6 +260,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta carros proibidos de circular
     def select_cars_forbidden(self):
         query = '''
             SELECT DISTINCT
@@ -267,6 +270,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta informações históricas das rodovias
     def select_historic_info(self):
         query = '''
             SELECT
@@ -278,6 +282,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta top 100 carros que mais passaram por rodovias
     def select_top100(self):
         query = '''
             SELECT
@@ -287,6 +292,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta o  tempo para computar cada análise
     def select_analysis_time(self):
         query = '''
             WITH aux AS (
@@ -304,6 +310,7 @@ class Connect:
         '''
         return psql.read_sql_query(query, self.conn)
     
+    # Consulta a média de tempo para computar cada análise
     def select_mean_analysis_time(self):
         query = '''
             SELECT
