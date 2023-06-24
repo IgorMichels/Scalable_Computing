@@ -64,7 +64,6 @@ if __name__ == '__main__':
     os.system('clear')
     while True:
         while not update:
-            t_load_cars = time()
             window_1 = Window.partitionBy('plate', 'highway').orderBy('time')
             window_2 = Window.partitionBy('plate', 'highway').orderBy(F.col('time').desc())
             last_iter_data = spark \
@@ -121,8 +120,6 @@ if __name__ == '__main__':
             .withColumn('speed_other_car', F.abs(F.col('speed_other_car'))) \
             .select('highway', 'plate', 'speed', 'plate_other_car', 'speed_other_car')
 
-        t_colision = time()
-
         last_iter_data = last_iter_data \
             .join(colision_df \
             .select('highway', 'plate', 'plate_other_car') \
@@ -136,8 +133,6 @@ if __name__ == '__main__':
             .withColumn('can_crash', F.when(F.col('plate_other_car').isNotNull(), 1).otherwise(0)) \
             .select('highway', 'plate', 'speed', 'highway_max_speed', 'can_crash')
 
-        t_overspeed_cars = time()
-
         # estatísticas gerais
         stats = last_iter_data \
             .agg(F.count('plate').alias('cars_count'),
@@ -145,9 +140,6 @@ if __name__ == '__main__':
                  F.sum(F.when(F.col('speed') > F.col('highway_max_speed'), 1).otherwise(0)).alias('overspeed_cars'),
                  F.count(F.col('plate_other_car')).alias('possible_crashes'))
 
-        t_stats = time()
-
-        t_historic_analysis = time()
         window = Window.partitionBy('plate', 'highway').orderBy('time')
         historic = spark \
             .read \
@@ -181,14 +173,10 @@ if __name__ == '__main__':
             .select('highway','plate') \
             .distinct()
 
-        t_dangerous_driving = time()
-
         cars_forbidden = historic \
             .filter(F.col('tickets_last_T_periods') >= NUM_MAX_TICKETS) \
             .select('highway', 'plate') \
             .distinct()
-
-        t_cars_forbidden = time()
 
         window = Window.partitionBy('highway', 'plate').orderBy('time')
         accidents = historic \
@@ -222,8 +210,6 @@ if __name__ == '__main__':
             .join(cross_time, ['highway'], 'full') \
             .orderBy(F.col('mean_crossing_time').desc())
 
-        t_historic_info = time()
-
         # top 100 carros com mais rodovias
         top100 = historic \
             .select('plate', 'highway') \
@@ -233,27 +219,34 @@ if __name__ == '__main__':
             .orderBy(F.col('highways_passed').desc()) \
             .limit(100)
 
-        t_top100 = time()
-        
+        t_load_cars = time()
         conn.insert_colision(df_rows = colision_df.collect())
+        t_colision = time()
         conn.insert_analysis_time('Colisão', t_colision - t_load_cars)
         
         conn.insert_overspeed(df_rows = overspeed_cars.collect())
+        t_overspeed_cars = time()
         conn.insert_analysis_time('Veículos acima da velocidade', t_overspeed_cars - t_load_cars)
         
         conn.insert_statistics(df_rows = stats.collect())
+        t_stats = time()
         conn.insert_analysis_time('Estatísticas gerais', t_stats - t_load_cars)
         
+        t_historic_analysis = time()
         conn.insert_dangerous_driving(df_rows = dangerous_driving.collect())
+        t_dangerous_driving = time()
         conn.insert_analysis_time('Direção perigosa', t_dangerous_driving - t_historic_analysis)
         
         conn.insert_cars_forbidden(df_rows = cars_forbidden.collect())
+        t_cars_forbidden = time()
         conn.insert_analysis_time('Carros proibidos de circular', t_cars_forbidden - t_historic_analysis)
 
         conn.insert_historic_info(df_rows = historic_info.collect())
+        t_historic_info = time()
         conn.insert_analysis_time('Histórico', t_historic_info - t_historic_analysis)
 
         conn.insert_top100(df_rows = top100.collect())
+        t_top100 = time()
         conn.insert_analysis_time('Top 100', t_top100 - t_historic_analysis)
 
         time_filter = new_time_filter
