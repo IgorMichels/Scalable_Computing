@@ -5,9 +5,9 @@ class Connect:
     def __init__(self, host, database, user, password, query=False):
         # Informa os dados da conexão
         self.user     = user
-        self.host     = host     
-        self.passw    = password 
-        self.database = database 
+        self.host     = host
+        self.passw    = password
+        self.database = database
         self.conn     = psycopg2.connect(host=self.host, database=self.database,
                                          user=self.user, password=self.passw)
         self.cursor = self.conn.cursor()
