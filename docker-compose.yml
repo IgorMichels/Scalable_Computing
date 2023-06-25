@@ -1,0 +1,15 @@
+version: '3.7'
+x-aws-vpc: "vpc-032f4cd57c0fa2942"
+services: 
+        worker: 
+                build:  
+                        context: . 
+                        dockerfile: Dockerfile 
+
+                environment: 
+                        - POSTGRESQL_HOST=db-highway-dashboard.c7mkrwgemklj.us-east-1.rds.amazonaws.com
+                        - POSTGRESQL_USER=postgres
+                        - POSTGRESQL_PASSWORD=postgrespassword
+                        - BROKER_URL=
+                image: CE 
+                command: ['celery', '-A', 'communication', 'worker', '-l', 'INFO']
