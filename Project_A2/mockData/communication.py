@@ -31,3 +31,5 @@ def SendHighwayInfo(code, maxSpeed, extension, maxSpeedCars, interval_ip, interv
 # celery -A communication worker --loglevel=info
 # brew services start mongodb-community@6.0
 # brew services stop mongodb-community@6.0
+# brew services start postgresql@14
+# brew services stop postgresql@14``
