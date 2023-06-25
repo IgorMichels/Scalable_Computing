@@ -44,13 +44,13 @@ if __name__ == '__main__':
                 numLanesN = randint(2, 4),
                 numLanesS = randint(2, 4),
                 maxSpeed = randint(22, 31), # 80 km/h a 110 km/h
-                probNewCar = randint(10, 25) / 100,
+                probNewCar = .15,
                 probChangeLane = randint(1, 10) / 100,
                 speedLimitsCar = (randint(11, 16), randint(33, 56)), # min entre 40 e 55 km/h e max entre 120 e 200 km/h
                 accelerationLimitsCar = (randint(-5, -1), randint(1, 7)),
                 probCrash = randint(1, 5) / 100,
                 cleanLaneEpochs = randint(3, 10),
-                highwayExtension = randint(3000, 5000)
+                highwayExtension = randint(10000, 15000)
             )
         
         highways.append(hw)
