@@ -11,9 +11,12 @@ sys.path.append('mockData/')
 from conn_postgres import Connect
 from db_connection import *
 
-user = input('Digite seu usuário: ')
-password = getpass()
-database = input('Digite o nome do database: ')
+# user = input('Digite seu usuário: ')
+# password = getpass()
+# database = input('Digite o nome do database: ')
+user = ''
+password = ''
+database = ''
 
 conn = Connect(host='localhost',
                database=database,
@@ -59,10 +62,11 @@ df_highways = spark \
 
 time_filter = df_highways.select(F.min('highway_time')).collect()[0].asDict()['min(highway_time)']
 update = False
-
+iters = 0
 if __name__ == '__main__':
     os.system('clear')
-    while True:
+    while iters < 20:
+        iters += 1
         while not update:
             window_1 = Window.partitionBy('plate', 'highway').orderBy('time')
             window_2 = Window.partitionBy('plate', 'highway').orderBy(F.col('time').desc())
@@ -248,6 +252,7 @@ if __name__ == '__main__':
         conn.insert_top100(df_rows = top100.collect())
         t_top100 = time()
         conn.insert_analysis_time('Top 100', t_top100 - t_historic_analysis)
+        conn.insert_analysis_time('Total', t_top100 - t_load_cars)
 
         time_filter = new_time_filter
         update = False
