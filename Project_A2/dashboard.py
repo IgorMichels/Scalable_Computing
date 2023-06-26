@@ -1,6 +1,5 @@
 import time
 import streamlit as st
-import matplotlib.pyplot as plt
 
 from conn_postgres import Connect
 conn = Connect('localhost', '', '', '', query=True)
