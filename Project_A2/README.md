@@ -5,43 +5,43 @@
 Inicialmente é necessário ter instalada a versão 6.0.6 do MongoDB, a versão 14.8 do PostgreSQL, a versão 3.12.0 do RabbitMQ e a versão 5.3.0 do Celery. Por simplicidade de implementação e executação, optou-se por não utilizar credenciais no PostgreSQL, embora isso seja uma péssima prática para projetos reais. De modo análogo, apenas configuramos um banco com duas coleções dentro do MongoDB.
 
 Para executar o programa de simulação, no ambiente local, é necessário dar início aos dois bancos de dados, por meio dos comandos
-`
+```
 brew services start mongodb-community@6.0
 brew services start postgresql@14
-`
+```
 
 de modo análogo, ao término da sessão, devemos encerrar os bancos por meio dos comandos
-`
+```
 brew services stop mongodb-community@6.0
 brew services stop postgresql@14
-`
+```
 
 Tendo os bancos de dados prontos, podemos ativar o servidor do RabbitMQ por meio do comando
-`
+```
 rabbitmq-server
-`
+```
 
 e, feito isso, executar, dentro do diretório `mockData`, o comando
-`
+```
 celery -A communication worker --loglevel=info
-`
+```
 
 Finalizados tais passos, temos o ambiente configurado para a execução do simulador e do pipeline de tratamento dos dados. A primeira etapa, nesse sentido, é a execução dos simuladores. Para tanto, dentro desse diretório, execute o comando
-`
+```
 python main.py -s=SIMS -t=TOTAL -h=HIGHWAY -ri=BOOL1 -rf=BOOL2
-`
+```
 
 onde `SIMS` é o número de iterações de cada rodovia (por default, 20), `TOTAL` é o número de rodovias desejado (por default, 1), `HIGHWAY` é o código inicial da rodovia (inteiro, default 100) e `BOOL1` e `BOOL2` são booleanos que indicam, respectivamente, se é desejado limpar o conteúdo do banco instanciado no MongoDB antes e depois de realizar as simulações. Por padrão, definimos `BOOL1=True` e `BOOL2=False`.
 
 Estando com a simulação rodando em um terminal basta executar, em outro terminal, o comando
-`
+```
 python pipeline.py
-`
+```
 
 o qual irá reinstanciar um banco no PostgreSQL e iniciar o processamento dos dados. Para observar os dados no dashboard, basta executar
-`
+```
 streamlit run dashboard.py
-`
+```
 
 ### Arquivos
 
