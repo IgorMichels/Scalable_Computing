@@ -91,6 +91,8 @@ class Highway:
         
         threads = list()
         for car in cars:
+            # armazenando posição anterior dos carros para ver se ocorreu ou não saltos
+            # de um carro sobre outro. se ocorrer, houve colisão
             positions[self.highwayCode]['old'][car.plate] = [car.pos, car.actualLane]
             # car.updateCar(highwayStatus)
             threads.append(threading.Thread(target = car.updateCar, args = (highwayStatus, )))
@@ -108,15 +110,26 @@ class Highway:
 
         # se um carro "saltou" outro então houve colisão
         for i, car in enumerate(cars):
+            # carro está batido, não anda, logo não pode saltar
             if car.isCrashed: continue
+            
+            # houve troca de pista, logo podemos considerar como ultrapassagem
             if car.plate in positions[self.highwayCode]['old'] and positions[self.highwayCode]['old'][car.plate][1] != positions[self.highwayCode]['new'][car.plate][1]: continue # trocou de pista
             for j, car2 in enumerate(cars):
+                # carro A não colide com si mesmo
                 if car.plate == car2.plate: continue
+                
+                # carros de direções opostas não batem
                 if car.direction != car2.direction: continue
-                if car2.plate in positions[self.highwayCode]['old'] and positions[self.highwayCode]['old'][car2.plate][1] != positions[self.highwayCode]['new'][car2.plate][1]: continue # trocou de pista
-                if positions[self.highwayCode]['old'][car.plate][1] != positions[self.highwayCode]['old'][car2.plate][1]: continue # não estão na mesma pista
+
+                # houve troca de pista, logo podemos considerar como ultrapassagem
+                if car2.plate in positions[self.highwayCode]['old'] and positions[self.highwayCode]['old'][car2.plate][1] != positions[self.highwayCode]['new'][car2.plate][1]: continue
+                
+                # carros em pistas distintas não colidem
+                if positions[self.highwayCode]['old'][car.plate][1] != positions[self.highwayCode]['old'][car2.plate][1]: continue
                 if positions[self.highwayCode]['old'][car.plate][0] < positions[self.highwayCode]['old'][car2.plate][0] and positions[self.highwayCode]['new'][car.plate][0] > positions[self.highwayCode]['new'][car2.plate][0]:
-                    # bateram
+                    # houve salto, logo, houve colisão
+                    # resta ver em que posição a mesma ocorreu
                     if car2.isCrashed:
                         car.pos = car2.pos
                         car.crash()
@@ -136,7 +149,8 @@ class Highway:
                         else: SendCarInfo.delay(car2.plate, car2.highwayExtension - car2.pos, car2.numLanesS + car2.actualLane, car2.highwayCode, datetime.now())
                 
                 if positions[self.highwayCode]['old'][car.plate][0] > positions[self.highwayCode]['old'][car2.plate][0] and positions[self.highwayCode]['new'][car.plate][0] < positions[self.highwayCode]['new'][car2.plate][0]:
-                    # bateram
+                    # houve salto, logo, houve colisão
+                    # resta ver em que posição a mesma ocorreu
                     if car2.isCrashed:
                         car.pos = car2.pos
                         car.crash()
@@ -153,6 +167,7 @@ class Highway:
                         if car2.direction == 'S': SendCarInfo.delay(car2.plate, car2.pos, car2.actualLane, car2.highwayCode, datetime.now())
                         else: SendCarInfo.delay(car2.plate, car2.highwayExtension - car2.pos, car2.numLanesS + car2.actualLane, car2.highwayCode, datetime.now())
 
+        # remover veículos que saíram da rodovia ou que já estão batidos a muito tempo (resgatados)
         drop = list()
         for i, car in enumerate(cars):
             pos, lane = car.pos, car.actualLane
@@ -207,8 +222,6 @@ class Highway:
         t2.start()
         t1.join()
         t2.join()
-        #self.updateHighwayStatus('S')
-        #self.updateHighwayStatus('N')
 
         self.actualEpoch += 1
 

@@ -48,12 +48,14 @@ class Car:
                  highwayStatus : np.array):
         # primeiro verifica se há algum carro ao seu lado
         # se sim, vai em direção ao mesmo, tentando colidir
+        #     direita
         if np.sum(highwayStatus[self.pos, self.actualLane:self.numLanes, 0] == 1) >= 2:
             self.pos += self.currSpeed
             self.actualLane += 1
             if self.direction == 'S': SendCarInfo.delay(self.plate, self.pos, self.actualLane, self.highwayCode, datetime.now())
             else: SendCarInfo.delay(self.plate, self.highwayExtension - self.pos, self.numLanesS + self.actualLane, self.highwayCode, datetime.now())
             return
+        #     esquerda
         elif np.sum(highwayStatus[self.pos, :self.actualLane, 0] == 1) >= 1:
             self.pos += self.currSpeed
             self.actualLane -= 1
@@ -85,7 +87,7 @@ class Car:
                 else: SendCarInfo.delay(self.plate, self.highwayExtension - self.pos, self.numLanesS + self.actualLane, self.highwayCode, datetime.now())
                 return
 
-        # não há carros atrás
+        # se não há carros atrás, mantém a pista a velocidade
         self.pos += self.currSpeed
         if self.direction == 'S': SendCarInfo.delay(self.plate, self.pos, self.actualLane, self.highwayCode, datetime.now())
         else: SendCarInfo.delay(self.plate, self.highwayExtension - self.pos, self.numLanesS + self.actualLane, self.highwayCode, datetime.now())
@@ -187,6 +189,7 @@ class Car:
         return
         
     def greenFlag(self):
+        # se não há acidentes para se preocupar, apenas atualiza a velocidade e a pista
         if random() < self.probChangeLane and self.numLanes != 1: self.actualLane = self.changeLane()
         self.currSpeed += randint(self.minAcceleration, self.maxAcceleration)
         if self.currSpeed > self.maxSpeed: self.currSpeed = self.maxSpeed
