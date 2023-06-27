@@ -13,7 +13,7 @@ class Connect:
         self.cursor = self.conn.cursor()
         if not query: self._start()
         
-    # Inicia a conexão
+    # Inicia a conexão, resetando o banco
     def _start(self):
         create = '''
             CREATE SCHEMA IF NOT EXISTS STATS;

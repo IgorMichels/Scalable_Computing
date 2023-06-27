@@ -11,9 +11,6 @@ sys.path.append('mockData/')
 from conn_postgres import Connect
 from db_connection import *
 
-# user = input('Digite seu usuário: ')
-# password = getpass()
-# database = input('Digite o nome do database: ')
 user = ''
 password = ''
 database = ''
@@ -24,25 +21,11 @@ conn = Connect(host='localhost',
                password=password
               )
 
-T = 50
-NUM_MAX_TICKETS = 5
+T = 100
+NUM_MAX_TICKETS = 10
 
 HIGH_ACC = 6
 HIGH_SPEED_COEF = .9
-
-def print_df(dataframe, show_schema=False, show_count=False, preview_count=10):
-    """
-    Print dataframe with adittional information
-
-    :param dataframe: the dataframe to print
-    :param show_schema: True to print the schema
-    :param show_count: True to print the number of rows
-    :param preview_count: number of rows to preview
-    """
-    if show_schema: dataframe.printSchema()
-    if show_count: print(f'{dataframe.count()} rows\n')
-    dataframe.show(n=preview_count)
-
 spark = SparkSession\
     .builder\
     .appName('mockData') \
@@ -62,11 +45,9 @@ df_highways = spark \
 
 time_filter = df_highways.select(F.min('highway_time')).collect()[0].asDict()['min(highway_time)']
 update = False
-iters = 0
 if __name__ == '__main__':
     os.system('clear')
-    while iters < 20:
-        iters += 1
+    while True:
         while not update:
             window_1 = Window.partitionBy('plate', 'highway').orderBy('time')
             window_2 = Window.partitionBy('plate', 'highway').orderBy(F.col('time').desc())
@@ -131,13 +112,11 @@ if __name__ == '__main__':
                 ['highway', 'plate'],
                 'left')
 
-        # veículos acima da velocidade
         overspeed_cars = last_iter_data \
             .filter(F.col('speed') > F.col('highway_max_speed')) \
             .withColumn('can_crash', F.when(F.col('plate_other_car').isNotNull(), 1).otherwise(0)) \
             .select('highway', 'plate', 'speed', 'highway_max_speed', 'can_crash')
 
-        # estatísticas gerais
         stats = last_iter_data \
             .agg(F.count('plate').alias('cars_count'),
                  F.countDistinct('highway').alias('highway_count'),
@@ -214,7 +193,6 @@ if __name__ == '__main__':
             .join(cross_time, ['highway'], 'full') \
             .orderBy(F.col('mean_crossing_time').desc())
 
-        # top 100 carros com mais rodovias
         top100 = historic \
             .select('plate', 'highway') \
             .dropDuplicates(['plate', 'highway']) \
